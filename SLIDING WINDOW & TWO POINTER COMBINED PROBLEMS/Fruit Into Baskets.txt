@@ -1,0 +1,231 @@
+904. Fruit Into Baskets
+
+❓ What is the question asking?
+
+You are given an array fruits[] where:
+
+each number represents a fruit type 🍎🍌🍇
+
+You have only:
+
+2 baskets 🧺🧺
+each basket can store only one type of fruit
+
+You must pick fruits continuously from the array.
+
+Find the maximum number of fruits you can collect containing at most 2 different fruit types 💖
+
+Example
+
+Input:
+
+fruits = [1,2,1]
+
+Output:
+
+3
+
+Explanation:
+
+We can take:
+
+[1,2,1]
+
+Only 2 fruit types:
+
+1 and 2
+
+Length = 3
+
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all subarrays.
+
+For every subarray:
+
+count distinct fruit types
+if distinct types ≤ 2
+→ update maximum length
+
+If distinct fruits become greater than 2,
+stop checking further.
+
+💻 Java Code
+import java.util.HashSet;
+
+public class Main {
+
+    public static int totalFruit(int[] fruits) {
+
+        int n = fruits.length;
+
+        int maxLen = 0;
+
+        for(int i = 0; i < n; i++) {
+
+            HashSet<Integer> set = new HashSet<>();
+
+            for(int j = i; j < n; j++) {
+
+                set.add(fruits[j]);
+
+                if(set.size() <= 2) {
+
+                    maxLen = Math.max(maxLen, j - i + 1);
+
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] fruits = {1,2,1};
+
+        System.out.println(totalFruit(fruits));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+
+Use Sliding Window + HashMap.
+
+Expand window using right.
+
+Store fruit frequencies inside HashMap.
+
+If distinct fruits become greater than 2:
+
+shrink window once from left
+
+Update maximum valid window size.
+
+💻 Java Code
+import java.util.HashMap;
+
+public class Main {
+
+    public static int totalFruit(int[] fruits) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int left = 0;
+
+        int maxLen = 0;
+
+        for(int right = 0; right < fruits.length; right++) {
+
+            map.put(fruits[right],
+                    map.getOrDefault(fruits[right], 0) + 1);
+
+            if(map.size() > 2) {
+
+                map.put(fruits[left],
+                        map.get(fruits[left]) - 1);
+
+                if(map.get(fruits[left]) == 0) {
+                    map.remove(fruits[left]);
+                }
+
+                left++;
+            }
+
+            if(map.size() <= 2) {
+                maxLen = Math.max(maxLen, right - left + 1);
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] fruits = {1,2,1};
+
+        System.out.println(totalFruit(fruits));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(2) ≈ O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Use Sliding Window efficiently.
+
+Maintain:
+
+at most 2 fruit types inside window
+
+Expand using right.
+
+If fruit types become greater than 2:
+
+continuously shrink from left
+remove fruits whose frequency becomes 0
+
+Keep track of maximum valid window length 💖
+
+💻 Java Code
+import java.util.HashMap;
+
+public class Main {
+
+    public static int totalFruit(int[] fruits) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int left = 0;
+
+        int maxLen = 0;
+
+        for(int right = 0; right < fruits.length; right++) {
+
+            map.put(fruits[right],
+                    map.getOrDefault(fruits[right], 0) + 1);
+
+            while(map.size() > 2) {
+
+                map.put(fruits[left],
+                        map.get(fruits[left]) - 1);
+
+                if(map.get(fruits[left]) == 0) {
+                    map.remove(fruits[left]);
+                }
+
+                left++;
+            }
+
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] fruits = {1,2,1};
+
+        System.out.println(totalFruit(fruits));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(2) ≈ O(1)
