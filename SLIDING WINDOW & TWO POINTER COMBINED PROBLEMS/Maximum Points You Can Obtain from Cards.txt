@@ -1,0 +1,145 @@
+1423. Maximum Points You Can Obtain from Cards
+
+❓ What is the question asking?
+
+You are given an array cardPoints[].
+
+You can take exactly k cards.
+
+But you can only take cards from:
+
+the start 🡨
+or the end 🡪
+
+We need to find the maximum score possible 💖
+
+Example:
+
+cards = [1,2,3,4,5,6,1]
+k = 3
+
+Possible pick:
+
+take 1 from left
+take 6 and 5 from right
+
+Total = 1 + 6 + 5 = 12
+
+Answer = 12
+
+🪨 Brute Force Approach
+💡 Idea
+
+Try all possible combinations.
+
+For every i:
+
+take i cards from left
+take k-i cards from right
+
+Then calculate sum.
+
+💻 Java Code
+public class Main {
+
+    public static int maxScore(int[] cardPoints, int k) {
+
+        int n = cardPoints.length;
+        int maxSum = 0;
+
+        for (int i = 0; i <= k; i++) {
+
+            int leftSum = 0;
+            int rightSum = 0;
+
+            // Take i cards from left
+            for (int j = 0; j < i; j++) {
+                leftSum += cardPoints[j];
+            }
+
+            // Take remaining cards from right
+            for (int j = 0; j < k - i; j++) {
+                rightSum += cardPoints[n - 1 - j];
+            }
+
+            maxSum = Math.max(maxSum, leftSum + rightSum);
+        }
+
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1,2,3,4,5,6,1};
+        int k = 3;
+
+        System.out.println(maxScore(arr, k));
+    }
+}
+▶️ Output
+12
+⏱️ Time Complexity
+O(k²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Sliding Window)
+💡 Idea
+
+Instead of recalculating every time:
+
+First take all k cards from left
+Then slowly:
+remove one card from left
+add one card from right
+Keep track of maximum sum
+
+This is sliding window concept 💖
+
+💻 Java Code
+public class Main {
+
+    public static int maxScore(int[] cardPoints, int k) {
+
+        int n = cardPoints.length;
+
+        int leftSum = 0;
+
+        // Take first k cards
+        for (int i = 0; i < k; i++) {
+            leftSum += cardPoints[i];
+        }
+
+        int maxSum = leftSum;
+        int rightSum = 0;
+
+        int rightIndex = n - 1;
+
+        // Move window
+        for (int i = k - 1; i >= 0; i--) {
+
+            leftSum -= cardPoints[i];
+
+            rightSum += cardPoints[rightIndex];
+
+            rightIndex--;
+
+            maxSum = Math.max(maxSum, leftSum + rightSum);
+        }
+
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1,2,3,4,5,6,1};
+        int k = 3;
+
+        System.out.println(maxScore(arr, k));
+    }
+}
+▶️ Output
+12
+⏱️ Time Complexity
+O(k)
+📦 Space Complexity
+O(1)
