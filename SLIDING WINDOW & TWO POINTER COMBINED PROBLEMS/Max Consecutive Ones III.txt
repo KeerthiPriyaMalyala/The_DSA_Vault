@@ -1,0 +1,306 @@
+# 1004. Max Consecutive Ones III
+
+## ❓ What is the question asking?
+
+You are given:
+
+* a binary array `nums`
+* an integer `k`
+
+You can flip at most `k` zeroes into ones.
+
+Find the maximum number of consecutive `1`s possible after performing at most `k` flips.
+
+---
+
+### Example
+
+Input:
+
+```java
+nums = [1,1,1,0,0,0,1,1,1,1,0]
+k = 2
+```
+
+Output:
+
+```java
+6
+```
+
+Explanation:
+
+We can flip two `0`s into `1`s to get the longest valid subarray of length `6`.
+
+---
+
+# 🪨 Brute Force Approach
+
+## 💡 Idea
+
+Generate all possible subarrays.
+
+For every subarray:
+
+* count the number of zeroes
+* if zeroes ≤ `k`
+  → update the maximum length
+
+If zero count becomes greater than `k`, stop checking further for that starting index.
+
+---
+
+## 💻 Java Code
+
+```java
+public class Main {
+
+    public static int longestOnes(int[] nums, int k) {
+
+        int n = nums.length;
+
+        int maxLen = 0;
+
+        for(int i = 0; i < n; i++) {
+
+            int zeroCount = 0;
+
+            for(int j = i; j < n; j++) {
+
+                if(nums[j] == 0) {
+                    zeroCount++;
+                }
+
+                if(zeroCount <= k) {
+
+                    maxLen = Math.max(maxLen, j - i + 1);
+
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1,1,1,0,0,0,1,1,1,1,0};
+
+        int k = 2;
+
+        System.out.println(longestOnes(nums, k));
+    }
+}
+```
+
+---
+
+## ▶️ Output
+
+```java
+6
+```
+
+---
+
+## ⏱️ Time Complexity
+
+```java
+O(n²)
+```
+
+---
+
+## 📦 Space Complexity
+
+```java
+O(1)
+```
+
+---
+
+# 🟡 Better Approach
+
+## 💡 Idea
+
+Use Sliding Window with two pointers:
+
+* `left`
+* `right`
+
+Expand the window using `right`.
+
+Whenever zero count becomes greater than `k`:
+
+* move `left` forward once
+* reduce zero count if needed
+
+Keep updating the maximum valid window size.
+
+---
+
+## 💻 Java Code
+
+```java
+public class Main {
+
+    public static int longestOnes(int[] nums, int k) {
+
+        int left = 0;
+
+        int zeroCount = 0;
+
+        int maxLen = 0;
+
+        for(int right = 0; right < nums.length; right++) {
+
+            if(nums[right] == 0) {
+                zeroCount++;
+            }
+
+            if(zeroCount > k) {
+
+                if(nums[left] == 0) {
+                    zeroCount--;
+                }
+
+                left++;
+            }
+
+            if(zeroCount <= k) {
+                maxLen = Math.max(maxLen, right - left + 1);
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1,1,1,0,0,0,1,1,1,1,0};
+
+        int k = 2;
+
+        System.out.println(longestOnes(nums, k));
+    }
+}
+```
+
+---
+
+## ▶️ Output
+
+```java
+6
+```
+
+---
+
+## ⏱️ Time Complexity
+
+```java
+O(n)
+```
+
+---
+
+## 📦 Space Complexity
+
+```java
+O(1)
+```
+
+---
+
+# ⚡ Optimal Approach
+
+## 💡 Idea
+
+Use Sliding Window efficiently.
+
+Expand the window using `right`.
+
+If zero count becomes greater than `k`:
+
+* continuously shrink the window from the left
+* until the window becomes valid again
+
+At every step:
+
+* maintain a valid window
+* update maximum length
+
+This guarantees the longest valid subarray.
+
+---
+
+## 💻 Java Code
+
+```java
+public class Main {
+
+    public static int longestOnes(int[] nums, int k) {
+
+        int left = 0;
+
+        int zeroCount = 0;
+
+        int maxLen = 0;
+
+        for(int right = 0; right < nums.length; right++) {
+
+            if(nums[right] == 0) {
+                zeroCount++;
+            }
+
+            while(zeroCount > k) {
+
+                if(nums[left] == 0) {
+                    zeroCount--;
+                }
+
+                left++;
+            }
+
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1,1,1,0,0,0,1,1,1,1,0};
+
+        int k = 2;
+
+        System.out.println(longestOnes(nums, k));
+    }
+}
+```
+
+---
+
+## ▶️ Output
+
+```java
+6
+```
+
+---
+
+## ⏱️ Time Complexity
+
+```java
+O(n)
+```
+
+---
+
+## 📦 Space Complexity
+
+```java
+O(1)
+```
