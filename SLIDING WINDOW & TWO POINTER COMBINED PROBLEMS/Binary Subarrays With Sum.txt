@@ -1,0 +1,166 @@
+930. Binary Subarrays With Sum
+❓ What is the question asking?
+
+You are given:
+
+a binary array nums
+an integer goal
+
+Find the number of subarrays whose sum is exactly equal to goal.
+
+Example
+
+Input:
+
+nums = [1,0,1,0,1]
+goal = 2
+
+Output:
+
+4
+
+Explanation:
+
+Valid subarrays:
+
+[1,0,1]
+[1,0,1,0]
+[0,1,0,1]
+[1,0,1]
+
+Answer = 4
+
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all possible subarrays.
+
+For every subarray:
+
+calculate its sum
+if sum equals goal
+→ increment count
+💻 Java Code
+public class Main {
+
+    public static int numSubarraysWithSum(int[] nums, int goal) {
+
+        int count = 0;
+
+        for(int i = 0; i < nums.length; i++) {
+
+            int sum = 0;
+
+            for(int j = i; j < nums.length; j++) {
+
+                sum += nums[j];
+
+                if(sum == goal) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1,0,1,0,1};
+
+        int goal = 2;
+
+        System.out.println(numSubarraysWithSum(nums, goal));
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Direct sliding window cannot count subarrays with exactly sum = goal.
+
+Instead:
+
+Subarrays(sum == goal)
+=
+Subarrays(sum <= goal)
+-
+Subarrays(sum <= goal - 1)
+
+So create a helper function:
+
+countAtMost(k)
+
+which returns number of subarrays having sum ≤ k.
+
+Then:
+
+answer =
+countAtMost(goal)
+-
+countAtMost(goal - 1)
+💻 Java Code
+public class Main {
+
+    public static int countAtMost(int[] nums, int goal) {
+
+        if(goal < 0) {
+            return 0;
+        }
+
+        int left = 0;
+        int sum = 0;
+        int count = 0;
+
+        for(int right = 0; right < nums.length; right++) {
+
+            sum += nums[right];
+
+            while(sum > goal) {
+
+                sum -= nums[left];
+
+                left++;
+            }
+
+            count += right - left + 1;
+        }
+
+        return count;
+    }
+
+    public static int numSubarraysWithSum(int[] nums, int goal) {
+
+        return countAtMost(nums, goal)
+                - countAtMost(nums, goal - 1);
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1,0,1,0,1};
+
+        int goal = 2;
+
+        System.out.println(numSubarraysWithSum(nums, goal));
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Important Pattern
+
+For binary arrays:
+
+Count(Exactly K)
+=
+Count(At Most K)
+-
+Count(At Most K - 1)
