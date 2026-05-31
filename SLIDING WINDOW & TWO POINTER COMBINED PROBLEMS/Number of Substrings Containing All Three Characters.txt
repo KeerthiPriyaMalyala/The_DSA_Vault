@@ -1,0 +1,228 @@
+1358. Number of Substrings Containing All Three Characters
+❓ What is the question asking?
+
+You are given a string s containing only:
+
+'a', 'b', 'c'
+
+Find the number of substrings that contain at least one:
+
+'a'
+'b'
+'c'
+Example
+
+Input:
+
+s = "abcabc"
+
+Output:
+
+10
+
+Explanation:
+
+Valid substrings contain all three characters.
+
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all possible substrings.
+
+For every substring:
+
+check whether it contains
+'a'
+'b'
+'c'
+
+If yes:
+
+count++;
+💻 Java Code
+public class Main {
+
+    public static int numberOfSubstrings(String s) {
+
+        int count = 0;
+
+        for(int i = 0; i < s.length(); i++) {
+
+            int[] freq = new int[3];
+
+            for(int j = i; j < s.length(); j++) {
+
+                freq[s.charAt(j) - 'a']++;
+
+                if(freq[0] > 0 &&
+                   freq[1] > 0 &&
+                   freq[2] > 0) {
+
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "abcabc";
+
+        System.out.println(numberOfSubstrings(s));
+    }
+}
+▶️ Output
+10
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Use Sliding Window.
+
+Maintain frequency of:
+
+a
+b
+c
+
+Expand window using right.
+
+Whenever window contains all three characters:
+
+freq[a] > 0
+freq[b] > 0
+freq[c] > 0
+
+Then every substring starting from left and ending from:
+
+right ... n-1
+
+will also be valid.
+
+So add:
+
+n - right
+
+to answer.
+
+Then shrink window from left.
+
+💻 Java Code
+public class Main {
+
+    public static int numberOfSubstrings(String s) {
+
+        int[] freq = new int[3];
+
+        int left = 0;
+
+        int count = 0;
+
+        int n = s.length();
+
+        for(int right = 0; right < n; right++) {
+
+            freq[s.charAt(right) - 'a']++;
+
+            while(freq[0] > 0 &&
+                  freq[1] > 0 &&
+                  freq[2] > 0) {
+
+                count += n - right;
+
+                freq[s.charAt(left) - 'a']--;
+
+                left++;
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "abcabc";
+
+        System.out.println(numberOfSubstrings(s));
+    }
+}
+▶️ Output
+10
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Key Observation
+
+Suppose:
+
+s = "abcabc"
+
+When:
+
+left = 0
+right = 2
+
+Window:
+
+"abc"
+
+already contains:
+
+a, b, c
+
+Then:
+
+"abc"
+"abca"
+"abcab"
+"abcabc"
+
+are all valid.
+
+Count:
+
+n - right
+=
+6 - 2
+=
+4
+
+That's why:
+
+count += n - right;
+
+is the heart of the solution 🔥
+
+🔥 Pattern
+
+This is another Sliding Window counting pattern:
+
+When window becomes valid:
+
+count += n - right
+
+Similar questions:
+
+✅ 1358. Number of Substrings Containing All Three Characters
+✅ Count Substrings With At Least K Distinct Characters
+✅ Count Complete Subarrays in an Array
+
+This is different from:
+
+Count(Exactly K)
+=
+Count(At Most K)
+-
+Count(At Most K-1)
+
+used in:
+
+✅ 930. Binary Subarrays With Sum
+✅ 1248. Count Number of Nice Subarrays
+✅ 992. Subarrays with K Different Integers
