@@ -1,0 +1,276 @@
+727. Minimum Window Subsequence
+
+❓ What is the question asking?
+
+You are given:
+
+a string s
+a string t
+
+Find the smallest substring of s such that:
+
+t is a subsequence of that substring
+
+If no such substring exists, return "".
+
+Example
+
+Input:
+
+s = "abcdebdde"
+t = "bde"
+
+Output:
+
+"bcde"
+
+Explanation:
+
+Inside:
+
+"bcde"
+
+we can find:
+
+b → d → e
+
+in order.
+
+So t is a subsequence of "bcde".
+
+🧠 Difference from Minimum Window Substring
+Minimum Window Substring (76)
+
+Need all characters:
+
+ABC
+
+Order doesn't matter.
+
+BAC
+CAB
+ABC
+
+all valid.
+
+Minimum Window Subsequence (727)
+
+Need:
+
+bde
+
+in the same order.
+
+bde  ✅
+be d ❌
+edb ❌
+
+Order matters.
+
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all substrings.
+
+For every substring:
+
+check whether t is a subsequence
+if yes
+update minimum length
+💻 Java Code
+public class Main {
+
+    public static String minWindow(String s, String t) {
+
+        String ans = "";
+
+        int minLen = Integer.MAX_VALUE;
+
+        for(int i = 0; i < s.length(); i++) {
+
+            for(int j = i; j < s.length(); j++) {
+
+                String sub = s.substring(i, j + 1);
+
+                if(isSubsequence(sub, t)) {
+
+                    if(sub.length() < minLen) {
+
+                        minLen = sub.length();
+                        ans = sub;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    private static boolean isSubsequence(String sub, String t) {
+
+        int i = 0;
+        int j = 0;
+
+        while(i < sub.length() && j < t.length()) {
+
+            if(sub.charAt(i) == t.charAt(j)) {
+                j++;
+            }
+
+            i++;
+        }
+
+        return j == t.length();
+    }
+}
+⏱️ Time Complexity
+O(n³)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Two Pointer Forward + Backward Scan)
+💡 Idea
+
+This is NOT a normal sliding window question.
+
+Why?
+
+Because:
+
+Subsequence
+
+doesn't have a fixed frequency condition.
+
+Step 1: Forward Scan
+
+Find a complete occurrence of t.
+
+Example:
+
+s = "abcdebdde"
+t = "bde"
+
+Move through s.
+
+When all characters of t are matched:
+
+b → d → e
+
+we found one valid ending position.
+
+Step 2: Backward Scan
+
+Now move backwards.
+
+Try to shrink the window while still keeping:
+
+b → d → e
+
+as a subsequence.
+
+This gives the minimum window ending at that position.
+
+Step 3
+
+Repeat for all possible windows.
+
+Keep smallest answer.
+
+💻 Java Code
+class Solution {
+
+    public String minWindow(String s, String t) {
+
+        int n = s.length();
+        int m = t.length();
+
+        int minLen = Integer.MAX_VALUE;
+        int start = -1;
+
+        int i = 0;
+
+        while(i < n) {
+
+            int j = 0;
+
+            while(i < n) {
+
+                if(s.charAt(i) == t.charAt(j)) {
+
+                    j++;
+
+                    if(j == m) {
+                        break;
+                    }
+                }
+
+                i++;
+            }
+
+            if(i == n) {
+                break;
+            }
+
+            int end = i + 1;
+
+            j = m - 1;
+
+            while(j >= 0) {
+
+                if(s.charAt(i) == t.charAt(j)) {
+                    j--;
+                }
+
+                i--;
+            }
+
+            i++;
+
+            if(end - i < minLen) {
+
+                minLen = end - i;
+                start = i;
+            }
+
+            i++;
+        }
+
+        return start == -1
+                ? ""
+                : s.substring(start, start + minLen);
+    }
+}
+▶️ Output
+Input:
+s = "abcdebdde"
+t = "bde"
+
+Output:
+"bcde"
+⏱️ Time Complexity
+O(n * m)
+📦 Space Complexity
+O(1)
+🧠 Interview Note
+
+This question looks similar to:
+
+76. Minimum Window Substring
+
+but the solution is completely different.
+
+Question	Technique
+Minimum Window Substring	Sliding Window + Frequency
+Minimum Window Subsequence	Forward Scan + Backward Scan
+
+💖 Easy memory trick:
+
+Substring → frequency counts
+
+Subsequence → order matters
+
+So when you see Subsequence, think:
+
+Match forward
+Shrink backward
+
+instead of normal Sliding Window 🔥.
