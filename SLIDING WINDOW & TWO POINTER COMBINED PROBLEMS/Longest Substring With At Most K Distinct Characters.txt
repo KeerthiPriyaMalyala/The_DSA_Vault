@@ -1,0 +1,207 @@
+Longest Substring With At Most K Distinct Characters
+
+❓ What is the question asking?
+
+You are given:
+
+a string s
+an integer k
+
+Find the length of the longest substring containing at most k distinct characters.
+
+Example
+
+Input:
+
+s = "eceba"
+k = 2
+
+Output:
+
+3
+
+Explanation:
+
+"ece"
+
+contains only:
+
+e, c
+
+Length = 3
+
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all possible substrings.
+
+For every substring:
+
+store distinct characters in a Set
+if distinct characters ≤ k
+→ update answer
+otherwise stop
+💻 Java Code
+import java.util.HashSet;
+
+public class Main {
+
+    public static int lengthOfLongestSubstringKDistinct(String s, int k) {
+
+        int maxLen = 0;
+
+        for(int i = 0; i < s.length(); i++) {
+
+            HashSet<Character> set = new HashSet<>();
+
+            for(int j = i; j < s.length(); j++) {
+
+                set.add(s.charAt(j));
+
+                if(set.size() <= k) {
+
+                    maxLen = Math.max(maxLen, j - i + 1);
+
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "eceba";
+        int k = 2;
+
+        System.out.println(lengthOfLongestSubstringKDistinct(s, k));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(k)
+🟡 Better Approach
+💡 Idea
+
+Use Sliding Window + HashMap.
+
+Maintain:
+
+left
+right
+character frequencies
+
+Expand window.
+
+If distinct characters become greater than k:
+
+if(map.size() > k)
+
+shrink window once.
+
+💻 Java Code
+import java.util.HashMap;
+
+public class Main {
+
+    public static int lengthOfLongestSubstringKDistinct(String s, int k) {
+
+        HashMap<Character,Integer> map = new HashMap<>();
+
+        int left = 0;
+        int maxLen = 0;
+
+        for(int right = 0; right < s.length(); right++) {
+
+            char ch = s.charAt(right);
+
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+            if(map.size() > k) {
+
+                char leftChar = s.charAt(left);
+
+                map.put(leftChar, map.get(leftChar) - 1);
+
+                if(map.get(leftChar) == 0) {
+                    map.remove(leftChar);
+                }
+
+                left++;
+            }
+
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(k)
+⚡ Optimal Approach
+💡 Idea
+
+Same Sliding Window.
+
+Expand using right.
+
+If distinct characters exceed k:
+
+while(map.size() > k)
+
+keep shrinking until window becomes valid again.
+
+Maintain maximum valid window length.
+
+💻 Java Code
+import java.util.HashMap;
+
+public class Main {
+
+    public static int lengthOfLongestSubstringKDistinct(String s, int k) {
+
+        HashMap<Character,Integer> map = new HashMap<>();
+
+        int left = 0;
+        int maxLen = 0;
+
+        for(int right = 0; right < s.length(); right++) {
+
+            char ch = s.charAt(right);
+
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+            while(map.size() > k) {
+
+                char leftChar = s.charAt(left);
+
+                map.put(leftChar, map.get(leftChar) - 1);
+
+                if(map.get(leftChar) == 0) {
+                    map.remove(leftChar);
+                }
+
+                left++;
+            }
+
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(k)
