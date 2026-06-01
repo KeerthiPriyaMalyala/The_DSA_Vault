@@ -1,0 +1,218 @@
+76. Minimum Window Substring
+
+❓ What is the question asking?
+
+You are given:
+
+a string s
+a string t
+
+Find the smallest substring of s that contains all characters of t (including duplicates).
+
+If no such substring exists, return "".
+
+Example
+
+Input:
+
+s = "ADOBECODEBANC"
+t = "ABC"
+
+Output:
+
+"BANC"
+
+Explanation:
+
+"BANC"
+
+is the smallest window containing:
+
+A, B, C
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all possible substrings.
+
+For every substring:
+
+count frequencies
+check whether all characters of t are present
+
+If valid:
+
+update minimum length
+💻 Java Code
+public class Main {
+
+    public static String minWindow(String s, String t) {
+
+        int minLen = Integer.MAX_VALUE;
+        String ans = "";
+
+        for(int i = 0; i < s.length(); i++) {
+
+            int[] freq = new int[128];
+
+            for(int j = i; j < s.length(); j++) {
+
+                freq[s.charAt(j)]++;
+
+                if(isValid(freq, t)) {
+
+                    if(j - i + 1 < minLen) {
+
+                        minLen = j - i + 1;
+                        ans = s.substring(i, j + 1);
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    private static boolean isValid(int[] freq, String t) {
+
+        int[] need = new int[128];
+
+        for(char ch : t.toCharArray()) {
+            need[ch]++;
+        }
+
+        for(int i = 0; i < 128; i++) {
+
+            if(freq[i] < need[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "ADOBECODEBANC";
+        String t = "ABC";
+
+        System.out.println(minWindow(s, t));
+    }
+}
+▶️ Output
+BANC
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(128)
+⚡ Optimal Approach
+💡 Idea
+
+Use Sliding Window.
+
+Maintain:
+
+frequency of characters needed from t
+count = how many required characters are matched
+
+Expand window using right.
+
+When all characters are matched:
+
+count == t.length()
+
+window becomes valid ✅
+
+Now shrink from left to get the minimum valid window.
+
+Keep updating:
+
+minLen
+startIndex
+💻 Java Code
+public class Main {
+
+    public static String minWindow(String s, String t) {
+
+        int[] freq = new int[128];
+
+        for(char ch : t.toCharArray()) {
+            freq[ch]++;
+        }
+
+        int left = 0;
+        int count = 0;
+
+        int minLen = Integer.MAX_VALUE;
+        int start = 0;
+
+        for(int right = 0; right < s.length(); right++) {
+
+            char ch = s.charAt(right);
+
+            if(freq[ch] > 0) {
+                count++;
+            }
+
+            freq[ch]--;
+
+            while(count == t.length()) {
+
+                if(right - left + 1 < minLen) {
+
+                    minLen = right - left + 1;
+                    start = left;
+                }
+
+                freq[s.charAt(left)]++;
+
+                if(freq[s.charAt(left)] > 0) {
+                    count--;
+                }
+
+                left++;
+            }
+        }
+
+        return minLen == Integer.MAX_VALUE
+                ? ""
+                : s.substring(start, start + minLen);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "ADOBECODEBANC";
+        String t = "ABC";
+
+        System.out.println(minWindow(s, t));
+    }
+}
+▶️ Output
+BANC
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(128)
+🧠 Pattern Recognition
+
+Previous questions:
+
+Longest Substring Without Repeating Characters
+Fruit Into Baskets
+Character Replacement
+
+asked for:
+
+Maximum Window
+
+This question asks for:
+
+Minimum Valid Window
+
+So the pattern changes:
+
+Maximum Window Problems
+Expand → Invalid → Shrink
+Minimum Window Substring
+Expand → Valid → Shrink
+
+🔥 This is one of the most important Sliding Window interview problems because it introduces the "minimum valid window" pattern.
