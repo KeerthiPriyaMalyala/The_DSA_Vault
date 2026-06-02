@@ -1,0 +1,104 @@
+🌳 Binary Tree Representation in Java 💖
+🌟 What is Representation?
+
+Representation means:
+
+How we store a binary tree in code
+
+We use a Node class.
+
+Each node contains:
+
+Data
+Left child reference
+Right child reference
+🌳 Structure of Binary Tree Node
+💻 Java Code
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+🌟 Visual Understanding
+
+Suppose tree is:
+
+        1
+       / \
+      2   3
+
+Representation:
+
+Node 1
+ ├── left  → Node 2
+ └── right → Node 3
+🌳 Creating Binary Tree in Java
+💻 Full Runnable Program
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Creating nodes
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        // Printing root and children
+        System.out.println(root.data);              // 1
+        System.out.println(root.left.data);         // 2
+        System.out.println(root.right.data);        // 3
+    }
+}
+▶️ Tree Formed
+        1
+       / \
+      2   3
+     / \
+    4   5
+🌟 Important Points
+🔹 Root Node
+root = starting node of tree
+🔹 Left Child
+root.left
+🔹 Right Child
+root.right
+🌟 Memory Trick 💖
+
+Each node stores:
+
+Data + Left Address + Right Address
+
+Exactly like:
+
+[value | left | right]
+🌟 Time Complexity
+
+Creating one node:
+
+O(1)
