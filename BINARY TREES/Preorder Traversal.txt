@@ -1,0 +1,141 @@
+🌳 Preorder Traversal 💖
+🌟 What is Preorder Traversal?
+
+In preorder traversal, nodes are visited in this order:
+
+Root → Left → Right
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+🌟 Preorder Traversal Step-by-Step
+Visit Root
+1
+Go to Left Subtree
+
+Visit 2
+
+1 2
+Go Left Again
+
+Visit 4
+
+1 2 4
+Backtrack and Visit Right of 2
+
+Visit 5
+
+1 2 4 5
+Backtrack and Visit Right of 1
+
+Visit 3
+
+1 2 4 5 3
+✅ Final Preorder Output
+1 2 4 5 3
+🌟 Main Logic
+
+At every node:
+
+1️⃣ Visit Root
+2️⃣ Traverse Left
+3️⃣ Traverse Right
+
+⚡ Recursive Approach
+💡 Idea
+
+Use recursion because:
+
+Left subtree is itself a tree
+Right subtree is itself a tree
+💻 Java Code
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void preorder(Node root) {
+
+        if (root == null)
+            return;
+
+        // Root
+        System.out.print(root.data + " ");
+
+        // Left
+        preorder(root.left);
+
+        // Right
+        preorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        preorder(root);
+    }
+}
+▶️ Output
+1 2 4 5 3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Because every node is visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Due to recursion stack.
+
+🌟 Dry Run
+preorder(1)
+print 1
+go left
+preorder(2)
+print 2
+go left
+preorder(4)
+print 4
+left null
+right null
+
+Backtrack ⬅️
+
+preorder(5)
+print 5
+
+Backtrack ⬅️
+
+preorder(3)
+print 3
+
+DONE ✅
+
+🎀 Memory Trick
+PREorder
+PRE = Parent First
+
+So:
+
+Root → Left → Right
