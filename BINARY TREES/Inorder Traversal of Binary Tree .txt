@@ -1,0 +1,139 @@
+🌳 Inorder Traversal of Binary Tree 💖
+🌟 What is Inorder Traversal?
+
+In inorder traversal, nodes are visited in this order:
+
+Left → Root → Right
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+🌟 Inorder Traversal Step-by-Step
+Go Left from 1
+
+Go to 2
+
+Then go left again to 4
+
+Visit 4
+4
+Backtrack and Visit 2
+4 2
+Visit Right of 2 → 5
+4 2 5
+Backtrack and Visit 1
+4 2 5 1
+Visit Right of 1 → 3
+4 2 5 1 3
+✅ Final Inorder Output
+4 2 5 1 3
+🌟 Main Logic
+
+At every node:
+
+1️⃣ Traverse Left
+2️⃣ Visit Root
+3️⃣ Traverse Right
+
+⚡ Recursive Approach
+💡 Idea
+
+First completely process left subtree,
+then current node,
+then right subtree.
+
+💻 Java Code
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void inorder(Node root) {
+
+        if (root == null)
+            return;
+
+        // Left
+        inorder(root.left);
+
+        // Root
+        System.out.print(root.data + " ");
+
+        // Right
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        inorder(root);
+    }
+}
+▶️ Output
+4 2 5 1 3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Due to recursion stack.
+
+🌟 Dry Run
+inorder(1)
+go left
+inorder(2)
+go left
+inorder(4)
+print 4
+
+Backtrack ⬅️
+
+Visit 2
+print 2
+
+Visit right → 5
+
+print 5
+
+Backtrack ⬅️
+
+Visit 1
+print 1
+
+Visit right → 3
+
+print 3
+
+DONE ✅
+
+🎀 Memory Trick
+INorder
+IN = Root comes IN between
+
+So:
+
+Left → Root → Right
