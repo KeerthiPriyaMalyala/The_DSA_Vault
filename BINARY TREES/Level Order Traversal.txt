@@ -1,0 +1,176 @@
+🌳 Level Order Traversal 💖
+🌟 What is Level Order Traversal?
+
+In Level Order Traversal, nodes are visited:
+
+Level by Level
+
+From:
+
+Left → Right
+Top → Bottom
+
+It is also called:
+
+Breadth First Search (BFS)
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+🌟 Traversal Process
+Level 1
+1
+Level 2
+2 3
+Level 3
+4 5
+✅ Final Level Order Output
+1 2 3 4 5
+🌟 Main Idea
+
+We use a:
+
+Queue
+
+Because queue follows:
+
+FIFO (First In First Out)
+🌟 Algorithm
+💡 Steps
+
+1️⃣ Put root into queue
+2️⃣ Remove front node
+3️⃣ Print it
+4️⃣ Add its left child
+5️⃣ Add its right child
+6️⃣ Repeat until queue becomes empty
+
+⚡ Optimal Approach (Using Queue)
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void levelOrder(Node root) {
+
+        if (root == null)
+            return;
+
+        Queue<Node> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+
+            Node current = queue.poll();
+
+            System.out.print(current.data + " ");
+
+            if (current.left != null) {
+                queue.offer(current.left);
+            }
+
+            if (current.right != null) {
+                queue.offer(current.right);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        levelOrder(root);
+    }
+}
+▶️ Output
+1 2 3 4 5
+🌟 Dry Run
+Initial Queue
+[1]
+Remove 1
+
+Print:
+
+1
+
+Add 2 and 3
+
+Queue:
+
+[2, 3]
+Remove 2
+
+Print:
+
+1 2
+
+Add 4 and 5
+
+Queue:
+
+[3, 4, 5]
+Remove 3
+
+Print:
+
+1 2 3
+
+Queue:
+
+[4, 5]
+Remove 4
+
+Print:
+
+1 2 3 4
+Remove 5
+
+Print:
+
+1 2 3 4 5
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Queue stores nodes.
+
+🌟 Traversal Comparison
+Traversal	Order
+Preorder	Root Left Right
+Inorder	Left Root Right
+Postorder	Left Right Root
+Level Order	Level by Level
+🎀 Memory Trick
+Level Order
+Use QUEUE + BFS
