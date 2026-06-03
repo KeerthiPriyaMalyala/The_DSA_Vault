@@ -1,0 +1,179 @@
+🌳 Iterative Preorder Traversal of Binary Tree 💖
+🌟 What is Iterative Preorder?
+
+Preorder traversal without recursion.
+
+Traversal order:
+
+Root → Left → Right
+
+Instead of recursion, we use:
+
+Stack
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+✅ Preorder Output
+1 2 4 5 3
+🌟 Main Idea
+
+Stack works:
+
+LIFO (Last In First Out)
+🌟 Important Trick 💖
+
+We want:
+
+Root → Left → Right
+
+But stack removes LAST inserted element first.
+
+So:
+
+Push order should be:
+Right first
+Left second
+
+Then left gets processed first ✅
+
+🌟 Algorithm
+💡 Steps
+
+1️⃣ Push root into stack
+2️⃣ Pop node
+3️⃣ Print node
+4️⃣ Push right child
+5️⃣ Push left child
+6️⃣ Repeat until stack becomes empty
+
+⚡ Optimal Iterative Approach
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void preorder(Node root) {
+
+        if (root == null)
+            return;
+
+        Stack<Node> stack = new Stack<>();
+
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+
+            Node current = stack.pop();
+
+            System.out.print(current.data + " ");
+
+            // Push RIGHT first
+            if (current.right != null) {
+                stack.push(current.right);
+            }
+
+            // Push LEFT second
+            if (current.left != null) {
+                stack.push(current.left);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        preorder(root);
+    }
+}
+▶️ Output
+1 2 4 5 3
+🌟 Dry Run
+Initial Stack
+[1]
+Pop 1
+
+Print:
+
+1
+
+Push 3, then 2
+
+Stack:
+
+[3, 2]
+Pop 2
+
+Print:
+
+1 2
+
+Push 5, then 4
+
+Stack:
+
+[3, 5, 4]
+Pop 4
+
+Print:
+
+1 2 4
+Pop 5
+
+Print:
+
+1 2 4 5
+Pop 3
+
+Print:
+
+1 2 4 5 3
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Stack stores nodes.
+
+🌟 Recursive vs Iterative
+Approach	Uses
+Recursive	Function Call Stack
+Iterative	Explicit Stack
+🎀 Memory Trick
+Preorder
+Root → Left → Right
+Stack Trick
+Push RIGHT first
+Push LEFT second
+
+💖
