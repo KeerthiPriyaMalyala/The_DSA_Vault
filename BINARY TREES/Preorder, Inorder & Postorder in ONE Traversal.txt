@@ -1,0 +1,218 @@
+Preorder, Inorder & Postorder in ONE Traversal 💖
+🌟 Goal
+
+Get all 3 traversals together:
+
+Preorder
+Inorder
+Postorder
+
+using:
+
+ONLY ONE traversal
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+✅ Outputs
+Preorder
+1 2 4 5 3
+Inorder
+4 2 5 1 3
+Postorder
+4 5 2 3 1
+🌟 Main Idea 💡
+
+We use:
+
+Stack + State Number
+
+Each node gets a state:
+
+State	Meaning
+1	Preorder time
+2	Inorder time
+3	Postorder time
+🌟 Logic
+When state = 1
+Process PREORDER
+Add node to preorder
+Increase state to 2
+Move LEFT
+When state = 2
+Process INORDER
+Add node to inorder
+Increase state to 3
+Move RIGHT
+When state = 3
+Process POSTORDER
+Add node to postorder
+Remove from stack
+⚡ Optimal Approach
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+// Pair class
+class Pair {
+
+    Node node;
+    int state;
+
+    Pair(Node node, int state) {
+        this.node = node;
+        this.state = state;
+    }
+}
+
+public class Main {
+
+    static void allTraversal(Node root) {
+
+        List<Integer> pre = new ArrayList<>();
+        List<Integer> in = new ArrayList<>();
+        List<Integer> post = new ArrayList<>();
+
+        Stack<Pair> stack = new Stack<>();
+
+        stack.push(new Pair(root, 1));
+
+        while (!stack.isEmpty()) {
+
+            Pair current = stack.pop();
+
+            // PREORDER
+            if (current.state == 1) {
+
+                pre.add(current.node.data);
+
+                current.state++;
+
+                stack.push(current);
+
+                if (current.node.left != null) {
+                    stack.push(new Pair(current.node.left, 1));
+                }
+            }
+
+            // INORDER
+            else if (current.state == 2) {
+
+                in.add(current.node.data);
+
+                current.state++;
+
+                stack.push(current);
+
+                if (current.node.right != null) {
+                    stack.push(new Pair(current.node.right, 1));
+                }
+            }
+
+            // POSTORDER
+            else {
+
+                post.add(current.node.data);
+            }
+        }
+
+        System.out.println("Preorder : " + pre);
+        System.out.println("Inorder  : " + in);
+        System.out.println("Postorder: " + post);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        allTraversal(root);
+    }
+}
+▶️ Output
+Preorder : [1, 2, 4, 5, 3]
+
+Inorder  : [4, 2, 5, 1, 3]
+
+Postorder: [4, 5, 2, 3, 1]
+🌟 Dry Run (Easy Understanding)
+Node 1 → State 1
+PREORDER
+
+Add:
+
+1
+
+Go LEFT
+
+Node 2 → State 1
+
+Add to preorder.
+
+Go LEFT.
+
+Node 4 → State 1
+
+Add to preorder.
+
+No left child.
+
+Node 4 → State 2
+
+Add to inorder.
+
+Node 4 → State 3
+
+Add to postorder.
+
+DONE for node 4 ✅
+
+Same process repeats for all nodes 🌳
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node processed 3 times.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Stack + traversal lists.
+
+🌟 Key Observation
+
+Each node behaves like:
+
+Visited 3 times
+Visit	Traversal
+1st	Preorder
+2nd	Inorder
+3rd	Postorder
+🎀 Memory Trick
+State Meaning
+1 → PRE
+2 → IN
+3 → POST
+
+💖
