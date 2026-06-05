@@ -1,0 +1,178 @@
+🌳 Iterative Inorder Traversal of Binary Tree 💖
+🌟 What is Inorder Traversal?
+
+Traversal order:
+
+Left → Root → Right
+
+Normally recursion is used.
+
+But in iterative approach, we use:
+
+Stack
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+✅ Inorder Output
+4 2 5 1 3
+🌟 Main Idea
+
+In inorder:
+
+Go LEFT as much as possible
+
+So:
+
+Push nodes into stack while moving left
+When left becomes null:
+Pop node
+Print it
+Move to right subtree
+🌟 Algorithm 💡
+Steps
+
+1️⃣ Create stack
+2️⃣ Move left and push nodes
+3️⃣ When left becomes null:
+
+Pop stack
+Print node
+Move right
+4️⃣ Repeat until:
+current == null
+stack becomes empty
+⚡ Optimal Iterative Approach
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void inorder(Node root) {
+
+        Stack<Node> stack = new Stack<>();
+
+        Node current = root;
+
+        while (current != null || !stack.isEmpty()) {
+
+            // Go LEFT completely
+            while (current != null) {
+
+                stack.push(current);
+
+                current = current.left;
+            }
+
+            // Process node
+            current = stack.pop();
+
+            System.out.print(current.data + " ");
+
+            // Move RIGHT
+            current = current.right;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        inorder(root);
+    }
+}
+▶️ Output
+4 2 5 1 3
+🌟 Dry Run
+Start at 1
+
+Push:
+
+1 → 2 → 4
+
+Stack:
+
+[1, 2, 4]
+Left becomes NULL
+
+Pop 4
+
+Print:
+
+4
+Pop 2
+
+Print:
+
+4 2
+
+Move to right → 5
+
+Push 5
+
+Pop 5
+
+Print:
+
+4 2 5
+Pop 1
+
+Print:
+
+4 2 5 1
+
+Move right → 3
+
+Pop 3
+
+Print:
+
+4 2 5 1 3
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Stack stores nodes.
+
+🌟 Important Observation
+Recursive inorder:
+System stack handles traversal
+Iterative inorder:
+WE manually handle stack
+🎀 Memory Trick
+Inorder
+Left → Root → Right
+Iterative Trick
+Go LEFT completely first
+
+💖
