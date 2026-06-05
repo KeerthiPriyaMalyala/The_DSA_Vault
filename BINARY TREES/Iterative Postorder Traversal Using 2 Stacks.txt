@@ -1,0 +1,169 @@
+🌳 Iterative Postorder Traversal Using 2 Stacks 💖
+🌟 What is Postorder Traversal?
+
+Traversal order:
+
+Left → Right → Root
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+✅ Postorder Output
+4 5 2 3 1
+🌟 Why 2 Stacks?
+
+Postorder is difficult iteratively because:
+
+Root should come LAST
+
+So we use:
+
+Stack 1 → for traversal
+Stack 2 → to reverse order
+🌟 Main Idea 💡
+
+If we do:
+
+Root → Right → Left
+
+and reverse it,
+
+we get:
+
+Left → Right → Root
+
+which is postorder ✅
+
+🌟 Algorithm
+Steps
+
+1️⃣ Push root into Stack1
+2️⃣ Pop from Stack1 and push into Stack2
+3️⃣ Push left child into Stack1
+4️⃣ Push right child into Stack1
+5️⃣ Repeat until Stack1 becomes empty
+6️⃣ Pop all elements from Stack2
+
+⚡ Optimal Approach (2 Stacks)
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void postorder(Node root) {
+
+        if (root == null)
+            return;
+
+        Stack<Node> stack1 = new Stack<>();
+        Stack<Node> stack2 = new Stack<>();
+
+        stack1.push(root);
+
+        while (!stack1.isEmpty()) {
+
+            Node current = stack1.pop();
+
+            stack2.push(current);
+
+            // LEFT child
+            if (current.left != null) {
+                stack1.push(current.left);
+            }
+
+            // RIGHT child
+            if (current.right != null) {
+                stack1.push(current.right);
+            }
+        }
+
+        while (!stack2.isEmpty()) {
+
+            System.out.print(stack2.pop().data + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        postorder(root);
+    }
+}
+▶️ Output
+4 5 2 3 1
+🌟 Dry Run
+Initial
+Stack1 = [1]
+Stack2 = []
+Pop 1
+
+Push into Stack2
+
+Stack2 = [1]
+
+Push left 2, right 3
+
+Stack1 = [2, 3]
+Pop 3
+Stack2 = [1, 3]
+Pop 2
+Stack2 = [1, 3, 2]
+
+Push 4, 5
+
+Pop 5
+Stack2 = [1, 3, 2, 5]
+Pop 4
+Stack2 = [1, 3, 2, 5, 4]
+Now Pop Stack2
+4 5 2 3 1
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Using 2 stacks.
+
+🌟 Key Observation
+Stack2 reverses order
+Root Right Left
+↓ reverse
+Left Right Root
+🎀 Memory Trick
+Postorder
+Left → Right → Root
+Iterative Trick
+Use 2 stacks
+Reverse the order
+
+💖
