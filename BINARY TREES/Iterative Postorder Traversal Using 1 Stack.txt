@@ -1,0 +1,181 @@
+🌳 Iterative Postorder Traversal Using 1 Stack 💖
+🌟 What is Postorder Traversal?
+
+Traversal order:
+
+Left → Right → Root
+🌳 Example Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+✅ Postorder Output
+4 5 2 3 1
+🌟 Why is 1 Stack Difficult? 😭
+
+Because:
+
+Root should come LAST
+
+We must carefully track:
+
+Left subtree done?
+Right subtree done?
+Then only print root
+🌟 Main Idea 💡
+
+1️⃣ Go completely LEFT and push nodes
+2️⃣ Check right subtree
+3️⃣ If right subtree not processed:
+
+move right
+4️⃣ Otherwise:
+print node
+pop it
+🌟 Important Variable
+
+We use:
+
+lastVisited
+
+It helps to know:
+
+whether right subtree is already processed
+⚡ Optimal Approach (1 Stack)
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void postorder(Node root) {
+
+        Stack<Node> stack = new Stack<>();
+
+        Node current = root;
+
+        Node lastVisited = null;
+
+        while (current != null || !stack.isEmpty()) {
+
+            // Go LEFT completely
+            while (current != null) {
+
+                stack.push(current);
+
+                current = current.left;
+            }
+
+            Node peekNode = stack.peek();
+
+            // If RIGHT exists and not processed
+            if (peekNode.right != null &&
+                lastVisited != peekNode.right) {
+
+                current = peekNode.right;
+            }
+            else {
+
+                System.out.print(peekNode.data + " ");
+
+                lastVisited = stack.pop();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        postorder(root);
+    }
+}
+▶️ Output
+4 5 2 3 1
+🌟 Dry Run (Easy Understanding)
+Push Left Completely
+1 → 2 → 4
+
+Stack:
+
+[1, 2, 4]
+Node 4
+
+No right child ✅
+
+Print:
+
+4
+Back to 2
+
+Right child = 5
+
+Go to 5
+
+Print:
+
+5
+Now both children of 2 done
+
+Print:
+
+2
+Visit 3
+
+Print:
+
+3
+Finally print 1
+1
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Stack stores nodes.
+
+🌟 Key Observation
+
+We print node ONLY when:
+
+Left subtree done
+AND
+Right subtree done
+🌟 Recursive vs Iterative
+Approach	Uses
+Recursive	Function Call Stack
+Iterative	Manual Stack + lastVisited
+🎀 Memory Trick
+Postorder
+Left → Right → Root
+1 Stack Trick
+Use lastVisited
+
+💖
