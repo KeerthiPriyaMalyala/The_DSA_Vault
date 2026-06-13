@@ -1,0 +1,201 @@
+104. Maximum Depth of Binary Tree 💖
+❓ What is the question asking?
+
+Find the:
+
+maximum depth / height
+
+of the binary tree.
+
+Depth means:
+
+Longest path from root to leaf
+🌳 Example Tree
+        1
+       / \
+      2   3
+     /
+    4
+
+Maximum depth:
+
+3
+🪨 Brute Force Approach (Using Level Order Traversal)
+💡 Idea
+
+Count how many levels are present in the tree.
+
+We use:
+
+Queue (BFS)
+
+Every loop processes one level.
+
+💻 Java Code
+import java.util.*;
+
+class Solution {
+
+    public int maxDepth(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        int depth = 0;
+
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+
+            depth++;
+
+            for (int i = 0; i < size; i++) {
+
+                TreeNode current = queue.poll();
+
+                if (current.left != null) {
+                    queue.offer(current.left);
+                }
+
+                if (current.right != null) {
+                    queue.offer(current.right);
+                }
+            }
+        }
+
+        return depth;
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Queue stores nodes.
+
+⚡ Optimal Approach (Recursion / DFS)
+💡 Idea
+
+For every node:
+
+Find left subtree height
+Find right subtree height
+Return maximum + 1
+🌟 Formula
+
+Height=1+max(leftHeight,rightHeight)
+
+💻 Java Code
+class Solution {
+
+    public int maxDepth(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        int leftHeight = maxDepth(root.left);
+
+        int rightHeight = maxDepth(root.right);
+
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+🌟 Better Approach (Iterative DFS Using Stack)
+💡 Idea
+
+Use stack manually instead of recursion.
+
+Store:
+
+(node, depth)
+
+Track maximum depth.
+
+💻 Java Code
+import java.util.*;
+
+class Pair {
+
+    TreeNode node;
+    int depth;
+
+    Pair(TreeNode node, int depth) {
+        this.node = node;
+        this.depth = depth;
+    }
+}
+
+class Solution {
+
+    public int maxDepth(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        Stack<Pair> stack = new Stack<>();
+
+        stack.push(new Pair(root, 1));
+
+        int maxDepth = 0;
+
+        while (!stack.isEmpty()) {
+
+            Pair current = stack.pop();
+
+            TreeNode node = current.node;
+            int depth = current.depth;
+
+            maxDepth = Math.max(maxDepth, depth);
+
+            if (node.left != null) {
+                stack.push(new Pair(node.left, depth + 1));
+            }
+
+            if (node.right != null) {
+                stack.push(new Pair(node.right, depth + 1));
+            }
+        }
+
+        return maxDepth;
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Stack stores nodes.
+
+🌟 Comparison
+Approach	Technique
+Brute Force	BFS / Queue
+Better	DFS / Stack
+Optimal	DFS / Recursion
+🎀 Important Observation
+DFS Formula
+1 + max(leftHeight, rightHeight)
+BFS Idea
+Count levels
