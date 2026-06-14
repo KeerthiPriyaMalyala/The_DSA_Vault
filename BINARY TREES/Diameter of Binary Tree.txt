@@ -1,0 +1,200 @@
+543. Diameter of Binary Tree 💖
+❓ What is the question asking?
+
+Find the:
+
+Diameter of Binary Tree
+🌟 What is Diameter?
+
+Diameter means:
+
+Longest path between any two nodes
+
+The path may or may NOT pass through root.
+
+🌳 Example
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+Longest path:
+
+4 → 2 → 1 → 3
+
+OR
+
+5 → 2 → 1 → 3
+
+Diameter:
+
+3 edges
+🌟 Main Idea 💡
+
+For every node:
+
+diameter passing through node =
+leftHeight + rightHeight
+🌟 Formula
+
+Diameter=leftHeight+rightHeight
+
+🪨 Brute Force Approach
+💡 Idea
+
+For every node:
+
+1️⃣ Find left height
+2️⃣ Find right height
+3️⃣ Calculate diameter
+4️⃣ Recursively check left & right subtree
+
+💻 Java Code
+class Solution {
+
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        int leftHeight = height(root.left);
+
+        int rightHeight = height(root.right);
+
+        int currentDiameter = leftHeight + rightHeight;
+
+        int leftDiameter = diameterOfBinaryTree(root.left);
+
+        int rightDiameter = diameterOfBinaryTree(root.right);
+
+        return Math.max(currentDiameter,
+               Math.max(leftDiameter, rightDiameter));
+    }
+
+    public int height(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        return 1 + Math.max(height(root.left),
+                            height(root.right));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n²)
+
+Height calculated repeatedly.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+⚡ Optimal Approach
+💡 Idea
+
+Calculate:
+
+height
+diameter
+
+together in ONE traversal 😎
+
+Use a global variable:
+
+diameter
+
+Update it at every node.
+
+🌟 Important Observation
+
+At every node:
+
+leftHeight + rightHeight
+
+can become answer.
+
+💻 Java Code
+class Solution {
+
+    int diameter = 0;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        height(root);
+
+        return diameter;
+    }
+
+    public int height(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        int leftHeight = height(root.left);
+
+        int rightHeight = height(root.right);
+
+        diameter = Math.max(diameter,
+                            leftHeight + rightHeight);
+
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+}
+▶️ Output
+3
+🌟 Dry Run
+Node 4
+left = 0
+right = 0
+
+diameter = 0
+Node 2
+left = 1
+right = 1
+
+diameter = 2
+Node 1
+left = 2
+right = 1
+
+diameter = 3
+
+DONE ✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+🌟 Important Note
+Diameter can be measured in:
+edges ✅ (LeetCode uses this)
+nodes
+
+This problem uses:
+
+Number of EDGES
+🌟 Comparison
+Approach	Time
+Brute Force	O(n²)
+Optimal	O(n)
+🎀 Memory Trick
+
+At every node:
+
+leftHeight + rightHeight
+
+can become diameter 💖
