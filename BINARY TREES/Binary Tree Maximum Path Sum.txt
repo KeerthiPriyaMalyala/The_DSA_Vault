@@ -1,0 +1,205 @@
+124. Binary Tree Maximum Path Sum 💖
+❓ What is the question asking?
+
+Find the:
+
+maximum path sum
+
+in the binary tree.
+
+🌟 What is a Path?
+
+A path is:
+
+connected nodes
+
+Rules:
+
+Path can start from ANY node
+Path can end at ANY node
+Must be continuous
+Cannot visit node twice
+🌳 Example
+        -10
+        /  \
+       9   20
+          /  \
+         15   7
+
+Best path:
+
+15 → 20 → 7
+
+Sum:
+
+42
+🌟 Main Idea 💡
+
+At every node:
+
+We calculate:
+
+maximum contribution from left
+maximum contribution from right
+🌟 Important Observation
+
+Negative paths are BAD 😭
+
+So if subtree gives negative sum:
+
+ignore it
+
+using:
+
+max(0,subtreeSum)
+
+🌟 Path Through Current Node
+
+At every node:
+
+left + root + right
+
+can become answer.
+
+🌟 Formula
+
+CurrentPathSum=leftGain+node.val+rightGain
+
+⚡ Optimal Approach (DFS)
+💡 Idea
+
+For every node:
+
+1️⃣ Get best left gain
+2️⃣ Get best right gain
+3️⃣ Ignore negative paths
+4️⃣ Update global maximum
+5️⃣ Return ONE side only to parent
+
+Why one side only?
+
+Because parent path must remain continuous 🌳
+
+💻 Java Code
+class Solution {
+
+    int maxSum = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+
+        dfs(root);
+
+        return maxSum;
+    }
+
+    public int dfs(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        int leftGain = Math.max(0, dfs(root.left));
+
+        int rightGain = Math.max(0, dfs(root.right));
+
+        int currentPathSum =
+                leftGain + root.val + rightGain;
+
+        maxSum = Math.max(maxSum, currentPathSum);
+
+        return root.val +
+               Math.max(leftGain, rightGain);
+    }
+}
+▶️ Output
+
+Example:
+
+42
+🌟 Dry Run
+
+Tree:
+
+        -10
+        /  \
+       9   20
+          /  \
+         15   7
+Node 15
+left = 0
+right = 0
+
+sum = 15
+
+maxSum = 15
+
+Node 7
+sum = 7
+
+maxSum still 15
+
+Node 20
+left = 15
+right = 7
+
+sum = 42
+
+maxSum = 42 ✅
+
+Return:
+
+20 + max(15,7) = 35
+Node -10
+left = 9
+right = 35
+
+sum = 34
+
+maxSum remains:
+
+42
+
+DONE ✅
+
+🌟 Why Return Only One Side?
+
+Suppose parent wants path.
+
+If we return:
+
+left + root + right
+
+path splits into TWO directions ❌
+
+Path must stay continuous.
+
+So return only:
+
+root + max(left, right)
+
+✅
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+🌟 Important Concepts
+Concept	Meaning
+Global answer	Any path
+Return value	One-side path
+Negative path	Ignore using max(0, …)
+🎀 Memory Trick
+At every node:
+left + root + right
+
+updates answer 💖
+
+Return to parent:
+root + max(left, right)
