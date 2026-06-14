@@ -1,0 +1,185 @@
+110. Balanced Binary Tree 💖
+❓ What is the question asking?
+
+Check whether a binary tree is:
+
+Height Balanced
+
+or not.
+
+🌟 Balanced Binary Tree Condition
+
+For every node:
+
+| leftHeight - rightHeight | ≤ 1
+
+AND
+
+left subtree must be balanced
+right subtree must be balanced
+🌳 Example of Balanced Tree
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+Difference at every node ≤ 1 ✅
+
+❌ Example of Unbalanced Tree
+        1
+       /
+      2
+     /
+    3
+
+Height difference becomes:
+
+2
+
+NOT balanced ❌
+
+🪨 Brute Force Approach
+💡 Idea
+
+For every node:
+
+1️⃣ Find left height
+2️⃣ Find right height
+3️⃣ Check difference
+4️⃣ Recursively check left & right subtree
+
+🌟 Height Formula
+
+∣leftHeight−rightHeight∣≤1
+
+💻 Java Code
+class Solution {
+
+    public boolean isBalanced(TreeNode root) {
+
+        if (root == null)
+            return true;
+
+        int leftHeight = height(root.left);
+
+        int rightHeight = height(root.right);
+
+        if (Math.abs(leftHeight - rightHeight) > 1)
+            return false;
+
+        return isBalanced(root.left) &&
+               isBalanced(root.right);
+    }
+
+    public int height(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        return 1 + Math.max(height(root.left),
+                            height(root.right));
+    }
+}
+▶️ Output
+true
+
+(for balanced tree)
+
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n²)
+
+Because height calculated repeatedly.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+⚡ Optimal Approach
+💡 Idea
+
+Instead of calculating height again and again:
+
+Return height if subtree balanced
+Return -1 immediately if unbalanced
+
+This avoids repeated work ✅
+
+🌟 Important Trick
+height() returns:
+- actual height → if balanced
+- -1 → if unbalanced
+💻 Java Code
+class Solution {
+
+    public boolean isBalanced(TreeNode root) {
+
+        return height(root) != -1;
+    }
+
+    public int height(TreeNode root) {
+
+        if (root == null)
+            return 0;
+
+        int leftHeight = height(root.left);
+
+        if (leftHeight == -1)
+            return -1;
+
+        int rightHeight = height(root.right);
+
+        if (rightHeight == -1)
+            return -1;
+
+        if (Math.abs(leftHeight - rightHeight) > 1)
+            return -1;
+
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+Complexity	Value
+Time	O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+Complexity	Value
+Space	O(n)
+
+Recursion stack.
+
+🌟 Dry Run
+Node 4
+height = 1
+Node 2
+left = 1
+right = 1
+
+difference = 0
+
+Balanced ✅
+
+Node 1
+left = 2
+right = 1
+
+difference = 1
+
+Balanced ✅
+
+🌟 Comparison
+Approach	Time
+Brute Force	O(n²)
+Optimal	O(n)
+🎀 Memory Trick
+Balanced Tree Condition
+|left - right| ≤ 1
+Optimal Trick
+Return -1 if unbalanced
