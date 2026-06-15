@@ -1,0 +1,208 @@
+Symmetric Binary Tree
+
+❓ What is the question asking?
+
+You are given a binary tree.
+You need to check whether the tree is a mirror image of itself around its center.
+
+A tree is called symmetric if:
+
+Left subtree is the mirror of right subtree
+Corresponding nodes have same values
+
+Example:
+
+        1
+      /   \
+     2     2
+    / \   / \
+   3  4  4   3
+
+This tree is symmetric.
+
+🪨 Brute Force Approach
+
+💡 Idea
+
+Store:
+Inorder traversal of left subtree
+Reverse inorder traversal of right subtree
+Compare both lists.
+
+But this approach is not fully reliable for all structures unless null nodes are also stored.
+
+So it is not preferred.
+
+💻 Java Code (only for understanding)
+
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static void inorder(Node root, List<Integer> list) {
+
+        if (root == null) {
+            list.add(-1);
+            return;
+        }
+
+        inorder(root.left, list);
+        list.add(root.data);
+        inorder(root.right, list);
+    }
+
+    static void reverseInorder(Node root, List<Integer> list) {
+
+        if (root == null) {
+            list.add(-1);
+            return;
+        }
+
+        reverseInorder(root.right, list);
+        list.add(root.data);
+        reverseInorder(root.left, list);
+    }
+
+    static boolean isSymmetric(Node root) {
+
+        if (root == null)
+            return true;
+
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+
+        inorder(root.left, left);
+        reverseInorder(root.right, right);
+
+        return left.equals(right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(2);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(4);
+
+        root.right.left = new Node(4);
+        root.right.right = new Node(3);
+
+        System.out.println(isSymmetric(root));
+    }
+}
+
+▶️ Output
+
+true
+
+⏱️ Time Complexity
+
+O(N)
+
+📦 Space Complexity
+
+O(N)
+
+For storing traversal lists.
+
+⚡️ Optimal Approach
+
+💡 Idea
+
+Use recursion and compare mirror nodes directly.
+
+For two nodes to be mirror:
+
+Both should be null → true
+One null and one not null → false
+Values should be equal
+Left child of first tree == Right child of second tree
+Right child of first tree == Left child of second tree
+
+We recursively check:
+
+left.left  ↔ right.right
+left.right ↔ right.left
+
+💻 Java Code
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static boolean isMirror(Node t1, Node t2) {
+
+        if (t1 == null && t2 == null)
+            return true;
+
+        if (t1 == null || t2 == null)
+            return false;
+
+        return (t1.data == t2.data)
+                && isMirror(t1.left, t2.right)
+                && isMirror(t1.right, t2.left);
+    }
+
+    static boolean isSymmetric(Node root) {
+
+        if (root == null)
+            return true;
+
+        return isMirror(root.left, root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(2);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(4);
+
+        root.right.left = new Node(4);
+        root.right.right = new Node(3);
+
+        boolean ans = isSymmetric(root);
+
+        System.out.println(ans);
+    }
+}
+
+▶️ Output
+
+true
+
+⏱️ Time Complexity
+
+O(N)
+
+Each node is visited once.
+
+📦 Space Complexity
+
+O(H)
+
+Where H is height of tree (recursive stack space).
