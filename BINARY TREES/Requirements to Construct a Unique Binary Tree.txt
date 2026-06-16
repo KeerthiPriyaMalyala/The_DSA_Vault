@@ -1,0 +1,73 @@
+Requirements to Construct a Unique Binary Tree 🌳
+
+To construct a unique Binary Tree, we need:
+
+✅ Any TWO traversals
+
+But one traversal must be:
+
+Inorder
+✅ Valid Combinations
+Traversal 1	Traversal 2	Unique Tree Possible?
+Inorder	Preorder	✅ Yes
+Inorder	Postorder	✅ Yes
+Inorder	Level Order	✅ Yes
+Preorder	Postorder	❌ No (not always unique)
+🧠 Why Inorder is Important?
+
+Because:
+
+Inorder divides tree into
+Left Subtree and Right Subtree
+
+That helps uniquely identify structure.
+
+🌳 Example
+Inorder
+D B E A F C
+Preorder
+A B D E C F
+🔥 Construction Logic
+
+From Preorder:
+
+First element = Root
+
+So:
+
+Root = A
+
+Now find A in inorder:
+
+D B E | A | F C
+
+Left side:
+
+D B E
+
+Right side:
+
+F C
+
+Thus tree becomes uniquely determined 😄
+
+❌ Why Preorder + Postorder alone fails?
+
+Because multiple trees can produce same traversals.
+
+Example:
+
+Preorder  : A B
+Postorder : B A
+
+Possible Trees:
+
+A        A
+/          \
+B            B
+
+Both give same traversals 😄
+
+🧠 Final Remember Trick
+Inorder + anything = Unique BT ✅
+Without inorder = Not guaranteed ❌
