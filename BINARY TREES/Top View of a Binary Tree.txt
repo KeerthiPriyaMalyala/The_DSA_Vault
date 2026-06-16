@@ -1,0 +1,137 @@
+Top View of a Binary Tree 🌳
+❓ What is the question asking?
+
+We need to print the nodes visible when the binary tree is viewed from the top.
+
+Only the first node at each vertical line is printed.
+
+🌟 Example
+          1
+        /   \
+       2     3
+        \   / \
+         4 5   6
+Top View
+2 1 3 6
+
+Because:
+
+2 visible from left
+1 visible at center
+3 visible
+6 visible at right
+
+4 and 5 are hidden.
+
+⚡ Optimal Approach
+💡 Idea
+
+Use:
+
+Level Order Traversal (BFS)
+Store:
+Node
+Horizontal Distance (HD)
+Horizontal Distance Rules
+Root HD = 0
+Left child = HD - 1
+Right child = HD + 1
+
+Store the first node encountered for every HD.
+
+Use:
+
+Queue → BFS
+TreeMap → sorted output
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+class Pair {
+    Node node;
+    int hd;
+
+    Pair(Node node, int hd) {
+        this.node = node;
+        this.hd = hd;
+    }
+}
+
+public class Main {
+
+    static void topView(Node root) {
+
+        if (root == null)
+            return;
+
+        Queue<Pair> q = new LinkedList<>();
+
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+
+        q.add(new Pair(root, 0));
+
+        while (!q.isEmpty()) {
+
+            Pair temp = q.poll();
+
+            Node curr = temp.node;
+            int hd = temp.hd;
+
+            // first node for this HD
+            if (!map.containsKey(hd)) {
+                map.put(hd, curr.data);
+            }
+
+            if (curr.left != null)
+                q.add(new Pair(curr.left, hd - 1));
+
+            if (curr.right != null)
+                q.add(new Pair(curr.right, hd + 1));
+        }
+
+        System.out.println("Top View:");
+
+        for (int x : map.values()) {
+            System.out.print(x + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.right = new Node(4);
+
+        root.right.left = new Node(5);
+        root.right.right = new Node(6);
+
+        topView(root);
+    }
+}
+▶️ Output
+Top View:
+2 1 3 6
+⏱️ Time Complexity
+O(N log N)
+
+(TreeMap insertion)
+
+📦 Space Complexity
+O(N)
+🧠 Small Remember Trick
+Top View = First node at every HD
+Left = HD-1
+Right = HD+1
+Queue + TreeMap = Top View 😄
