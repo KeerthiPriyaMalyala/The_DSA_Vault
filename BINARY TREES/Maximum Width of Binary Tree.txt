@@ -1,0 +1,184 @@
+Maximum Width of Binary Tree 🌳
+❓ What is the question asking?
+
+We need to find:
+
+Maximum number of nodes present at any level
+
+Example:
+
+        1
+      /   \
+     2     3
+    / \     \
+   4   5     8
+
+Levels:
+
+Level 0 → 1 node
+Level 1 → 2 nodes
+Level 2 → 3 nodes
+
+So answer = 3 ✅
+
+💡 Main Idea
+
+This is basically:
+
+Level Order Traversal (BFS)
+
+At every level:
+
+check queue size
+update maximum
+
+You already know BFS 😄
+So this problem is EASY upgrade of BFS.
+
+🪨 Brute Force Approach
+💡 Idea
+Find height of tree
+For every level:
+count nodes
+Return maximum count
+
+This works but repeated traversal happens.
+
+⏱️ Time Complexity
+O(N²)
+
+Worst case skew tree.
+
+⚡️ Optimal Approach
+💡 Idea
+
+Use Queue (BFS).
+
+At each level:
+
+size of queue = width of that level
+
+Store maximum.
+
+🧠 Dry Run
+        1
+      /   \
+     2     3
+    / \     \
+   4   5     8
+
+Queue:
+
+[1]
+size = 1
+max = 1
+
+Next:
+
+[2,3]
+size = 2
+max = 2
+
+Next:
+
+[4,5,8]
+size = 3
+max = 3
+
+DONE ✅
+
+💻 Java Code (Your Template Style)
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int maximumWidth(Node root) {
+
+        if (root == null)
+            return 0;
+
+        Queue<Node> q = new LinkedList<>();
+
+        q.offer(root);
+
+        int maxWidth = 0;
+
+        while (!q.isEmpty()) {
+
+            int size = q.size();
+
+            // Update maximum width
+            maxWidth = Math.max(maxWidth, size);
+
+            // Process current level
+            for (int i = 0; i < size; i++) {
+
+                Node current = q.poll();
+
+                if (current.left != null)
+                    q.offer(current.left);
+
+                if (current.right != null)
+                    q.offer(current.right);
+            }
+        }
+
+        return maxWidth;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        root.right.right = new Node(8);
+
+        int ans = maximumWidth(root);
+
+        System.out.println("Maximum Width: " + ans);
+    }
+}
+▶️ Output
+Maximum Width: 3
+⏱️ Time Complexity
+O(N)
+
+Each node visited once.
+
+📦 Space Complexity
+O(N)
+
+Queue stores level nodes.
+
+🧠 Important Observation
+Queue size at each level
+        =
+Width of that level
+
+This is the WHOLE problem 🔥
+
+🎯 Tiny Revision Notes
+1. Use BFS (Queue)
+
+2. Queue size = width of current level
+
+3. Update max width
+
+4. Push left and right children
+
+5. Return maxWidth
