@@ -1,0 +1,193 @@
+Count Total Nodes in Complete Binary Tree 🌳
+❓ What is the question asking?
+
+Count total number of nodes in a:
+
+Complete Binary Tree
+🌳 What is Complete Binary Tree?
+
+A tree where:
+
+all levels completely filled
+except possibly last level
+last level filled from left to right
+
+Example:
+
+        1
+      /   \
+     2     3
+    / \   /
+   4   5 6
+
+This is Complete BT ✅
+
+🪨 Brute Force Approach
+💡 Idea
+
+Simple traversal:
+
+visit every node
+count nodes
+
+Can use:
+
+preorder
+inorder
+postorder
+BFS
+💻 Basic Idea
+count =
+1 + leftCount + rightCount
+⏱️ Time Complexity
+O(N)
+⚡️ Optimal Approach
+😯 Important Property
+
+In Complete BT:
+
+If:
+
+left height == right height
+
+Then tree is:
+
+Perfect Binary Tree
+
+Number of nodes directly:
+
+(2^h) - 1
+
+No need to traverse all nodes 🔥
+
+💡 Main Idea
+
+For every subtree:
+
+Find left height
+Find right height
+
+If equal:
+
+return (2^h)-1
+
+Else:
+
+1 + left subtree + right subtree
+🧠 Why Faster?
+
+Because many subtrees become perfect trees,
+so we calculate directly instead of traversing all nodes.
+
+💻 Java Code (Your Template Style)
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int leftHeight(Node root) {
+
+        int height = 0;
+
+        while (root != null) {
+            height++;
+            root = root.left;
+        }
+
+        return height;
+    }
+
+    static int rightHeight(Node root) {
+
+        int height = 0;
+
+        while (root != null) {
+            height++;
+            root = root.right;
+        }
+
+        return height;
+    }
+
+    static int countNodes(Node root) {
+
+        if (root == null)
+            return 0;
+
+        int lh = leftHeight(root);
+        int rh = rightHeight(root);
+
+        // Perfect Binary Tree
+        if (lh == rh)
+            return (1 << lh) - 1;
+
+        // Otherwise recurse
+        return 1 +
+               countNodes(root.left) +
+               countNodes(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        root.right.left = new Node(6);
+
+        int ans = countNodes(root);
+
+        System.out.println("Total Nodes: " + ans);
+    }
+}
+▶️ Output
+Total Nodes: 6
+⏱️ Time Complexity
+O((log N)^2)
+
+Why?
+
+At every recursion:
+
+height calculation → O(log N)
+recursion depth → O(log N)
+
+So:
+
+O(log N × log N)
+📦 Space Complexity
+O(log N)
+
+Recursion stack.
+
+🧠 MOST IMPORTANT INTERVIEW TRICK
+If left height == right height
+→ Perfect Binary Tree
+
+Then directly use:
+
+(2^h)-1
+
+This is the FULL optimization 🔥
+
+🎯 Tiny Revision Notes
+1. Find left height
+
+2. Find right height
+
+3. If equal:
+   nodes = (2^h)-1
+
+4. Else:
+   1 + left + right
