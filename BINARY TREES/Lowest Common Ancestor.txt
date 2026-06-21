@@ -1,0 +1,164 @@
+❓ What is LCA?
+
+Lowest Common Ancestor means:
+
+For two nodes p and q,
+find the lowest node in the tree that has both as descendants.
+
+Example:
+
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+LCA of 4 and 5 = 2
+
+Because:
+
+2 is parent of both
+and lowest common node.
+💡 Main Intuition
+
+At every node:
+
+If current node is p or q
+→ return it.
+Search left subtree.
+Search right subtree.
+
+Now:
+
+If both left and right return non-null
+→ current node is LCA.
+Else return whichever side is non-null.
+🧠 Small Dry Run
+
+Find LCA of 4 and 5
+
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+At node 4:
+
+found 4 → return 4
+
+At node 5:
+
+found 5 → return 5
+
+At node 2:
+
+left = 4
+right = 5
+
+Both non-null 😯
+So return 2.
+
+DONE ✅
+
+⚡️ Optimal Approach
+💡 Idea
+
+Use recursion.
+
+Cases:
+
+root == null → return null
+root == p or q → return root
+recurse left and right
+if both exist → root is answer
+else return existing side
+💻 Java Code (Your Template Style)
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static Node lca(Node root, int p, int q) {
+
+        // Base Case
+        if (root == null)
+            return null;
+
+        // If current node is p or q
+        if (root.data == p || root.data == q)
+            return root;
+
+        // Search in left subtree
+        Node left = lca(root.left, p, q);
+
+        // Search in right subtree
+        Node right = lca(root.right, p, q);
+
+        // If both are not null -> current node is LCA
+        if (left != null && right != null)
+            return root;
+
+        // Return non-null side
+        if (left != null)
+            return left;
+
+        return right;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        Node ans = lca(root, 4, 5);
+
+        System.out.println("LCA: " + ans.data);
+    }
+}
+▶️ Output
+LCA: 2
+⏱️ Time Complexity
+O(N)
+
+Because worst case we visit all nodes once.
+
+📦 Space Complexity
+O(H)
+
+H = height of tree (recursion stack)
+
+Worst case:
+
+O(N)
+🧠 Important Pattern to Remember
+left != null && right != null
+        ↓
+Current node is ANSWER
+
+This line is the whole concept 🔥
+
+🎯 Tiny Revision Notes
+1. If root is null → return null
+
+2. If root == p or q
+   → return root
+
+3. Search left and right
+
+4. If both sides return value
+   → current node is LCA
+
+5. Else return non-null side
