@@ -1,0 +1,159 @@
+Children Sum Property in Binary Tree 🌳
+❓ What is the question asking?
+
+For every node:
+
+Node value = Left child + Right child
+
+Tree should satisfy this condition for ALL nodes.
+
+✅ Valid Example
+        10
+       /  \
+      8    2
+     / \
+    3   5
+
+Check:
+
+8 = 3 + 5 ✅
+10 = 8 + 2 ✅
+
+So tree satisfies Children Sum Property.
+
+❌ Invalid Example
+        10
+       /  \
+      7    2
+
+Because:
+
+7 + 2 = 9 ≠ 10
+
+So invalid ❌
+
+💡 Main Idea
+
+For every node:
+
+calculate left child value
+calculate right child value
+compare sum with current node
+
+If any node fails:
+
+return false
+
+Else:
+
+return true
+⚡️ Optimal Approach
+💡 Idea
+
+Use recursion (DFS).
+
+At every node:
+
+Find left value
+Find right value
+
+Check:
+
+root.data == left + right
+Recursively check left and right subtree
+🧠 Important Base Cases
+
+Leaf node always valid ✅
+
+Why?
+
+Because:
+
+No children
+
+So property automatically satisfied.
+
+💻 Java Code (Your Template Style)
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static boolean childrenSum(Node root) {
+
+        // Empty tree or leaf node
+        if (root == null ||
+            (root.left == null && root.right == null))
+            return true;
+
+        int left = 0;
+        int right = 0;
+
+        if (root.left != null)
+            left = root.left.data;
+
+        if (root.right != null)
+            right = root.right.data;
+
+        // Check current node
+        if (root.data == left + right
+                && childrenSum(root.left)
+                && childrenSum(root.right))
+            return true;
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(10);
+
+        root.left = new Node(8);
+        root.right = new Node(2);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(5);
+
+        boolean ans = childrenSum(root);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(N)
+
+Every node visited once.
+
+📦 Space Complexity
+O(H)
+
+Recursion stack.
+
+Worst case skew tree:
+
+O(N)
+🧠 Core Logic to Remember
+root.data == left + right
+
+This single line is entire problem 🔥
+
+🎯 Tiny Revision Notes
+1. Leaf node → always true
+
+2. Find left child value
+
+3. Find right child value
+
+4. Check:
+   root = left + right
+
+5. Recursively check subtrees
