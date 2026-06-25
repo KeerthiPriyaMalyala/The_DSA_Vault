@@ -1,0 +1,243 @@
+❓ What is the question asking?
+
+You are given:
+
+A Binary Tree
+A target node
+
+Fire starts from target node 🔥
+
+Every second:
+
+left child burns
+right child burns
+parent also burns
+
+We need to find:
+
+➡️ Minimum time to burn entire tree
+
+💡 Main Idea
+
+Normally tree only goes downward ⬇️
+
+But fire spreads:
+
+left
+right
+parent ⬆️
+
+So first:
+
+Step 1:
+
+Store parent of every node using BFS
+
+Then:
+
+Step 2:
+
+Start BFS from target node and spread fire in all 3 directions.
+
+Each BFS level = 1 second ⏱️
+
+🌳 Example
+        1
+      /   \
+     2     3
+    / \     \
+   4   5     6
+
+Target = 5
+
+🔥 Burning Process
+Time = 0
+5
+Time = 1
+2
+Time = 2
+1 4
+Time = 3
+3
+Time = 4
+6
+
+✅ Answer = 4
+
+⚡ Optimal Approach
+💡 Idea
+Phase 1:
+
+Create:
+
+HashMap<Node, Node> parentMap
+
+using BFS.
+
+Phase 2:
+
+Again BFS from target node.
+
+For every node:
+
+go left
+go right
+go parent
+
+Use visited map so fire doesn't revisit.
+
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    // Store parent references
+    public static Node markParents(Node root,
+                                   HashMap<Node, Node> parentMap,
+                                   int target) {
+
+        Queue<Node> q = new LinkedList<>();
+        q.offer(root);
+
+        Node targetNode = null;
+
+        while (!q.isEmpty()) {
+
+            Node current = q.poll();
+
+            if (current.data == target) {
+                targetNode = current;
+            }
+
+            if (current.left != null) {
+                parentMap.put(current.left, current);
+                q.offer(current.left);
+            }
+
+            if (current.right != null) {
+                parentMap.put(current.right, current);
+                q.offer(current.right);
+            }
+        }
+
+        return targetNode;
+    }
+
+    public static int burnTree(Node root, int target) {
+
+        HashMap<Node, Node> parentMap = new HashMap<>();
+
+        Node targetNode = markParents(root, parentMap, target);
+
+        Queue<Node> q = new LinkedList<>();
+        HashMap<Node, Boolean> visited = new HashMap<>();
+
+        q.offer(targetNode);
+        visited.put(targetNode, true);
+
+        int time = 0;
+
+        while (!q.isEmpty()) {
+
+            int size = q.size();
+
+            int burned = 0;
+
+            for (int i = 0; i < size; i++) {
+
+                Node current = q.poll();
+
+                // left child
+                if (current.left != null &&
+                        visited.get(current.left) == null) {
+
+                    burned = 1;
+                    visited.put(current.left, true);
+                    q.offer(current.left);
+                }
+
+                // right child
+                if (current.right != null &&
+                        visited.get(current.right) == null) {
+
+                    burned = 1;
+                    visited.put(current.right, true);
+                    q.offer(current.right);
+                }
+
+                // parent
+                if (parentMap.get(current) != null &&
+                        visited.get(parentMap.get(current)) == null) {
+
+                    burned = 1;
+                    visited.put(parentMap.get(current), true);
+                    q.offer(parentMap.get(current));
+                }
+            }
+
+            if (burned == 1) {
+                time++;
+            }
+        }
+
+        return time;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        root.right.right = new Node(6);
+
+        int target = 5;
+
+        System.out.println("Minimum Time = " +
+                burnTree(root, target));
+    }
+}
+▶️ Output
+Minimum Time = 4
+⏱️ Time Complexity
+Parent Mapping BFS
+O(N)
+Burning BFS
+O(N)
+Final
+O(N)
+📦 Space Complexity
+O(N)
+
+because:
+
+queue
+parent map
+visited map
+🧠 Super Important Interview Point
+
+Why parent map needed? 🤔
+
+Because tree nodes don't store parent pointer.
+
+Without parent mapping:
+❌ Fire cannot go upward.
+
+So we convert tree into:
+
+Undirected Graph
+
+using parent connections 😎💖
