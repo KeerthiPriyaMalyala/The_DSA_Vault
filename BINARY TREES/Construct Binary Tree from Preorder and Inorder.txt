@@ -1,0 +1,192 @@
+Construct Binary Tree from Preorder and Inorder 🌳💖
+❓ What is the question asking?
+
+We are given:
+
+Preorder Traversal
+Inorder Traversal
+
+We need to:
+➡️ Construct the original Binary Tree.
+
+🧠 Important Traversal Property
+Preorder
+Root -> Left -> Right
+
+So:
+✅ First element is always ROOT.
+
+Inorder
+Left -> Root -> Right
+
+So:
+✅ Elements left of root belong to left subtree.
+✅ Elements right of root belong to right subtree.
+
+🌳 Example
+Preorder
+[3, 9, 20, 15, 7]
+Inorder
+[9, 3, 15, 20, 7]
+💡 Main Idea
+Step 1:
+
+Take first element from preorder.
+
+3
+
+✅ Root.
+
+Step 2:
+
+Find 3 in inorder.
+
+[9, 3, 15, 20, 7]
+
+Everything:
+
+left side → left subtree
+right side → right subtree
+Step 3:
+
+Recursively build:
+
+left subtree
+right subtree
+⚡ Optimal Approach
+💡 Idea
+
+Use:
+
+HashMap<Integer, Integer>
+
+to store inorder indexes.
+
+This avoids linear search every time 😎
+
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    static int preIndex = 0;
+
+    public static Node buildTree(int[] preorder,
+                                 int[] inorder,
+                                 int inStart,
+                                 int inEnd,
+                                 HashMap<Integer, Integer> map) {
+
+        // Base Case
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        // Current root from preorder
+        int rootValue = preorder[preIndex++];
+
+        Node root = new Node(rootValue);
+
+        // Find root index in inorder
+        int inIndex = map.get(rootValue);
+
+        // Build left subtree
+        root.left = buildTree(preorder,
+                              inorder,
+                              inStart,
+                              inIndex - 1,
+                              map);
+
+        // Build right subtree
+        root.right = buildTree(preorder,
+                               inorder,
+                               inIndex + 1,
+                               inEnd,
+                               map);
+
+        return root;
+    }
+
+    // Inorder print
+    public static void printInorder(Node root) {
+
+        if (root == null)
+            return;
+
+        printInorder(root.left);
+
+        System.out.print(root.data + " ");
+
+        printInorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        int[] preorder = {3, 9, 20, 15, 7};
+
+        int[] inorder = {9, 3, 15, 20, 7};
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Store inorder indexes
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+
+        Node root = buildTree(preorder,
+                              inorder,
+                              0,
+                              inorder.length - 1,
+                              map);
+
+        System.out.println("Inorder Traversal:");
+
+        printInorder(root);
+    }
+}
+▶️ Output
+Inorder Traversal:
+9 3 15 20 7
+🌳 Constructed Tree
+        3
+       / \
+      9   20
+         /  \
+        15   7
+⏱️ Time Complexity
+Using HashMap
+O(N)
+
+because every node processed once.
+
+📦 Space Complexity
+O(N)
+
+for:
+
+recursion stack
+hashmap
+🧠 Super Important Observation
+
+Why preorder helps? 🤔
+
+Because:
+
+First element = Root
+
+Why inorder helps? 🤔
+
+Because:
+
+It separates left and right subtree
+
+Together both uniquely construct tree
