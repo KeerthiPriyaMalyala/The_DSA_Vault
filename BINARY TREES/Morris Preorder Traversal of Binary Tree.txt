@@ -1,0 +1,194 @@
+Morris Preorder Traversal of Binary Tree 🌳💖
+❓ What is the question asking?
+
+We need to do:
+
+Preorder Traversal
+
+which is:
+
+Root Left Right
+
+BUT:
+
+⚠️ Without using:
+
+recursion
+stack
+
+Need:
+
+O(1) space
+🧠 Main Idea of Morris Traversal
+
+Normally recursion uses stack internally 😭
+
+Morris Traversal avoids stack by:
+
+temporarily creating threads/links
+
+using tree NULL pointers.
+
+🌳 Important Concept
+
+For every node:
+
+Go to:
+
+left subtree
+
+Then find:
+
+rightmost node
+
+called:
+
+predecessor
+💡 Preorder Logic
+
+Since preorder is:
+
+Root Left Right
+
+👉 Print node:
+
+BEFORE going left
+
+Very important 😚
+
+⚡ Morris Preorder Algorithm
+Case 1️⃣
+
+If:
+
+current.left == null
+
+✅ print current
+✅ move right
+
+Case 2️⃣
+
+Find predecessor in left subtree.
+
+If predecessor.right == null
+
+Create thread:
+
+predecessor.right = current
+
+✅ PRINT current first
+✅ move left
+
+If predecessor.right == current
+
+Thread already exists.
+
+Remove it:
+
+predecessor.right = null
+
+Move right.
+
+🌳 Visual Example
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+Preorder:
+
+1 2 4 5 3
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static void morrisPreorder(Node root) {
+
+        Node current = root;
+
+        while (current != null) {
+
+            // No left child
+            if (current.left == null) {
+
+                System.out.print(current.data + " ");
+
+                current = current.right;
+            }
+
+            else {
+
+                // Find predecessor
+                Node predecessor = current.left;
+
+                while (predecessor.right != null &&
+                       predecessor.right != current) {
+
+                    predecessor = predecessor.right;
+                }
+
+                // Create thread
+                if (predecessor.right == null) {
+
+                    System.out.print(current.data + " ");
+
+                    predecessor.right = current;
+
+                    current = current.left;
+                }
+
+                // Thread already exists
+                else {
+
+                    predecessor.right = null;
+
+                    current = current.right;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(3);
+
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+
+        morrisPreorder(root);
+    }
+}
+▶️ Output
+1 2 4 5 3
+⏱️ Time Complexity
+O(N)
+
+Each edge visited at most 2 times.
+
+📦 Space Complexity
+O(1)
+
+No recursion
+No stack 😎🔥
+
+🧠 SUPER IMPORTANT MEMORY TRICK
+Morris Inorder
+Print AFTER coming back
+Morris Preorder
+Print BEFORE going left
+
+😭💖 biggest difference
