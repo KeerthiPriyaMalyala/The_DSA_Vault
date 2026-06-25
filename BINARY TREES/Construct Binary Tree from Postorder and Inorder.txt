@@ -1,0 +1,210 @@
+Construct Binary Tree from Postorder and Inorder 🌳💖
+❓ What is the question asking?
+
+We are given:
+
+Postorder Traversal
+Inorder Traversal
+
+Need to:
+➡️ Construct the original Binary Tree.
+
+🧠 Traversal Properties
+Inorder
+Left Root Right
+
+Used to split:
+
+left subtree
+right subtree
+Postorder
+Left Right Root
+
+So:
+✅ LAST element is always ROOT.
+
+🌳 Example
+Postorder = [9, 15, 7, 20, 3]
+
+Inorder   = [9, 3, 15, 20, 7]
+💡 Main Idea
+Step 1
+
+Take last element from postorder.
+
+3
+
+✅ root node
+
+Step 2
+
+Find 3 in inorder.
+
+[9 |3| 15 20 7]
+
+Left side:
+
+[9]
+
+Right side:
+
+[15 20 7]
+⚠️ Important Observation
+
+Postorder is:
+
+Left Right Root
+
+We are traversing from END.
+
+So traversal becomes:
+
+Root Right Left
+
+Hence:
+✅ Build RIGHT subtree first 😭🔥
+
+⚡ Optimal Approach
+💡 Idea
+
+Use:
+
+HashMap<Integer,Integer>
+
+to store inorder indexes.
+
+Searching root position becomes:
+
+O(1)
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    static int postIndex;
+
+    public static Node buildTree(int[] postorder,
+                                 int[] inorder,
+                                 int inStart,
+                                 int inEnd,
+                                 HashMap<Integer, Integer> map) {
+
+        // Base Case
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        // Current root from postorder
+        int rootValue = postorder[postIndex--];
+
+        Node root = new Node(rootValue);
+
+        // Find root index in inorder
+        int inIndex = map.get(rootValue);
+
+        // Build RIGHT subtree first
+        root.right = buildTree(postorder,
+                               inorder,
+                               inIndex + 1,
+                               inEnd,
+                               map);
+
+        // Build LEFT subtree
+        root.left = buildTree(postorder,
+                              inorder,
+                              inStart,
+                              inIndex - 1,
+                              map);
+
+        return root;
+    }
+
+    // Inorder print
+    public static void printInorder(Node root) {
+
+        if (root == null)
+            return;
+
+        printInorder(root.left);
+
+        System.out.print(root.data + " ");
+
+        printInorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        int[] postorder = {9, 15, 7, 20, 3};
+
+        int[] inorder = {9, 3, 15, 20, 7};
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Store inorder indexes
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+
+        // Start from last index
+        postIndex = postorder.length - 1;
+
+        Node root = buildTree(postorder,
+                              inorder,
+                              0,
+                              inorder.length - 1,
+                              map);
+
+        System.out.println("Inorder Traversal:");
+
+        printInorder(root);
+    }
+}
+▶️ Output
+Inorder Traversal:
+9 3 15 20 7
+🌳 Constructed Tree
+        3
+       / \
+      9   20
+         /  \
+        15   7
+⏱️ Time Complexity
+
+Using hashmap:
+
+O(N)
+
+because:
+
+every node processed once
+hashmap search is O(1)
+📦 Space Complexity
+O(N)
+
+for:
+
+hashmap
+recursion stack
+🧠 Super Important Memory Trick
+Preorder
+Root Left Right
+
+➡️ build LEFT first
+
+Postorder
+Left Right Root
+
+Traverse backwards:
+
+Root Right Left
+
+➡️ build RIGHT first 😭💖
