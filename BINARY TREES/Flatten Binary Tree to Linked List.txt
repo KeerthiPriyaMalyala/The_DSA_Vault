@@ -1,0 +1,186 @@
+Flatten Binary Tree to Linked List 🌳➡️📄💖
+❓ What is the question asking?
+
+Convert the Binary Tree into a Linked List in-place.
+
+Rules:
+
+Use only the right pointer
+Left pointers should become null
+Order should follow Preorder Traversal
+🌳 Example
+Input Tree
+        1
+       / \
+      2   5
+     / \   \
+    3   4   6
+Flattened Tree
+1 → 2 → 3 → 4 → 5 → 6
+
+Using only right pointers ✨
+
+🪨 Brute Force Approach
+💡 Idea
+Store preorder traversal in ArrayList
+Reconnect nodes one by one
+❌ Problem
+
+Extra space used.
+
+⏱️ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+⚡️ Optimal Approach (Reverse Preorder) 🌟
+💡 Main Idea
+
+We traverse:
+
+Right → Left → Root
+
+Why? 🤔
+
+Because we maintain a prev node.
+
+At every node:
+
+current.right = prev
+current.left = null
+prev = current
+
+So nodes automatically connect in preorder sequence 💖
+
+🌟 Dry Run
+
+Tree:
+
+        1
+       / \
+      2   5
+     / \   \
+    3   4   6
+Start from Reverse Preorder
+
+Traversal:
+
+6 → 5 → 4 → 3 → 2 → 1
+Step 1
+
+At node 6:
+
+prev = 6
+Step 2
+
+At node 5:
+
+5.right = 6
+5.left = null
+prev = 5
+
+List:
+
+5 → 6
+Step 3
+
+At node 4:
+
+4.right = 5
+prev = 4
+
+List:
+
+4 → 5 → 6
+Step 4
+
+At node 3:
+
+3.right = 4
+prev = 3
+Step 5
+
+At node 2:
+
+2.right = 3
+prev = 2
+Step 6
+
+At node 1:
+
+1.right = 2
+prev = 1
+
+Final:
+
+1 → 2 → 3 → 4 → 5 → 6
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static Node prev = null;
+
+    public static void flatten(Node root) {
+
+        if (root == null)
+            return;
+
+        // Reverse Preorder
+        flatten(root.right);
+        flatten(root.left);
+
+        root.right = prev;
+        root.left = null;
+
+        prev = root;
+    }
+
+    // PRINT LINKED LIST
+    public static void printList(Node root) {
+
+        while (root != null) {
+            System.out.print(root.data + " ");
+            root = root.right;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(1);
+
+        root.left = new Node(2);
+        root.right = new Node(5);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(4);
+
+        root.right.right = new Node(6);
+
+        flatten(root);
+
+        System.out.println("Flattened Linked List:");
+
+        printList(root);
+    }
+}
+▶️ Output
+Flattened Linked List:
+1 2 3 4 5 6
+⏱️ Time Complexity
+O(N)
+
+Each node visited once ✨
+
+📦 Space Complexity
+O(H)
+
+Due to recursion stack (H = height of tree) 💖
