@@ -1,1 +1,174 @@
+Introduction to Binary Search Tree (BST) 🌳💖
+❓ What is BST?
 
+A Binary Search Tree (BST) is a special type of Binary Tree where:
+
+Left Subtree  <  Root  <  Right Subtree
+
+At every node ✨
+
+🌳 Example BST
+          8
+        /   \
+       5     12
+      / \    / \
+     3   6  10  14
+🌟 BST Property
+
+For every node:
+
+Left side values
+Smaller than root
+Right side values
+Greater than root
+🧠 Example Understanding
+
+Take node:
+
+8
+
+Left subtree:
+
+5,3,6
+
+All are smaller than 8 ✅
+
+Right subtree:
+
+12,10,14
+
+All are greater than 8 ✅
+
+So it is BST 💖
+
+❌ Not a BST Example
+        8
+       / \
+      5   12
+         /
+        4
+
+Why wrong? 😭
+
+Because:
+
+4 is in right subtree of 8
+But 4 < 8
+
+So BST property breaks ❌
+
+🌟 Important Points
+1️⃣ Inorder Traversal of BST
+
+Always gives:
+
+Sorted Order
+
+Example:
+
+3 5 6 8 10 12 14
+2️⃣ Searching is Fast ⚡️
+
+At every step:
+
+Go left
+OR go right
+
+Like Binary Search 💖
+
+🌟 Search Example
+
+Find:
+
+10
+
+Tree:
+
+          8
+        /   \
+       5     12
+            /
+           10
+Step 1
+10 > 8
+
+Go RIGHT 👉
+
+Step 2
+
+At 12:
+
+10 < 12
+
+Go LEFT 👈
+
+Found 10 ✅
+
+⚡️ Time Complexities
+Balanced BST
+Operation	Complexity
+Search	O(log N)
+Insert	O(log N)
+Delete	O(log N)
+Worst Case (Skew Tree)
+O(N)
+💻 Basic BST Node Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+🌟 Small BST Creation
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static void inorder(Node root) {
+
+        if (root == null)
+            return;
+
+        inorder(root.left);
+
+        System.out.print(root.data + " ");
+
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        System.out.println("Inorder Traversal:");
+
+        inorder(root);
+    }
+}
+▶️ Output
+Inorder Traversal:
+3 5 6 8 10 12 14
+
+Sorted order because it is BST 💖
