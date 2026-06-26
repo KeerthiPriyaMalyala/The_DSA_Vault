@@ -1,0 +1,152 @@
+Search in a Binary Search Tree (BST) 🌳🔍💖
+❓ What is the question asking?
+
+Given:
+
+A Binary Search Tree
+A value x
+
+We need to:
+
+✅ Find whether x exists in BST or not.
+
+Return:
+
+Node if found
+null if not found
+🌳 Example BST
+          8
+        /   \
+       5     12
+      / \    / \
+     3   6  10  14
+
+Find:
+
+10
+💡 Main BST Logic
+
+In BST:
+
+Smaller → Left
+Greater → Right
+
+So we do NOT search entire tree 😎
+
+🌟 Dry Run
+
+Target:
+
+10
+Step 1
+
+At root:
+
+8
+
+Check:
+
+10 > 8
+
+Go RIGHT 👉
+
+Step 2
+
+At node:
+
+12
+
+Check:
+
+10 < 12
+
+Go LEFT 👈
+
+Step 3
+
+At node:
+
+10
+
+Found ✅💖
+
+⚡️ Optimal Approach (Iterative)
+💡 Idea
+
+Keep moving:
+
+Left if smaller
+Right if greater
+
+Until:
+
+Node found
+OR
+Node becomes null
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // SEARCH IN BST
+    public static Node search(Node root, int key) {
+
+        while (root != null) {
+
+            // FOUND
+            if (root.data == key)
+                return root;
+
+            // GO LEFT
+            else if (key < root.data)
+                root = root.left;
+
+            // GO RIGHT
+            else
+                root = root.right;
+        }
+
+        return null;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int key = 10;
+
+        Node ans = search(root, key);
+
+        if (ans != null)
+            System.out.println("Node Found: " + ans.data);
+        else
+            System.out.println("Node Not Found");
+    }
+}
+▶️ Output
+Node Found: 10
+⏱️ Time Complexity
+Average / Balanced BST
+O(log N)
+Worst Case (Skew Tree)
+O(N)
+📦 Space Complexity
+O(1)
