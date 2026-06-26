@@ -1,0 +1,180 @@
+Ceil in a Binary Search Tree (BST) 🌳⬆️💖
+❓ What is the question asking?
+
+Given:
+
+A BST
+A number x
+
+Find the smallest value greater than or equal to x
+
+That value is called:
+
+CEIL
+🌳 Example BST
+          8
+        /   \
+       5     12
+      / \    / \
+     3   6  10  14
+
+Find ceil of:
+
+11
+🌟 Answer
+12
+
+Because:
+
+10 < 11 ❌
+12 ≥ 11 ✅
+Smallest possible greater value = 12
+💡 Main BST Logic
+
+At every node:
+
+Case 1
+
+If:
+
+root.data == key
+
+Then root itself is ceil ✅
+
+Case 2
+
+If:
+
+key > root.data
+
+Go RIGHT 👉
+
+Because ceil cannot be on left side.
+
+Case 3
+
+If:
+
+key < root.data
+
+Current node can be a possible ceil 💖
+
+Store it and go LEFT 👈
+
+Maybe smaller ceil exists.
+
+🌟 Dry Run
+
+Find ceil of:
+
+11
+Step 1
+
+At node:
+
+8
+11 > 8
+
+Go RIGHT 👉
+
+Step 2
+
+At node:
+
+12
+11 < 12
+
+Possible ceil = 12 💖
+
+Go LEFT 👈
+
+Step 3
+
+At node:
+
+10
+11 > 10
+
+Go RIGHT 👉
+
+NULL reached.
+
+Final ceil:
+
+12
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static int ceilBST(Node root, int key) {
+
+        int ceil = -1;
+
+        while (root != null) {
+
+            // FOUND EXACT
+            if (root.data == key) {
+                ceil = root.data;
+                return ceil;
+            }
+
+            // GO RIGHT
+            if (key > root.data) {
+
+                root = root.right;
+            }
+
+            // POSSIBLE CEIL
+            else {
+
+                ceil = root.data;
+
+                root = root.left;
+            }
+        }
+
+        return ceil;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int key = 11;
+
+        int ans = ceilBST(root, key);
+
+        System.out.println("Ceil is: " + ans);
+    }
+}
+▶️ Output
+Ceil is: 12
+⏱️ Time Complexity
+Balanced BST
+O(log N)
+Worst Case
+O(N)
+📦 Space Complexity
+O(1)
+
+Iterative approach 💖
