@@ -1,0 +1,138 @@
+# Floor in a Binary Search Tree (BST)
+
+## ❓ What is Floor in BST?
+
+Floor of a number `x` in a BST means:
+
+👉 **The greatest value in the BST that is smaller than or equal to `x`**
+
+### Example:
+
+BST values: `2, 4, 6, 8, 10`
+
+* Floor of `7` = `6`
+* Floor of `10` = `10`
+* Floor of `1` = `-1` (not present)
+
+---
+
+# 💡 Intuition
+
+In BST:
+
+* Left side → smaller values
+* Right side → greater values
+
+While searching:
+
+* If node value == x → answer found
+* If node value < x → this can be a possible floor, move right for bigger closer value
+* If node value > x → move left
+
+---
+
+# ⚡ Optimal Approach
+
+## 💡 Idea
+
+We traverse the BST once.
+
+Keep a variable `floor = -1`
+
+At every node:
+
+* If node value == x
+  → return node value
+
+* If node value < x
+  → store it as possible floor
+  → move right
+
+* If node value > x
+  → move left
+
+---
+
+# 💻 Java Code
+
+```java
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int findFloor(Node root, int x) {
+
+        int floor = -1;
+
+        while (root != null) {
+
+            if (root.data == x) {
+                return root.data;
+            }
+
+            if (root.data < x) {
+                floor = root.data;
+                root = root.right;
+            } else {
+                root = root.left;
+            }
+        }
+
+        return floor;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+        root.left = new Node(4);
+        root.right = new Node(12);
+
+        root.left.left = new Node(2);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int x = 11;
+
+        System.out.println("Floor is: " + findFloor(root, x));
+    }
+}
+```
+
+---
+
+# ▶️ Output
+
+```text
+Floor is: 10
+```
+
+---
+
+# ⏱️ Time Complexity
+
+### Best/Average:
+
+`O(log N)`
+(BST balanced)
+
+### Worst:
+
+`O(N)`
+(Skewed BST)
+
+---
+
+# 📦 Space Complexity
+
+`O(1)`
+(Iterative approach)
