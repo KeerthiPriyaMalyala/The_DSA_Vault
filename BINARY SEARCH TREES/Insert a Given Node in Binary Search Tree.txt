@@ -1,0 +1,120 @@
+Insert a Given Node in Binary Search Tree (BST)
+❓ What is the question asking?
+
+Given a BST and a value x,
+
+👉 Insert the new node in the correct position so that BST property remains valid.
+
+BST Property:
+Left subtree → smaller values
+Right subtree → greater values
+💡 Example
+Before Insert:
+        8
+       / \
+      4   12
+     / \
+    2   6
+
+Insert 10
+
+After Insert:
+        8
+       / \
+      4   12
+     / \  /
+    2  6 10
+⚡ Optimal Approach
+💡 Idea
+
+Start from root:
+
+If value is smaller → go left
+If value is greater → go right
+When null position found → insert node there
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static Node insert(Node root, int val) {
+
+        if (root == null) {
+            return new Node(val);
+        }
+
+        Node curr = root;
+
+        while (true) {
+
+            if (val < curr.data) {
+
+                if (curr.left == null) {
+                    curr.left = new Node(val);
+                    break;
+                } else {
+                    curr = curr.left;
+                }
+
+            } else {
+
+                if (curr.right == null) {
+                    curr.right = new Node(val);
+                    break;
+                } else {
+                    curr = curr.right;
+                }
+            }
+        }
+
+        return root;
+    }
+
+    static void inorder(Node root) {
+
+        if (root == null)
+            return;
+
+        inorder(root.left);
+        System.out.print(root.data + " ");
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(4);
+        root.right = new Node(12);
+
+        root.left.left = new Node(2);
+        root.left.right = new Node(6);
+
+        insert(root, 10);
+
+        inorder(root);
+    }
+}
+▶️ Output
+2 4 6 8 10 12
+⏱️ Time Complexity
+Best/Average:
+
+O(log N)
+
+Worst:
+
+O(N)
+
+📦 Space Complexity
+
+O(1)
+(Iterative approach)
