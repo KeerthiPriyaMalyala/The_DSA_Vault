@@ -1,0 +1,178 @@
+BST Delete Trick Using Left Subtree + Right Subtree Connection
+❓ What is this method?
+
+This is another valid BST deletion approach ✨
+
+Instead of:
+
+finding inorder successor
+copying values
+
+We do:
+
+1️⃣ Go to node to delete
+2️⃣ Take its LEFT subtree
+3️⃣ Attach RIGHT subtree to the rightmost node of LEFT subtree
+4️⃣ Return LEFT subtree as new root
+
+Very famous shortcut method 💖
+
+🌳 Example
+
+Delete 8
+
+        8
+       / \
+      4   12
+     / \  / \
+    2  6 10 14
+Step 1️⃣
+
+Take left subtree:
+
+      4
+     / \
+    2   6
+Step 2️⃣
+
+Find rightmost node in left subtree = 6
+
+Connect original right subtree there:
+
+      4
+     / \
+    2   6
+           \
+            12
+           /  \
+          10  14
+
+Now return 4
+
+⚡ Optimal Approach
+💡 Idea
+
+For deleting node:
+
+If left null → return right
+If right null → return left
+Else:
+store left subtree
+find rightmost node in left subtree
+attach right subtree there
+return left subtree
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static Node helper(Node root) {
+
+        if (root.left == null)
+            return root.right;
+
+        if (root.right == null)
+            return root.left;
+
+        Node leftSubTree = root.left;
+
+        Node rightMost = findRightMost(leftSubTree);
+
+        rightMost.right = root.right;
+
+        return leftSubTree;
+    }
+
+    static Node findRightMost(Node root) {
+
+        while (root.right != null) {
+            root = root.right;
+        }
+
+        return root;
+    }
+
+    static Node deleteNode(Node root, int key) {
+
+        if (root == null)
+            return null;
+
+        if (root.data == key) {
+            return helper(root);
+        }
+
+        Node curr = root;
+
+        while (curr != null) {
+
+            if (key < curr.data) {
+
+                if (curr.left != null && curr.left.data == key) {
+                    curr.left = helper(curr.left);
+                    break;
+                } else {
+                    curr = curr.left;
+                }
+
+            } else {
+
+                if (curr.right != null && curr.right.data == key) {
+                    curr.right = helper(curr.right);
+                    break;
+                } else {
+                    curr = curr.right;
+                }
+            }
+        }
+
+        return root;
+    }
+
+    static void inorder(Node root) {
+
+        if (root == null)
+            return;
+
+        inorder(root.left);
+        System.out.print(root.data + " ");
+
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(4);
+        root.right = new Node(12);
+
+        root.left.left = new Node(2);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        root = deleteNode(root, 8);
+
+        inorder(root);
+    }
+}
+▶️ Output
+2 4 6 10 12 14
+⏱️ Time Complexity
+
+O(H)
+
+(H = height of BST)
+
+📦 Space Complexity
+
+O(1)
