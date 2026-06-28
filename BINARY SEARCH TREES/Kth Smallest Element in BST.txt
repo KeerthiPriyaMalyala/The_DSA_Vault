@@ -1,0 +1,130 @@
+Kth Smallest Element in BST using Inorder + Count Approach 🌳✨
+❓ What is the question asking?
+
+Given:
+
+A BST
+A number k
+
+👉 Find the Kth smallest element.
+
+💡 Main Trick
+BST + Inorder = Sorted Order
+
+So while doing inorder traversal:
+
+LEFT → ROOT → RIGHT
+
+nodes come in increasing order.
+
+We simply count nodes during traversal.
+
+When count becomes k,
+that node is answer ✨
+
+🌳 Example
+        8
+       / \
+      4   12
+     / \  / \
+    2  6 10 14
+
+Inorder:
+
+2 4 6 8 10 12 14
+
+For k = 3
+
+Answer:
+
+6
+⚡ Optimal Approach
+💡 Idea
+
+1️⃣ Perform inorder traversal
+2️⃣ Increase count for every node
+3️⃣ When count == k
+→ store answer
+
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int count = 0;
+    static int ans = -1;
+
+    static void inorder(Node root, int k) {
+
+        if (root == null)
+            return;
+
+        inorder(root.left, k);
+
+        count++;
+
+        if (count == k) {
+            ans = root.data;
+            return;
+        }
+
+        inorder(root.right, k);
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(4);
+        root.right = new Node(12);
+
+        root.left.left = new Node(2);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int k = 3;
+
+        inorder(root, k);
+
+        System.out.println("Kth Smallest Element: " + ans);
+    }
+}
+▶️ Output
+Kth Smallest Element: 6
+⏱️ Time Complexity
+Worst Case:
+
+O(N)
+
+Average:
+
+O(H + K)
+
+📦 Space Complexity
+
+O(H)
+
+(H = height of tree)
+
+💖 Important Memory Trick
+Inorder gives sorted order,
+count nodes while traversing ✨
+🌟 Reverse Inorder for Kth Largest
+
+Use:
+
+RIGHT → ROOT → LEFT
+
+This gives descending order.
+
+Then same count logic works for Kth Largest 💖
