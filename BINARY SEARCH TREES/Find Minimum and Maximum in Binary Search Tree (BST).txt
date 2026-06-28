@@ -1,0 +1,106 @@
+Find Minimum and Maximum in Binary Search Tree (BST)
+❓ What is the question asking?
+
+Given a BST,
+
+👉 Find:
+
+Minimum value node
+Maximum value node
+💡 Important BST Property
+
+In BST:
+
+Left side → smaller values
+Right side → greater values
+
+So,
+
+✅ Minimum element = Leftmost node
+✅ Maximum element = Rightmost node
+
+🌳 Example BST
+        8
+       / \
+      4   12
+     / \   \
+    2   6   14
+Minimum = 2
+Maximum = 14
+⚡ Optimal Approach
+💡 Idea for Minimum
+
+Keep moving LEFT until left becomes null.
+
+💡 Idea for Maximum
+
+Keep moving RIGHT until right becomes null.
+
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int findMin(Node root) {
+
+        if (root == null)
+            return -1;
+
+        while (root.left != null) {
+            root = root.left;
+        }
+
+        return root.data;
+    }
+
+    static int findMax(Node root) {
+
+        if (root == null)
+            return -1;
+
+        while (root.right != null) {
+            root = root.right;
+        }
+
+        return root.data;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(4);
+        root.right = new Node(12);
+
+        root.left.left = new Node(2);
+        root.left.right = new Node(6);
+
+        root.right.right = new Node(14);
+
+        System.out.println("Minimum: " + findMin(root));
+        System.out.println("Maximum: " + findMax(root));
+    }
+}
+▶️ Output
+Minimum: 2
+Maximum: 14
+⏱️ Time Complexity
+Best/Average:
+
+O(log N)
+
+Worst:
+
+O(N)
+
+📦 Space Complexity
+
+O(1)
