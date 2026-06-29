@@ -1,0 +1,337 @@
+Inorder Successor in BST 🌳➡️💖
+❓ What is the question asking?
+
+Given:
+
+A BST
+A target node/value
+
+Find the:
+
+Next greater node
+
+in inorder traversal.
+
+That node is called:
+
+Inorder Successor
+🌳 Example BST
+          8
+        /   \
+       5     12
+      / \    / \
+     3   6  10  14
+
+Find successor of:
+
+10
+🌟 Answer
+12
+
+Because inorder traversal is:
+
+3 5 6 8 10 12 14
+
+Next element after 10 is 12 💖
+
+💡 Main BST Logic
+
+At every node:
+
+Case 1
+
+If:
+
+key >= root.data
+
+Go RIGHT 👉
+
+Because successor must be larger.
+
+Case 2
+
+If:
+
+key < root.data
+
+Current node can be a possible successor 💖
+
+Store it and go LEFT 👈
+
+Maybe smaller successor exists.
+
+🌟 Dry Run
+
+Find successor of:
+
+10
+Step 1
+
+At node:
+
+8
+10 >= 8
+
+Go RIGHT 👉
+
+Step 2
+
+At node:
+
+12
+10 < 12
+
+Possible successor = 12 💖
+
+Go LEFT 👈
+
+Step 3
+
+At node:
+
+10
+10 >= 10
+
+Go RIGHT 👉
+
+NULL reached.
+
+Final successor:
+
+12
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static Node inorderSuccessor(Node root, int key) {
+
+        Node successor = null;
+
+        while (root != null) {
+
+            // GO RIGHT
+            if (key >= root.data) {
+
+                root = root.right;
+            }
+
+            // POSSIBLE SUCCESSOR
+            else {
+
+                successor = root;
+
+                root = root.left;
+            }
+        }
+
+        return successor;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int key = 10;
+
+        Node ans = inorderSuccessor(root, key);
+
+        if (ans != null) {
+            System.out.println("Successor is: " + ans.data);
+        } else {
+            System.out.println("No Successor");
+        }
+    }
+}
+▶️ Output
+Successor is: 12
+⏱️ Time Complexity
+Balanced BST
+O(log N)
+Worst Case
+O(N)
+📦 Space Complexity
+O(1)
+
+Iterative approach 💖
+
+Inorder Predecessor in BST 🌳⬅️💖
+❓ What is the question asking?
+
+Find the:
+
+Previous smaller node
+
+in inorder traversal.
+
+That node is called:
+
+Inorder Predecessor
+🌟 Example
+
+Find predecessor of:
+
+10
+
+Inorder:
+
+3 5 6 8 10 12 14
+
+Previous element before 10 is:
+
+8
+💡 Main BST Logic
+Case 1
+
+If:
+
+key <= root.data
+
+Go LEFT 👈
+
+Because predecessor must be smaller.
+
+Case 2
+
+If:
+
+key > root.data
+
+Current node can be possible predecessor 💖
+
+Store it and go RIGHT 👉
+
+Maybe larger predecessor exists.
+
+🌟 Dry Run
+
+Find predecessor of:
+
+10
+Step 1
+
+At node:
+
+8
+10 > 8
+
+Possible predecessor = 8 💖
+
+Go RIGHT 👉
+
+Step 2
+
+At node:
+
+12
+10 <= 12
+
+Go LEFT 👈
+
+Step 3
+
+At node:
+
+10
+10 <= 10
+
+Go LEFT 👈
+
+NULL reached.
+
+Final predecessor:
+
+8
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static Node inorderPredecessor(Node root, int key) {
+
+        Node predecessor = null;
+
+        while (root != null) {
+
+            // GO LEFT
+            if (key <= root.data) {
+
+                root = root.left;
+            }
+
+            // POSSIBLE PREDECESSOR
+            else {
+
+                predecessor = root;
+
+                root = root.right;
+            }
+        }
+
+        return predecessor;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int key = 10;
+
+        Node ans = inorderPredecessor(root, key);
+
+        if (ans != null) {
+            System.out.println("Predecessor is: " + ans.data);
+        } else {
+            System.out.println("No Predecessor");
+        }
+    }
+}
+▶️ Output
+Predecessor is: 8
+⏱️ Time Complexity
+Balanced BST
+O(log N)
+Worst Case
+O(N)
+📦 Space Complexity
+O(1)
+
+Iterative approach 💖
