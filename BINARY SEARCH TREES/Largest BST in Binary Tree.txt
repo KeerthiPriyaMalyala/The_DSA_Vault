@@ -1,0 +1,223 @@
+Largest BST in Binary Tree 🌳💖
+❓ What is the question asking?
+
+Given:
+
+A normal Binary Tree (NOT necessarily BST)
+
+Find:
+
+Size of the largest subtree
+which is a BST
+🌳 Example
+           50
+          /  \
+        30    60
+       / \    / \
+      5  20  45  70
+                 / \
+                65  80
+🌟 Answer
+
+Largest BST is:
+
+        60
+       /  \
+      45   70
+           / \
+          65  80
+
+Size =
+
+5
+
+💖
+
+Because subtree rooted at 30 is NOT BST:
+
+20 < 30 is okay
+but structure breaks BST rules overall
+💡 Main Idea
+
+For every node we need:
+
+minimum value in subtree
+maximum value in subtree
+size of BST
+🌟 BST Condition
+
+A subtree is BST if:
+
+left.max < root.data < right.min
+
+✅ Then current subtree is BST
+
+Else ❌ not BST
+
+💡 What do we return from every node?
+
+We create a helper class:
+
+NodeInfo
+
+Containing:
+
+min
+max
+size
+🌟 Cases
+Case 1 → Valid BST ✅
+
+If:
+
+left.max < root.data
+AND
+root.data < right.min
+
+Then:
+
+Current subtree is BST 💖
+
+Size becomes:
+
+left.size + right.size + 1
+Case 2 → Invalid BST ❌
+
+Return:
+
+very small min
+very large max
+
+So parent also fails BST condition.
+
+And keep:
+
+max(left.size, right.size)
+🌟 Dry Run
+
+At node:
+
+60
+
+Left max:
+
+45
+
+Right min:
+
+65
+
+Condition:
+
+45 < 60 < 65
+
+✅ BST found
+
+Size:
+
+1 + left + right = 5
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+// HELPER CLASS
+class NodeInfo {
+
+    int min;
+    int max;
+    int size;
+
+    NodeInfo(int min, int max, int size) {
+
+        this.min = min;
+        this.max = max;
+        this.size = size;
+    }
+}
+
+public class Main {
+
+    // RETURNS INFO ABOUT SUBTREE
+    public static NodeInfo largestBST(Node root) {
+
+        // EMPTY TREE
+        if (root == null) {
+
+            return new NodeInfo(
+                    Integer.MAX_VALUE,
+                    Integer.MIN_VALUE,
+                    0
+            );
+        }
+
+        NodeInfo left = largestBST(root.left);
+
+        NodeInfo right = largestBST(root.right);
+
+        // VALID BST
+        if (left.max < root.data &&
+            root.data < right.min) {
+
+            return new NodeInfo(
+
+                    Math.min(root.data, left.min),
+
+                    Math.max(root.data, right.max),
+
+                    left.size + right.size + 1
+            );
+        }
+
+        // INVALID BST
+        return new NodeInfo(
+
+                Integer.MIN_VALUE,
+                Integer.MAX_VALUE,
+
+                Math.max(left.size, right.size)
+        );
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(50);
+
+        root.left = new Node(30);
+        root.right = new Node(60);
+
+        root.left.left = new Node(5);
+        root.left.right = new Node(20);
+
+        root.right.left = new Node(45);
+        root.right.right = new Node(70);
+
+        root.right.right.left = new Node(65);
+        root.right.right.right = new Node(80);
+
+        NodeInfo ans = largestBST(root);
+
+        System.out.println(
+                "Largest BST Size: " + ans.size
+        );
+    }
+}
+▶️ Output
+Largest BST Size: 5
+⏱️ Time Complexity
+O(N)
+
+Every node visited once 💖
+
+📦 Space Complexity
+O(H)
+
+Recursive stack height 🌳
