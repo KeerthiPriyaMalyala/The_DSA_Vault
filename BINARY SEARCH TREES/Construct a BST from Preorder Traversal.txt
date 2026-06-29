@@ -1,0 +1,218 @@
+Construct a BST from Preorder Traversal 🌳💖
+❓ What is the question asking?
+
+Given:
+
+Preorder traversal of a BST
+
+Construct the original:
+
+Binary Search Tree
+🌳 Example
+
+Preorder:
+
+[8, 5, 1, 7, 10, 12]
+
+Constructed BST:
+
+          8
+        /   \
+       5     10
+      / \      \
+     1   7      12
+💡 Main BST + Preorder Logic
+
+Preorder follows:
+
+Root → Left → Right
+
+So:
+
+First element is always ROOT 💖
+Values smaller than root go LEFT 👈
+Values greater than root go RIGHT 👉
+🌟 Important Observation
+
+In BST:
+
+Left subtree < Root
+Right subtree > Root
+
+We use:
+
+current index
+valid range (min, max)
+
+If current value fits range:
+✅ create node
+
+Else:
+❌ return NULL
+
+🌟 Dry Run
+
+Preorder:
+
+[8, 5, 1, 7, 10, 12]
+Step 1
+
+Take:
+
+8
+
+Root = 8 💖
+
+Range:
+
+(-∞, +∞)
+Step 2
+
+Next value:
+
+5
+
+Fits left range of 8:
+
+(-∞, 8)
+
+Attach LEFT 👈
+
+Step 3
+
+Next value:
+
+1
+
+Fits left range of 5:
+
+(-∞, 5)
+
+Attach LEFT 👈
+
+Step 4
+
+Next value:
+
+7
+
+Cannot go under 1 ❌
+
+Fits range:
+
+(5, 8)
+
+Attach RIGHT of 5 👉
+
+Step 5
+
+Next value:
+
+10
+
+Fits:
+
+(8, +∞)
+
+Attach RIGHT 👉
+
+Step 6
+
+Next value:
+
+12
+
+Fits:
+
+(10, +∞)
+
+Attach RIGHT 👉
+
+BST constructed successfully ✨
+
+⚡️ Optimal Approach
+💻 Java Code
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    static int index = 0;
+
+    public static Node buildBST(int preorder[], int min, int max) {
+
+        // OUT OF BOUNDS
+        if (index >= preorder.length) {
+            return null;
+        }
+
+        int val = preorder[index];
+
+        // VALUE NOT IN RANGE
+        if (val < min || val > max) {
+            return null;
+        }
+
+        // CREATE NODE
+        Node root = new Node(val);
+
+        index++;
+
+        // BUILD LEFT
+        root.left = buildBST(preorder, min, val);
+
+        // BUILD RIGHT
+        root.right = buildBST(preorder, val, max);
+
+        return root;
+    }
+
+    // INORDER PRINT
+    public static void inorder(Node root) {
+
+        if (root == null) {
+            return;
+        }
+
+        inorder(root.left);
+
+        System.out.print(root.data + " ");
+
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+
+        int preorder[] = {8, 5, 1, 7, 10, 12};
+
+        Node root = buildBST(
+                preorder,
+                Integer.MIN_VALUE,
+                Integer.MAX_VALUE
+        );
+
+        System.out.println("Inorder Traversal:");
+
+        inorder(root);
+    }
+}
+▶️ Output
+Inorder Traversal:
+1 5 7 8 10 12
+⏱️ Time Complexity
+O(N)
+
+Each node visited once 💖
+
+📦 Space Complexity
+O(N)
+
+Recursive stack in worst case 🌳
