@@ -1,0 +1,226 @@
+Two Sum in BST 🌳💖
+Check if there exists a pair with Sum K
+❓ What is the question asking?
+
+Given:
+
+A Binary Search Tree
+A target sum K
+
+Check whether there exist:
+
+Two nodes whose sum = K
+
+Return:
+
+true / false
+🌳 Example BST
+           8
+         /   \
+        5     12
+       / \    / \
+      3   6  10  14
+
+Find:
+
+K = 16
+🌟 Answer
+true
+
+Because:
+
+6 + 10 = 16
+
+✅ Pair exists
+
+💡 Main BST Logic
+
+Important BST property:
+
+Inorder Traversal = Sorted Order
+
+So BST becomes:
+
+[3, 5, 6, 8, 10, 12, 14]
+
+Now apply:
+
+Two Pointer Technique
+🌟 Two Pointer Idea
+
+Take:
+
+one pointer at START 👈
+one pointer at END 👉
+Case 1
+
+If:
+
+sum == k
+
+Return TRUE ✅
+
+Case 2
+
+If:
+
+sum < k
+
+Move LEFT pointer forward 👉
+
+Need bigger sum.
+
+Case 3
+
+If:
+
+sum > k
+
+Move RIGHT pointer backward 👈
+
+Need smaller sum.
+
+🌟 Dry Run
+
+Sorted inorder:
+
+[3, 5, 6, 8, 10, 12, 14]
+
+K =
+
+16
+Step 1
+3 + 14 = 17
+
+Too big ❌
+
+Move right pointer 👈
+
+Step 2
+3 + 12 = 15
+
+Too small ❌
+
+Move left pointer 👉
+
+Step 3
+5 + 12 = 17
+
+Too big ❌
+
+Move right pointer 👈
+
+Step 4
+5 + 10 = 15
+
+Too small ❌
+
+Move left pointer 👉
+
+Step 5
+6 + 10 = 16
+
+FOUND ✅💖
+
+Return:
+
+true
+⚡️ Optimal Approach
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // INORDER TRAVERSAL
+    public static void inorder(Node root, ArrayList<Integer> list) {
+
+        if (root == null) {
+            return;
+        }
+
+        inorder(root.left, list);
+
+        list.add(root.data);
+
+        inorder(root.right, list);
+    }
+
+    // TWO SUM CHECK
+    public static boolean twoSumBST(Node root, int k) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        inorder(root, list);
+
+        int left = 0;
+        int right = list.size() - 1;
+
+        while (left < right) {
+
+            int sum = list.get(left) + list.get(right);
+
+            // FOUND
+            if (sum == k) {
+                return true;
+            }
+
+            // NEED BIGGER SUM
+            else if (sum < k) {
+                left++;
+            }
+
+            // NEED SMALLER SUM
+            else {
+                right--;
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        Node root = new Node(8);
+
+        root.left = new Node(5);
+        root.right = new Node(12);
+
+        root.left.left = new Node(3);
+        root.left.right = new Node(6);
+
+        root.right.left = new Node(10);
+        root.right.right = new Node(14);
+
+        int k = 16;
+
+        boolean ans = twoSumBST(root, k);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+Inorder Traversal
+O(N)
+Two Pointer Scan
+O(N)
+
+Overall:
+
+O(N)
+📦 Space Complexity
+O(N)
+
+For inorder list 💖
