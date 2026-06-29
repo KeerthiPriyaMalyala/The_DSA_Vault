@@ -1,0 +1,187 @@
+Merge 2 BST's 🌳💖🌳
+❓ What is the question asking?
+
+Given:
+
+Two Binary Search Trees
+
+Merge both BSTs and return:
+
+Sorted elements
+🌳 Example
+BST 1
+        2
+       / \
+      1   4
+BST 2
+        9
+       / \
+      3   12
+🌟 Merged Output
+[1, 2, 3, 4, 9, 12]
+💡 Main BST Logic
+
+Important property of BST:
+
+Inorder Traversal = Sorted Order
+
+So:
+
+Step 1
+
+Get inorder of BST1 💖
+
+[1, 2, 4]
+Step 2
+
+Get inorder of BST2 💖
+
+[3, 9, 12]
+Step 3
+
+Merge two sorted arrays ✨
+
+Final:
+
+[1, 2, 3, 4, 9, 12]
+🌟 Dry Run
+Inorder of BST1
+1 2 4
+Inorder of BST2
+3 9 12
+Merge Process
+
+Compare:
+
+1 and 3 → take 1
+
+Compare:
+
+2 and 3 → take 2
+
+Compare:
+
+4 and 3 → take 3
+
+Compare:
+
+4 and 9 → take 4
+
+Remaining:
+
+9 12
+
+Final merged list 💖
+
+1 2 3 4 9 12
+⚡️ Optimal Approach
+💻 Java Code
+import java.util.*;
+
+class Node {
+
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // INORDER TRAVERSAL
+    public static void inorder(Node root, ArrayList<Integer> list) {
+
+        if (root == null) {
+            return;
+        }
+
+        inorder(root.left, list);
+
+        list.add(root.data);
+
+        inorder(root.right, list);
+    }
+
+    // MERGE TWO SORTED LISTS
+    public static ArrayList<Integer> mergeLists(
+            ArrayList<Integer> a,
+            ArrayList<Integer> b) {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        int i = 0;
+        int j = 0;
+
+        while (i < a.size() && j < b.size()) {
+
+            if (a.get(i) < b.get(j)) {
+
+                ans.add(a.get(i));
+                i++;
+            }
+            else {
+
+                ans.add(b.get(j));
+                j++;
+            }
+        }
+
+        // REMAINING ELEMENTS
+        while (i < a.size()) {
+
+            ans.add(a.get(i));
+            i++;
+        }
+
+        while (j < b.size()) {
+
+            ans.add(b.get(j));
+            j++;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        // BST 1
+        Node root1 = new Node(2);
+
+        root1.left = new Node(1);
+        root1.right = new Node(4);
+
+        // BST 2
+        Node root2 = new Node(9);
+
+        root2.left = new Node(3);
+        root2.right = new Node(12);
+
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+
+        inorder(root1, list1);
+        inorder(root2, list2);
+
+        ArrayList<Integer> ans = mergeLists(list1, list2);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+[1, 2, 3, 4, 9, 12]
+⏱️ Time Complexity
+Inorder Traversal
+O(N + M)
+Merge Step
+O(N + M)
+
+Overall:
+
+O(N + M)
+📦 Space Complexity
+O(N + M)
+
+For storing inorder traversals 💖
