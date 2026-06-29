@@ -1,0 +1,201 @@
+Check if a Tree is BST or Not 🌳✅
+❓ What is the question asking?
+
+We need to check whether a binary tree follows BST rules or not.
+
+BST Rule 💖
+Left subtree values < root.data
+Right subtree values > root.data
+
+AND
+
+Every subtree should ALSO be BST
+🌟 IMPORTANT TRICK
+
+Just checking:
+
+root.left.data < root.data
+root.right.data > root.data
+
+is NOT enough 😭❌
+
+Because violation can happen deeper.
+
+Example:
+
+        10
+       /  \
+      5    15
+          /
+         6
+
+This is NOT BST ❌
+
+Because:
+
+6 is inside RIGHT subtree of 10
+So 6 should be > 10
+
+But:
+
+6 < 10
+
+Violation 😭
+
+⚡️ Optimal Approach
+💡 Idea
+
+For every node:
+
+node value must lie between:
+min range
+max range
+
+Initially:
+
+(-∞ , +∞)
+
+When going LEFT:
+
+max becomes root.data
+
+When going RIGHT:
+
+min becomes root.data
+🌳 Visualization
+
+For root = 10
+
+Allowed range:
+(-∞ , +∞)
+
+Left child:
+
+(-∞ , 10)
+
+Right child:
+
+(10 , +∞)
+💻 Java Code
+class Node
+{
+    int data;
+    Node left;
+    Node right;
+
+    Node(int data)
+    {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+
+public class Main
+{
+    static boolean isBST(Node root, long min, long max)
+    {
+        // Empty tree is BST
+        if(root == null)
+        {
+            return true;
+        }
+
+        // Violation
+        if(root.data <= min || root.data >= max)
+        {
+            return false;
+        }
+
+        // Check left and right
+        return isBST(root.left, min, root.data) &&
+               isBST(root.right, root.data, max);
+    }
+
+    public static void main(String[] args)
+    {
+        Node root = new Node(10);
+
+        root.left = new Node(5);
+        root.right = new Node(15);
+
+        root.right.left = new Node(6);
+        root.right.right = new Node(20);
+
+        boolean ans = isBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+false
+
+Because:
+
+6 is in right subtree of 10
+but 6 < 10
+🌟 DRY RUN
+
+Tree:
+
+        10
+       /  \
+      5    15
+          /
+         6
+Step 1️⃣
+isBST(10, -∞, +∞)
+
+Check:
+
+10 > -∞
+10 < +∞
+
+VALID ✅
+
+Step 2️⃣ LEFT
+isBST(5, -∞, 10)
+
+Check:
+
+5 > -∞
+5 < 10
+
+VALID ✅
+
+Step 3️⃣ RIGHT
+isBST(15, 10, +∞)
+
+Check:
+
+15 > 10
+15 < +∞
+
+VALID ✅
+
+Step 4️⃣ Node 6
+isBST(6, 10, 15)
+
+Check:
+
+6 > 10 ❌
+
+FALSE immediately 🚨
+
+So whole tree becomes NOT BST ❌
+
+⏱️ Time Complexity
+O(n)
+
+Every node visited once.
+
+📦 Space Complexity
+O(h)
+
+Recursive stack height.
+
+🧠 SUPER IMPORTANT MEMORY LINE
+Every node must satisfy
+a VALID RANGE.
+
+NOT just parent comparison 💖🌳
