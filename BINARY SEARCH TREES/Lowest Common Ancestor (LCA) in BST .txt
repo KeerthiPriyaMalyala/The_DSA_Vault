@@ -1,0 +1,251 @@
+Lowest Common Ancestor (LCA) in BST 🌳✨
+❓ What is the question asking?
+
+Given:
+
+a BST
+two nodes p and q
+
+Find:
+
+Lowest node
+that has both p and q
+in its subtree.
+🌳 Example
+          6
+        /   \
+       2     8
+      / \   / \
+     0   4 7   9
+        / \
+       3   5
+
+Find LCA of:
+
+2 and 8
+
+Answer:
+
+6
+
+Because:
+
+2 is in left subtree
+8 is in right subtree
+
+So first splitting point = 6 💖
+
+🌟 MOST IMPORTANT BST PROPERTY
+left < root
+right > root
+
+Using this ONLY,
+we solve in O(h) 😄🔥
+
+⚡️ Optimal Approach
+💡 Idea
+
+At every node:
+
+Case 1️⃣
+
+If BOTH values smaller:
+
+Go LEFT
+Case 2️⃣
+
+If BOTH values bigger:
+
+Go RIGHT
+Case 3️⃣ ⭐
+
+One on left and one on right:
+
+Current node is LCA
+
+ALSO:
+
+If current node itself equals p or q,
+it is LCA 😄✨
+
+🌳 Visualization
+
+Suppose:
+
+Find LCA of 3 and 5
+
+Tree:
+
+          6
+        /   \
+       2     8
+      / \
+     0   4
+        / \
+       3   5
+
+At 6:
+
+3 < 6
+5 < 6
+
+Both smaller → LEFT ✅
+
+At 2:
+
+3 > 2
+5 > 2
+
+Both bigger → RIGHT ✅
+
+At 4:
+
+3 < 4
+5 > 4
+
+Split happens 💥
+
+So:
+
+LCA = 4
+💻 Java Code
+class Node
+{
+    int data;
+    Node left;
+    Node right;
+
+    Node(int data)
+    {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+
+public class Main
+{
+    static Node lca(Node root, Node p, Node q)
+    {
+        while(root != null)
+        {
+            // Both smaller
+            if(p.data < root.data && q.data < root.data)
+            {
+                root = root.left;
+            }
+
+            // Both greater
+            else if(p.data > root.data && q.data > root.data)
+            {
+                root = root.right;
+            }
+
+            // Split point
+            else
+            {
+                return root;
+            }
+        }
+
+        return null;
+    }
+
+    public static void main(String[] args)
+    {
+        Node root = new Node(6);
+
+        root.left = new Node(2);
+        root.right = new Node(8);
+
+        root.left.left = new Node(0);
+        root.left.right = new Node(4);
+
+        root.left.right.left = new Node(3);
+        root.left.right.right = new Node(5);
+
+        root.right.left = new Node(7);
+        root.right.right = new Node(9);
+
+        Node p = root.left.right.left;   // 3
+        Node q = root.left.right.right;  // 5
+
+        Node ans = lca(root, p, q);
+
+        System.out.println("LCA = " + ans.data);
+    }
+}
+▶️ Output
+LCA = 4
+🌟 DRY RUN
+
+Find:
+
+LCA of 3 and 5
+Step 1️⃣
+
+Current:
+
+root = 6
+
+Check:
+
+3 < 6
+5 < 6
+
+Both left ✅
+
+root = root.left;
+
+Now:
+
+root = 2
+Step 2️⃣
+
+Check:
+
+3 > 2
+5 > 2
+
+Both right ✅
+
+root = root.right;
+
+Now:
+
+root = 4
+Step 3️⃣
+
+Check:
+
+3 < 4
+5 > 4
+
+Split point 💥
+
+So:
+
+return root;
+
+returns:
+
+4
+
+DONE 🎉✨
+
+⏱️ Time Complexity
+O(h)
+
+Because we move only one direction each step.
+
+📦 Space Complexity
+Iterative
+O(1)
+
+No recursion stack.
+
+🧠 SUPER IMPORTANT MEMORY LINE
+First node where paths split
+= LCA
+
+That’s the whole intuition 💖🌳
