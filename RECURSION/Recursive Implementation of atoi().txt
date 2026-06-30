@@ -1,0 +1,209 @@
+🔢 Recursive Implementation of atoi()
+❓ What is the question asking?
+
+atoi means:
+
+ASCII to Integer
+
+We are given a numeric string like:
+
+"1234"
+
+We need to convert it into:
+
+1234
+
+Using:
+
+✅ Recursion only
+
+🌟 Main Recursion Idea
+
+Suppose string:
+
+"1234"
+
+Think like this:
+
+1234
+=
+123 × 10 + 4
+
+Again:
+
+123
+=
+12 × 10 + 3
+
+Again:
+
+12
+=
+1 × 10 + 2
+
+This is PERFECT for recursion 💖
+
+🧠 Recursive Thinking
+
+We solve:
+
+smaller string first
+
+Then attach current digit.
+
+🌈 Example Flow
+Input
+"1234"
+Step 1
+
+Take last digit:
+
+4
+
+Remaining string:
+
+"123"
+
+Now recursively solve "123".
+
+Step 2
+
+Solve "123"
+
+Take:
+
+3
+
+Remaining:
+
+"12"
+Step 3
+
+Solve "12"
+
+Take:
+
+2
+
+Remaining:
+
+"1"
+Step 4
+
+Solve "1"
+
+Take:
+
+1
+
+Remaining:
+
+""
+
+Base case reached ✅
+
+🔥 Backtracking Starts
+Return from "1"
+0 × 10 + 1 = 1
+Return from "12"
+1 × 10 + 2 = 12
+Return from "123"
+12 × 10 + 3 = 123
+Return from "1234"
+123 × 10 + 4 = 1234
+
+Final answer ✅
+
+⚡ Optimal Recursive Approach
+💻 Java Code
+public class Main {
+
+    public static int atoi(String str, int n) {
+
+        // Base case
+        if (n == 0) {
+            return 0;
+        }
+
+        // Recursive call for smaller string
+        int smallAns = atoi(str, n - 1);
+
+        // Current digit
+        int digit = str.charAt(n - 1) - '0';
+
+        // Build answer
+        return smallAns * 10 + digit;
+    }
+
+    public static void main(String[] args) {
+
+        String str = "1234";
+
+        int ans = atoi(str, str.length());
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+1234
+⏱️ Time Complexity
+O(n)
+
+One recursive call for each character.
+
+📦 Space Complexity
+O(n)
+
+Recursion stack space.
+
+🌟 MOST IMPORTANT RECURSION UNDERSTANDING
+
+This problem teaches:
+
+Solve smaller problem first
+Then build current answer
+🧠 VERY IMPORTANT LINE
+return smallAns * 10 + digit;
+
+Why?
+
+Suppose:
+
+smallAns = 123
+digit = 4
+
+Then:
+
+123 * 10 + 4
+=
+1234
+
+✨ Magic of place values.
+
+🌈 Recursion Flow Visualization
+atoi("1234")
+
+→ atoi("123")
+    → atoi("12")
+        → atoi("1")
+            → atoi("")
+
+Then backtracking:
+
+0
+1
+12
+123
+1234
+🎯 Pattern Learned
+
+This problem teaches:
+
+✅ Smaller Input Recursion
+n → n-1
+
+AND
+
+✅ Build answer while returning
+
+VERY important for recursion 💖
