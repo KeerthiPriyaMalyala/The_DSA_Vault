@@ -1,0 +1,238 @@
+🌟 Power Set
+❓ What is the question asking?
+
+Power Set means:
+
+✅ Generate ALL possible subsets of an array.
+
+🌈 Example
+Input
+[1,2,3]
+Output
+[]
+[1]
+[2]
+[3]
+[1,2]
+[1,3]
+[2,3]
+[1,2,3]
+🧠 MOST IMPORTANT IDEA
+
+For every element we have ONLY 2 choices:
+
+Take it
+OR
+Don't take it
+
+THIS is the famous:
+
+Take / Not Take Pattern
+
+💖 MOST IMPORTANT recursion pattern.
+
+🌳 Recursion Tree Thinking
+
+Suppose:
+
+arr = [1,2]
+Start at index 0
+
+Element:
+
+1
+
+Choices:
+
+Take 1
+Don't take 1
+If Take 1
+
+Current subset:
+
+[1]
+
+Now move to next element 2.
+
+Again choices:
+
+Take 2
+Don't take 2
+
+Produces:
+
+[1,2]
+[1]
+If Don't Take 1
+
+Current subset:
+
+[]
+
+Again choices for 2:
+
+Produces:
+
+[2]
+[]
+🌈 FULL TREE
+                []
+             /      \
+          [1]        []
+         /   \      /   \
+     [1,2] [1]   [2]   []
+⚡ Optimal Recursive Approach
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static void generate(int[] arr,
+                                int index,
+                                List<Integer> current) {
+
+        // Base case
+        if (index == arr.length) {
+
+            System.out.println(current);
+            return;
+        }
+
+        // TAKE current element
+        current.add(arr[index]);
+
+        generate(arr, index + 1, current);
+
+        // BACKTRACK
+        current.remove(current.size() - 1);
+
+        // NOT TAKE current element
+        generate(arr, index + 1, current);
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1, 2, 3};
+
+        generate(arr, 0, new ArrayList<>());
+    }
+}
+▶️ Output
+[1, 2, 3]
+[1, 2]
+[1, 3]
+[1]
+[2, 3]
+[2]
+[3]
+[]
+🌟 SUPER IMPORTANT DRY RUN
+Input
+[1,2]
+🔽 Start
+generate(0, [])
+Step 1 → TAKE 1
+[1]
+
+Call:
+
+generate(1, [1])
+Step 2 → TAKE 2
+[1,2]
+
+Now index becomes 2.
+
+Base case reached ✅
+
+Print:
+
+[1,2]
+🔥 BACKTRACK
+
+Remove 2
+
+Current:
+
+[1]
+Step 3 → NOT TAKE 2
+
+Base case.
+
+Print:
+
+[1]
+🔥 BACKTRACK AGAIN
+
+Remove 1
+
+Current:
+
+[]
+Step 4 → NOT TAKE 1
+
+Now move to element 2.
+
+TAKE 2
+
+Print:
+
+[2]
+NOT TAKE 2
+
+Print:
+
+[]
+🌟 MOST IMPORTANT LINE
+current.remove(current.size() - 1);
+
+THIS is:
+
+💖 BACKTRACKING 💖
+🧠 Why needed?
+
+After exploring:
+
+Take current element
+
+we must UNDO the choice before exploring:
+
+Don't take current element
+
+Otherwise subsets become wrong 😭
+
+🌈 Time Complexity
+
+Every element has:
+
+2 choices
+
+So total subsets:
+
+2ⁿ
+
+Time Complexity:
+
+O(2ⁿ)
+📦 Space Complexity
+O(n)
+
+(recursion stack + current subset)
+
+🎯 MOST IMPORTANT PATTERN LEARNED
+
+This is THE KING recursion pattern 👑
+
+Take
+→ Recurse
+→ Backtrack
+
+Don't Take
+→ Recurse
+🌟 THIS PATTERN COMES IN
+Subsequences
+Combination Sum
+Subsets
+Target Sum
+Partition Problems
+N Queen
+Sudoku
