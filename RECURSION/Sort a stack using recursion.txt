@@ -1,0 +1,233 @@
+🔄 Reverse a Stack Using Recursion
+❓ What is the question asking?
+
+We need to:
+
+✅ Reverse the stack
+
+WITHOUT using:
+
+extra stack
+array
+loops for reversing
+
+Using only:
+
+Recursion
+🌟 Main Recursion Idea
+
+Normally stack looks like:
+
+Top
+4
+3
+2
+1
+
+After reverse:
+
+Top
+1
+2
+3
+4
+🧠 Super Important Trick
+
+We use 2 recursive functions:
+
+1️⃣ reverse()
+
+This function:
+
+✅ Removes top elements one by one
+
+Until stack becomes empty.
+
+2️⃣ insertAtBottom()
+
+This function:
+
+✅ Inserts an element at the bottom of stack using recursion.
+
+🎯 Full Flow Understanding
+
+Suppose stack:
+
+[1,2,3,4]
+
+Top = 4
+
+Step 1 → Remove top
+
+Remove 4
+
+Remaining:
+
+[1,2,3]
+
+Now recursively reverse smaller stack.
+
+Step 2 → Remove 3
+
+Remaining:
+
+[1,2]
+Step 3 → Remove 2
+
+Remaining:
+
+[1]
+Step 4 → Remove 1
+
+Remaining:
+
+[]
+
+Now stack empty ✅
+
+🔥 Now Backtracking Starts
+
+We insert removed elements at bottom.
+
+Insert 1
+[1]
+Insert 2 at bottom
+[2,1]
+Insert 3 at bottom
+[3,2,1]
+Insert 4 at bottom
+[4,3,2,1]
+
+Reversed ✅
+
+⚡ Optimal Recursive Approach
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    // Insert element at bottom
+    public static void insertAtBottom(Stack<Integer> st, int data) {
+
+        // Base case
+        if (st.isEmpty()) {
+            st.push(data);
+            return;
+        }
+
+        int top = st.pop();
+
+        insertAtBottom(st, data);
+
+        st.push(top);
+    }
+
+    // Reverse stack
+    public static void reverse(Stack<Integer> st) {
+
+        // Base case
+        if (st.isEmpty()) {
+            return;
+        }
+
+        int top = st.pop();
+
+        reverse(st);
+
+        insertAtBottom(st, top);
+    }
+
+    public static void main(String[] args) {
+
+        Stack<Integer> st = new Stack<>();
+
+        st.push(1);
+        st.push(2);
+        st.push(3);
+        st.push(4);
+
+        System.out.println("Original Stack:");
+        System.out.println(st);
+
+        reverse(st);
+
+        System.out.println("Reversed Stack:");
+        System.out.println(st);
+    }
+}
+▶️ Output
+Original Stack:
+[1, 2, 3, 4]
+
+Reversed Stack:
+[4, 3, 2, 1]
+⏱️ Time Complexity
+O(n²)
+
+Why?
+
+Because for every element:
+
+insertAtBottom()
+
+travels through stack again.
+
+📦 Space Complexity
+O(n)
+
+Recursion stack space.
+
+🌈 MOST IMPORTANT RECURSION UNDERSTANDING
+✨ Recursion has 2 phases
+1️⃣ Going Down
+
+Functions keep calling themselves.
+
+Example:
+
+reverse(4)
+reverse(3)
+reverse(2)
+reverse(1)
+2️⃣ Backtracking
+
+Functions start returning.
+
+This is where actual rebuilding happens 💖
+
+insert 1
+insert 2
+insert 3
+insert 4
+🧠 Golden Tip For Recursion Problems
+
+Whenever stuck ask:
+
+✅ What is smaller problem?
+
+Here:
+
+Reverse smaller stack
+
+Then trust recursion handles it ✨
+
+After that:
+
+Do current work
+
+which is:
+
+Insert current element at bottom
+🎀 Recursion Pattern You Should Learn
+
+This problem teaches VERY important recursion pattern:
+
+Remove → Recursive Call → Rebuild while Backtracking
+
+This same pattern comes in:
+
+Reverse Queue
+Sort Stack
+Delete Middle of Stack
+Tree Problems
+Backtracking Problems
