@@ -1,0 +1,209 @@
+🌟 Generate Binary Strings Without Consecutive 1s
+❓ What is the question asking?
+
+We need to generate all binary strings of length n such that:
+
+❌ No two consecutive 1s should come together.
+
+🌈 Example
+Input
+n = 3
+Valid Strings
+000
+001
+010
+100
+101
+Invalid Strings
+011
+110
+111
+
+Because they contain:
+
+consecutive 1s
+🧠 Main Recursion Idea
+
+At every index:
+
+We try placing:
+
+0
+or
+1
+
+BUT:
+
+✅ 1 can be placed ONLY if previous character is NOT 1.
+
+This is:
+
+Choices + Constraint recursion
+
+VERY important recursion pattern 💖
+
+🌟 Recursion Tree Thinking
+
+Suppose:
+
+n = 3
+
+Start with empty string:
+
+""
+Level 1
+
+Can place:
+
+0
+1
+From "0"
+
+Again can place:
+
+0
+1
+
+because previous is 0.
+
+From "1"
+
+Can place ONLY:
+
+0
+
+because consecutive 1 not allowed.
+
+🌈 Visual Tree
+"" 
+├── "0"
+│    ├── "00"
+│    │     ├── "000"
+│    │     └── "001"
+│    │
+│    └── "01"
+│          └── "010"
+│
+└── "1"
+     └── "10"
+           ├── "100"
+           └── "101"
+⚡ Optimal Recursive Approach
+💻 Java Code
+public class Main {
+
+    public static void generate(int n,
+                                String current,
+                                int lastDigit) {
+
+        // Base case
+        if (current.length() == n) {
+            System.out.println(current);
+            return;
+        }
+
+        // Always place 0
+        generate(n, current + "0", 0);
+
+        // Place 1 only if previous wasn't 1
+        if (lastDigit != 1) {
+            generate(n, current + "1", 1);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int n = 3;
+
+        generate(n, "", 0);
+    }
+}
+▶️ Output
+000
+001
+010
+100
+101
+🌟 Dry Run
+Input
+n = 2
+🔽 Start
+generate(2, "", 0)
+Step 1 → Add "0"
+"0"
+
+Now from "0":
+
+Can add both:
+
+0
+1
+
+Produces:
+
+00
+01
+Step 2 → Add "1"
+"1"
+
+Now previous digit is 1.
+
+So ONLY:
+
+0
+
+allowed.
+
+Produces:
+
+10
+Final Output
+00
+01
+10
+🧠 MOST IMPORTANT RECURSION UNDERSTANDING
+
+This problem teaches:
+
+✅ Choices at every level
+0 or 1
+✅ Constraint-based recursion
+
+Before choosing:
+
+Check if choice is valid
+🌟 MOST IMPORTANT LINE
+if(lastDigit != 1)
+
+This prevents:
+
+11
+
+from forming.
+
+🌈 Time Complexity
+
+Each level has at most 2 choices.
+
+So:
+
+O(2^n)
+📦 Space Complexity
+O(n)
+
+(recursion stack)
+
+🎯 Pattern Learned
+
+This is VERY important pattern:
+
+Choose
+→ Check validity
+→ Recurse
+
+This same pattern comes in:
+
+Generate Parentheses
+N Queen
+Sudoku
+Rat in Maze
