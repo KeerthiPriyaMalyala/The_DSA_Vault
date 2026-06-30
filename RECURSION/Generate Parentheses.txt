@@ -1,0 +1,247 @@
+🌟 Generate Parentheses
+❓ What is the question asking?
+
+We need to generate all:
+
+✅ Valid parenthesis combinations
+
+using:
+
+n pairs
+
+of brackets.
+
+🌈 Example
+Input
+n = 3
+Output
+((()))
+(()())
+(())()
+()(())
+()()()
+❌ Invalid Strings
+()))((
+(()(()
+
+Because parentheses are not balanced.
+
+🧠 Main Recursion Idea
+
+At every step we try:
+
+(
+or
+)
+
+BUT with rules 💖
+
+🌟 Important Rules
+✅ We can add "("
+
+ONLY if:
+
+open < n
+
+because maximum n opening brackets allowed.
+
+✅ We can add ")"
+
+ONLY if:
+
+close < open
+
+Why?
+
+Because:
+
+closing brackets can never exceed opening brackets
+
+Otherwise string becomes invalid 😭
+
+🌈 MOST IMPORTANT THINKING
+
+We NEVER generate invalid strings.
+
+We stop invalid paths EARLY ✨
+
+This is called:
+
+Pruning
+
+VERY important backtracking concept 💖
+
+🌳 Recursion Tree
+Input
+n = 2
+Start
+""
+Add "("
+"("
+
+Now:
+
+open = 1
+close = 0
+
+Can add both:
+
+(
+)
+Tree
+""
+|
+└── "("
+     ├── "(("
+     │      └── "(())"
+     │
+     └── "()"
+            └── "()()"
+⚡ Optimal Recursive Approach
+💻 Java Code
+public class Main {
+
+    public static void generate(int n,
+                                int open,
+                                int close,
+                                String current) {
+
+        // Base case
+        if (current.length() == 2 * n) {
+            System.out.println(current);
+            return;
+        }
+
+        // Add opening bracket
+        if (open < n) {
+            generate(n,
+                     open + 1,
+                     close,
+                     current + "(");
+        }
+
+        // Add closing bracket
+        if (close < open) {
+            generate(n,
+                     open,
+                     close + 1,
+                     current + ")");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int n = 3;
+
+        generate(n, 0, 0, "");
+    }
+}
+▶️ Output
+((()))
+(()())
+(())()
+()(())
+()()()
+🌈 Dry Run
+Input
+n = 2
+🔽 Start
+generate(2,0,0,"")
+Step 1 → Add "("
+"("
+
+open = 1
+
+Step 2
+
+Can add:
+
+(
+or
+)
+Path 1 → "(("
+
+Now:
+
+open = 2
+close = 0
+
+Cannot add more "("
+
+Only:
+
+")"
+
+Produces:
+
+(())
+Path 2 → "()"
+
+Now:
+
+open = 1
+close = 1
+
+Can add only:
+
+(
+
+Then:
+
+()
+(
+
+Finally:
+
+()()
+🌟 MOST IMPORTANT CONCEPT
+🚨 This line is EVERYTHING
+if(close < open)
+
+This guarantees:
+
+✅ Valid parentheses only.
+
+🧠 Why?
+
+Suppose:
+
+close > open
+
+Example:
+
+")("
+
+Already invalid 😭
+
+No need to continue recursion.
+
+🌈 Time Complexity
+
+Approx:
+
+O(2^n)
+
+because many combinations generated.
+
+📦 Space Complexity
+O(n)
+
+(recursion stack)
+
+🎯 Pattern Learned
+
+This problem teaches HUGE backtracking pattern:
+
+Choose
+→ Check validity
+→ Recurse
+→ Backtrack
+
+This SAME pattern comes in:
+
+N Queen
+Sudoku
+Rat in Maze
+M Coloring
+Word Search
