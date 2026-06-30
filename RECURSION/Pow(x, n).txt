@@ -1,0 +1,232 @@
+⚡ Pow(x, n)
+❓ What is the question asking?
+
+We need to calculate:
+
+xⁿ
+
+Example:
+
+2³ = 8
+
+Using:
+
+✅ Recursion
+
+🪨 Normal Recursive Approach
+💡 Idea
+
+We know:
+
+xⁿ = x × xⁿ⁻¹
+
+Example:
+
+2³
+= 2 × 2²
+= 2 × 2 × 2¹
+= 2 × 2 × 2 × 2⁰
+💻 Java Code
+public class Main {
+
+    public static long power(long x, long n) {
+
+        // Base case
+        if (n == 0) {
+            return 1;
+        }
+
+        return x * power(x, n - 1);
+    }
+
+    public static void main(String[] args) {
+
+        long x = 2;
+        long n = 5;
+
+        System.out.println(power(x, n));
+    }
+}
+▶️ Output
+32
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Binary Exponentiation)
+💡 Main Genius Idea
+
+Instead of reducing:
+
+n → n-1
+
+we reduce:
+
+n → n/2
+
+This makes recursion SUPER FAST 😭💖
+
+🌟 Important Maths
+If n is EVEN
+xⁿ = (x^(n/2))²
+
+Example:
+
+2⁴
+= (2²)²
+= 4²
+= 16
+If n is ODD
+xⁿ = x × (x^(n/2))²
+
+Example:
+
+2⁵
+= 2 × (2²)²
+= 2 × 4²
+= 32
+🌈 Dry Run
+Input
+2⁵
+🔽 GOING DOWN
+Call 1
+power(2,5)
+
+Odd number.
+
+Needs:
+
+power(2,2)
+Call 2
+power(2,2)
+
+Even number.
+
+Needs:
+
+power(2,1)
+Call 3
+power(2,1)
+
+Odd number.
+
+Needs:
+
+power(2,0)
+Call 4 → Base Case
+power(2,0)
+
+Returns:
+
+1
+🔥 BACKTRACKING
+Return to power(2,1)
+smallAns = 1
+
+Odd:
+
+2 × 1 × 1
+= 2
+
+Returns 2
+
+Return to power(2,2)
+smallAns = 2
+
+Even:
+
+2 × 2
+= 4
+
+Returns 4
+
+Return to power(2,5)
+smallAns = 4
+
+Odd:
+
+2 × 4 × 4
+= 32
+
+Final Answer ✅
+
+💻 Optimal Java Code
+public class Main {
+
+    public static long power(long x, long n) {
+
+        // Base case
+        if (n == 0) {
+            return 1;
+        }
+
+        long half = power(x, n / 2);
+
+        // Even power
+        if (n % 2 == 0) {
+            return half * half;
+        }
+
+        // Odd power
+        return x * half * half;
+    }
+
+    public static void main(String[] args) {
+
+        long x = 2;
+        long n = 5;
+
+        System.out.println(power(x, n));
+    }
+}
+▶️ Output
+32
+⏱️ Time Complexity
+O(log n)
+
+Because:
+
+n becomes n/2 every time
+📦 Space Complexity
+O(log n)
+🌟 MOST IMPORTANT RECURSION LEARNING
+
+This problem teaches:
+
+✅ Divide and Conquer
+
+Break big problem into:
+
+smaller HALF problem
+
+instead of reducing by 1.
+
+🧠 Golden Observation
+
+Normal recursion:
+
+n → n-1
+
+takes many calls 😭
+
+Binary exponentiation:
+
+n → n/2
+
+makes recursion VERY FAST 🚀
+
+🌈 Recursion Tree
+power(2,5)
+|
+→ power(2,2)
+   |
+   → power(2,1)
+      |
+      → power(2,0)
+
+Backtracking:
+
+1
+2
+4
+32
