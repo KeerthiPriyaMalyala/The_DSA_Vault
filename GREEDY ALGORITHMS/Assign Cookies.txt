@@ -1,0 +1,156 @@
+🍪 Assign Cookies
+❓ What is the question asking?
+
+We are given:
+
+g[] → greed factor of children
+s[] → size of cookies
+
+Each child can get only one cookie.
+
+A child is happy if:
+
+cookie size >= greed factor
+
+We need to find:
+
+✅ Maximum number of children we can satisfy.
+
+🪨 Brute Force Approach
+💡 Idea
+For every child, check all cookies.
+Give the first possible unused cookie.
+Mark cookie as used.
+
+This works but is slow because we check many combinations repeatedly 😵
+
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static int findContentChildren(int[] g, int[] s) {
+
+        boolean[] used = new boolean[s.length];
+        int count = 0;
+
+        for (int i = 0; i < g.length; i++) {
+
+            for (int j = 0; j < s.length; j++) {
+
+                if (!used[j] && s[j] >= g[i]) {
+                    used[j] = true;
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+
+        int ans = findContentChildren(g, s);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+1
+⏱️ Time Complexity
+O(n × m)
+📦 Space Complexity
+O(m)
+⚡ Optimal Approach (Greedy)
+💡 Idea
+
+✨ Main Greedy Thought:
+
+Sort both arrays.
+Give the smallest possible cookie to the least greedy child.
+
+Why?
+
+Because big cookies should be saved for greedier children 🍪
+
+✅ Steps
+Sort greed array.
+Sort cookies array.
+Use 2 pointers:
+i → child
+j → cookie
+If cookie satisfies child:
+child happy ✅
+move both pointers
+Else:
+cookie too small ❌
+move cookie pointer only
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static int findContentChildren(int[] g, int[] s) {
+
+        Arrays.sort(g);
+        Arrays.sort(s);
+
+        int i = 0; // child pointer
+        int j = 0; // cookie pointer
+
+        while (i < g.length && j < s.length) {
+
+            if (s[j] >= g[i]) {
+                i++;
+                j++;
+            } else {
+                j++;
+            }
+        }
+
+        return i;
+    }
+
+    public static void main(String[] args) {
+
+        int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+
+        int ans = findContentChildren(g, s);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+1
+⏱️ Time Complexity
+O(n log n + m log m)
+
+(Sorting time)
+
+📦 Space Complexity
+O(1)
+
+(or sorting space depending on Java internal sort)
+
+🌟 Greedy Intuition
+
+Suppose:
+
+Children = [1,2,3]
+Cookies  = [1,2]
+Give cookie 1 to greed 1
+Give cookie 2 to greed 2
+Child 3 remains 😢
+
+Answer = 2
+
+🧠 Important Point
+
+We always try to satisfy the smallest greed first.
+
+This is why Greedy works here 💖
