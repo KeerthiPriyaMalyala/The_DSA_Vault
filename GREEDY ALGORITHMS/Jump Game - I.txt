@@ -1,0 +1,171 @@
+🦘 Jump Game - I
+❓ What is the question asking?
+
+We are given an array:
+
+nums[i]
+
+Each element tells:
+
+👉 Maximum jump length from that position.
+
+We need to check:
+
+✅ Can we reach the last index?
+
+Return:
+
+true → if reachable
+false → otherwise
+🪨 Brute Force Approach
+💡 Idea
+
+From every index:
+
+Try all possible jumps recursively.
+
+If any path reaches last index → return true.
+
+But many repeated calculations happen 😵
+
+💻 Java Code
+public class Main {
+
+    public static boolean canReach(int[] nums, int index) {
+
+        // Reached last index
+        if (index >= nums.length - 1) {
+            return true;
+        }
+
+        // Try all jumps
+        for (int jump = 1; jump <= nums[index]; jump++) {
+
+            if (canReach(nums, index + jump)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2, 3, 1, 1, 4};
+
+        boolean ans = canReach(nums, 0);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(2^n)
+📦 Space Complexity
+O(n)
+
+(recursion stack)
+
+⚡ Optimal Approach (Greedy)
+💡 Idea
+
+✨ Greedy Thought:
+
+Track the:
+
+farthest index reachable
+
+If current index becomes greater than reachable distance:
+
+❌ We are stuck.
+
+Otherwise:
+
+✅ Keep updating farthest reachable index.
+
+💻 Java Code
+public class Main {
+
+    public static boolean canJump(int[] nums) {
+
+        int maxReach = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+
+            // Cannot reach this index
+            if (i > maxReach) {
+                return false;
+            }
+
+            // Update farthest reachable index
+            maxReach = Math.max(maxReach, i + nums[i]);
+
+            // Already can reach end
+            if (maxReach >= nums.length - 1) {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2, 3, 1, 1, 4};
+
+        boolean ans = canJump(nums);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🌟 Example Walkthrough
+Input
+[2,3,1,1,4]
+Step 1
+
+Index 0
+
+maxReach = max(0, 0+2) = 2
+Step 2
+
+Index 1
+
+maxReach = max(2, 1+3) = 4
+
+Now:
+
+maxReach >= last index
+
+✅ Can reach end.
+
+❌ Example Where Answer is False
+Input
+[3,2,1,0,4]
+
+At index 4:
+
+maxReach = 3
+
+Cannot move further because of 0.
+
+So answer:
+
+false
+🧠 Important Greedy Point
+
+We never need to try all paths 😎
+
+Just maintain:
+
+How far can I reach till now?
+
+If current index is reachable → continue.
+
+Else → impossible 💖
