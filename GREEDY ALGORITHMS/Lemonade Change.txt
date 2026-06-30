@@ -1,0 +1,197 @@
+🍋 Lemonade Change
+❓ What is the question asking?
+
+At a lemonade shop:
+
+Each lemonade costs $5
+Customers pay using:
+$5
+$10
+$20
+
+Initially, we have:
+
+No money in hand
+
+We need to return correct change to every customer.
+
+Return:
+
+true ✅ → if change can be given to all customers
+false ❌ → otherwise
+🪨 Brute Force Approach
+💡 Idea
+Simulate every transaction.
+Keep track of all notes received.
+Whenever change needed, search available notes manually.
+
+This works but unnecessary extra checking happens 😵
+
+Since only $5 and $10 matter for change, we can optimize.
+
+⚡ Optimal Approach (Greedy)
+💡 Idea
+
+✨ Greedy Thought:
+
+Always try to preserve smaller notes smartly.
+
+We maintain:
+
+count of $5
+count of $10
+Cases
+1️⃣ Customer gives $5
+
+No change needed.
+
+Just increase $5 count.
+
+2️⃣ Customer gives $10
+
+Need to give:
+
+$5 change
+
+So:
+
+one $5 must exist
+3️⃣ Customer gives $20
+
+Need to give:
+
+$15 change
+
+Best greedy choice:
+
+✅ Prefer:
+
+One $10 + One $5
+
+instead of:
+
+Three $5 notes
+
+Because saving $5 notes helps future transactions 💡
+
+💻 Java Code
+public class Main {
+
+    public static boolean lemonadeChange(int[] bills) {
+
+        int five = 0;
+        int ten = 0;
+
+        for (int bill : bills) {
+
+            // Customer gives $5
+            if (bill == 5) {
+                five++;
+            }
+
+            // Customer gives $10
+            else if (bill == 10) {
+
+                if (five == 0) {
+                    return false;
+                }
+
+                five--;
+                ten++;
+            }
+
+            // Customer gives $20
+            else {
+
+                // Prefer 10 + 5
+                if (ten > 0 && five > 0) {
+                    ten--;
+                    five--;
+                }
+
+                // Otherwise use three 5s
+                else if (five >= 3) {
+                    five -= 3;
+                }
+
+                else {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        int[] bills = {5, 5, 5, 10, 20};
+
+        boolean ans = lemonadeChange(bills);
+
+        System.out.println(ans);
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🌟 Example Walkthrough
+Input
+[5,5,5,10,20]
+Step 1
+
+Customer gives 5
+
+five = 1
+ten  = 0
+Step 2
+
+Customer gives 5
+
+five = 2
+Step 3
+
+Customer gives 5
+
+five = 3
+Step 4
+
+Customer gives 10
+
+Need one 5 as change.
+
+five = 2
+ten  = 1
+Step 5
+
+Customer gives 20
+
+Need 15 change.
+
+Use:
+
+10 + 5
+
+Final:
+
+five = 1
+ten  = 0
+
+All customers satisfied ✅
+
+🧠 Important Greedy Point
+
+For $20:
+
+✅ Prefer:
+
+10 + 5
+
+❌ Avoid using:
+
+5 + 5 + 5
+
+Because $5 notes are more valuable for future change 💖
