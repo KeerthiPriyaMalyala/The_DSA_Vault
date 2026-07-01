@@ -1,0 +1,201 @@
+🌸 Connected Components
+💡 What is Connected Component?
+
+Graph lo oka group of nodes anni oka daniki okati reachable unte 😚
+aa group ni Connected Component antam 💖
+
+Simple ga:
+
+👉 “Mutually connected group of nodes”
+
+🌟 Example
+Component 1:      Component 2:
+
+0 ---- 1          3 ---- 4
+|
+2
+💛 Here:
+Component 1
+0, 1, 2
+
+All connected 😚
+
+Component 2
+3, 4
+
+Connected separately 😎
+
+🌈 Total Connected Components
+2
+💖 Important Point
+
+👉 Connected Components concept mainly for:
+
+🌸 Undirected Graphs
+
+Because directed lo strongly/weakly connected concepts vastayi 😚
+
+🌟 Logic
+
+We use:
+
+BFS OR
+DFS
+
+Idea:
+
+Start from one unvisited node
+Visit all reachable nodes
+That forms ONE component 😎
+Repeat for remaining unvisited nodes
+💚 Example Dry Run
+Graph
+0 ---- 1
+
+2 ---- 3
+
+4
+🌸 Step 1
+
+Start DFS/BFS from 0
+
+Visited:
+
+0, 1
+
+✅ Component count = 1
+
+🌸 Step 2
+
+Next unvisited = 2
+
+Visited:
+
+2, 3
+
+✅ Component count = 2
+
+🌸 Step 3
+
+Next unvisited = 4
+
+Visited:
+
+4
+
+✅ Component count = 3
+
+🌈 Final Answer
+3 Connected Components
+💻 Java Code using DFS
+import java.util.*;
+
+public class Main {
+
+    static void dfs(int node, ArrayList<ArrayList<Integer>> adj, boolean[] visited) {
+
+        visited[node] = true;
+
+        for(int neighbor : adj.get(node)) {
+
+            if(!visited[neighbor]) {
+                dfs(neighbor, adj, visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int V = 5;
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Component 1
+        adj.get(0).add(1);
+        adj.get(1).add(0);
+
+        // Component 2
+        adj.get(2).add(3);
+        adj.get(3).add(2);
+
+        // Node 4 isolated
+
+        boolean[] visited = new boolean[V];
+
+        int count = 0;
+
+        for(int i = 0; i < V; i++) {
+
+            if(!visited[i]) {
+
+                dfs(i, adj, visited);
+
+                count++;
+            }
+        }
+
+        System.out.println("Connected Components = " + count);
+    }
+}
+🌟 Output
+Connected Components = 3
+💙 Why count++ after DFS?
+
+Because:
+
+👉 One DFS visits ENTIRE connected group 😎✨
+
+So:
+
+one DFS = one component
+🌸 Time Complexity
+DFS/BFS Traversal
+O(V + E)
+
+Where:
+
+V = vertices
+E = edges
+💜 Space Complexity
+O(V)
+
+Visited array + recursion stack
+
+🌟 Special Cases
+💛 Isolated Node
+4
+
+Single node also component 😚
+
+💚 Fully Connected Graph
+0 -- 1 -- 2 -- 3
+
+Only:
+
+1 Connected Component
+❤️ No Edges
+0   1   2
+
+Answer:
+
+3 Components
+
+Because each node separate 😚
+
+🥹 Tiny Revision
+✅ Connected Component
+
+Group of connected nodes 💖
+
+✅ Find Using
+DFS
+BFS
+✅ Logic
+Every new DFS/BFS call
+= New Component
+✅ Formula Idea
+Count unvisited DFS calls
