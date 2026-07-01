@@ -1,0 +1,235 @@
+🌸 BFS (Breadth First Search)
+💡 What is BFS?
+
+BFS means:
+
+Breadth First Search
+
+👉 Level by level traversal 😚
+
+First:
+
+nearby nodes
+then farther nodes
+🌟 Real Life Example
+📍 Google Maps
+
+Nearest places first explore chestundi 😎
+
+🌸 BFS Traversal Style
+Start Node
+↓
+All immediate neighbors
+↓
+Neighbors of neighbors
+↓
+and so on...
+💖 Data Structure Used
+✅ Queue
+
+FIFO 😚
+
+First In First Out
+🌈 Example Graph
+      0
+    /   \
+   1     2
+  / \
+ 3   4
+🌟 BFS Traversal
+
+Starting from 0
+
+0 → 1 → 2 → 3 → 4
+🌸 Step-by-Step Dry Run
+💛 Step 1
+
+Queue:
+
+[0]
+
+Visited:
+
+0
+💛 Step 2
+
+Remove 0
+
+Add neighbors:
+
+1
+2
+
+Queue:
+
+[1, 2]
+
+Traversal:
+
+0
+💛 Step 3
+
+Remove 1
+
+Add:
+
+3
+4
+
+Queue:
+
+[2, 3, 4]
+
+Traversal:
+
+0 1
+💛 Step 4
+
+Remove 2
+
+No new neighbors 😚
+
+Queue:
+
+[3, 4]
+
+Traversal:
+
+0 1 2
+💛 Step 5
+
+Remove 3
+
+Queue:
+
+[4]
+
+Traversal:
+
+0 1 2 3
+💛 Step 6
+
+Remove 4
+
+Queue empty 😎
+
+Final:
+
+0 1 2 3 4
+💻 Java Code (Adjacency List)
+import java.util.*;
+
+public class Main {
+
+    public static void bfs(int start, ArrayList<ArrayList<Integer>> adj, int V) {
+
+        boolean[] visited = new boolean[V];
+
+        Queue<Integer> queue = new LinkedList<>();
+
+        // start node
+        visited[start] = true;
+        queue.offer(start);
+
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            System.out.print(node + " ");
+
+            // visit neighbors
+            for(int neighbor : adj.get(node)) {
+
+                if(!visited[neighbor]) {
+
+                    visited[neighbor] = true;
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int V = 5;
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // edges
+        adj.get(0).add(1);
+        adj.get(1).add(0);
+
+        adj.get(0).add(2);
+        adj.get(2).add(0);
+
+        adj.get(1).add(3);
+        adj.get(3).add(1);
+
+        adj.get(1).add(4);
+        adj.get(4).add(1);
+
+        bfs(0, adj, V);
+    }
+}
+🌟 Output
+0 1 2 3 4
+🌸 Important Logic
+✅ Mark visited BEFORE adding to queue
+visited[neighbor] = true;
+queue.offer(neighbor);
+
+Because duplicate insertions avoid cheyyali 😚
+
+🌈 BFS Template
+1. Create visited[]
+2. Create Queue
+3. Add start node
+4. While queue not empty:
+      remove node
+      visit neighbors
+      add unvisited neighbors
+💚 Time Complexity
+O(V + E)
+
+Where:
+
+V = vertices
+E = edges
+💙 Space Complexity
+O(V)
+
+Queue + visited array
+
+🌸 Applications of BFS
+💛 Shortest Path in Unweighted Graph
+💚 Connected Components
+❤️ Cycle Detection
+💜 Level Order Traversal in Trees
+
+Tree BFS = Level Order 😎
+
+🌟 BFS vs DFS
+BFS	DFS
+Queue	Stack/Recursion
+Level-wise	Depth-wise
+Shortest path	Not guaranteed
+More memory	Less memory
+🥹 Tiny Revision
+✅ BFS
+Breadth First Search
+✅ Uses
+Queue
+Visited array
+✅ Traversal
+Level by level
+✅ Time
+O(V + E)
+✅ Core Idea
+Pop from queue
+Explore neighbors
+Add unvisited nodes
