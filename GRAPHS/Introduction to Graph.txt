@@ -1,0 +1,242 @@
+🌸 Introduction to Graph
+💡 What is a Graph?
+
+A Graph is a data structure used to represent connections between things 😚
+
+It contains:
+
+Vertices (Nodes) → points
+Edges → connections between nodes
+🌟 Real Life Examples
+📍 Google Maps
+
+Cities = Nodes
+Roads = Edges
+
+📍 Instagram
+
+Users = Nodes
+Follow relationship = Edges
+
+📍 Friends Network
+
+People = Nodes
+Friendship = Edges
+
+💖 Basic Structure
+A ----- B
+|       |
+|       |
+C ----- D
+🌸 Here:
+Nodes / Vertices
+A, B, C, D
+Edges
+A-B
+A-C
+B-D
+C-D
+🌈 Terminologies
+💛 Vertex (Node)
+
+Single point in graph.
+
+Example:
+
+A
+B
+C
+💙 Edge
+
+Connection between two nodes.
+
+Example:
+
+A ----- B
+❤️ Degree
+
+Number of edges connected to a node.
+
+Example:
+
+A connected to B and C
+Degree of A = 2
+💜 Path
+
+Sequence of nodes connected together.
+
+Example:
+
+A → B → D
+🧡 Cycle
+
+If we come back to starting node 😚
+
+Example:
+
+A → B → C → A
+🌸 Types of Graphs
+💚 1. Undirected Graph
+
+👉 No direction between nodes.
+
+A ----- B
+
+Means:
+
+A connected to B
+B connected to A
+💙 2. Directed Graph (Digraph)
+
+👉 Direction untadi 😎
+
+A → B
+
+Means:
+
+A can go to B
+B cannot go to A automatically
+❤️ 3. Weighted Graph
+
+👉 Edges ki weight/cost untadi 💰
+
+A --5-- B
+
+Here:
+
+weight = 5
+
+Used in:
+
+shortest path
+maps
+networks
+💛 4. Cyclic Graph
+
+👉 Contains cycle.
+
+A → B → C → A
+💜 5. Acyclic Graph
+
+👉 No cycle.
+
+🌟 Graph Representation
+
+Graphs ni memory lo mainly 2 ways lo store chestham 😚
+
+1️⃣ Adjacency Matrix
+int[][] graph
+2️⃣ Adjacency List ✅ MOST USED
+ArrayList<ArrayList<Integer>>
+🌈 Why Adjacency List Mostly Used?
+
+Because:
+
+less space 😚
+faster traversal 😎
+perfect for sparse graphs
+🌸 Graph vs Tree
+Graph	Tree
+Can have cycle	No cycle
+Can be disconnected	Always connected
+More general	Special type of graph
+💖 Important Formula
+🌟 Undirected Graph
+
+Total degree sum:
+
+2 × Number of Edges
+🌸 Example
+0 ----- 1
+|       |
+2 ----- 3
+
+Vertices = 4
+Edges = 4
+
+Degrees:
+
+0 → 2
+1 → 2
+2 → 2
+3 → 2
+
+Total = 8
+
+2 × Edges = 2 × 4 = 8
+
+Correct 😚✨
+
+💻 Simple Java Graph Creation
+Using Adjacency List
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int V = 4;
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        // create list for each vertex
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // add edges
+        adj.get(0).add(1);
+        adj.get(1).add(0);
+
+        adj.get(0).add(2);
+        adj.get(2).add(0);
+
+        adj.get(1).add(3);
+        adj.get(3).add(1);
+
+        // print graph
+        for(int i = 0; i < V; i++) {
+
+            System.out.print(i + " -> ");
+
+            for(int node : adj.get(i)) {
+                System.out.print(node + " ");
+            }
+
+            System.out.println();
+        }
+    }
+}
+🌟 Output
+0 -> 1 2
+1 -> 0 3
+2 -> 0
+3 -> 1
+🥹 Tiny Revision
+✅ Graph
+
+Collection of:
+
+Nodes
+Edges
+✅ Types
+Undirected
+Directed
+Weighted
+Cyclic
+Acyclic
+✅ Representations
+Adjacency Matrix
+Adjacency List ⭐
+✅ Most Used
+ArrayList<ArrayList<Integer>>
+💕 Next Important Topics
+
+After this learn:
+
+BFS
+DFS
+Connected Components
+Cycle Detection
+Topological Sort
+Shortest Path
