@@ -1,0 +1,198 @@
+🌈 Flood Fill Algorithm (BFS)
+❓ What is the question asking?
+
+We are given:
+
+A 2D image (matrix)
+A starting cell (sr, sc)
+A new color
+
+We need to:
+
+✅ Change the color of the starting cell and all connected cells having the same original color into the new color.
+
+Connection is only in:
+
+Up
+Down
+Left
+Right
+🌟 Example
+Input
+Image
+
+1 1 1
+1 1 0
+1 0 1
+
+sr = 1
+sc = 1
+
+newColor = 2
+
+Starting cell:
+
+(1,1)
+
+Original color:
+
+1
+Output
+2 2 2
+2 2 0
+2 0 1
+
+The bottom-right 1 is not connected, so it remains unchanged.
+
+🧠 Main Idea
+Store the original color.
+Start BFS from (sr, sc).
+Visit all connected cells having the original color.
+Change their color to the new color.
+⚡ Optimal Approach (BFS)
+💡 Idea
+Push starting cell into queue.
+Change its color immediately.
+Process queue.
+Check all 4 directions.
+If neighbour has original color:
+Change its color.
+Push into queue.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int[] row = {-1, 1, 0, 0};
+    static int[] col = {0, 0, -1, 1};
+
+    public static void floodFill(int[][] image, int sr, int sc, int newColor) {
+
+        int oldColor = image[sr][sc];
+
+        if(oldColor == newColor)
+            return;
+
+        int n = image.length;
+        int m = image[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+
+        queue.offer(new int[]{sr, sc});
+
+        image[sr][sc] = newColor;
+
+        while(!queue.isEmpty()) {
+
+            int[] current = queue.poll();
+
+            int r = current[0];
+            int c = current[1];
+
+            for(int k=0;k<4;k++) {
+
+                int newRow = r + row[k];
+                int newCol = c + col[k];
+
+                if(newRow>=0 && newRow<n &&
+                   newCol>=0 && newCol<m &&
+                   image[newRow][newCol]==oldColor) {
+
+                    image[newRow][newCol] = newColor;
+
+                    queue.offer(new int[]{newRow,newCol});
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[][] image = {
+                {1,1,1},
+                {1,1,0},
+                {1,0,1}
+        };
+
+        floodFill(image,1,1,2);
+
+        for(int[] row : image){
+            System.out.println(Arrays.toString(row));
+        }
+    }
+}
+▶️ Output
+[2, 2, 2]
+[2, 2, 0]
+[2, 0, 1]
+⏱️ Time Complexity
+O(N × M)
+
+Each cell is visited at most once.
+
+📦 Space Complexity
+Auxiliary Space
+O(N × M)
+
+Worst case:
+
+Queue stores many cells.
+🌈 Dry Run
+Initial Image
+1 1 1
+1 1 0
+1 0 1
+
+Start:
+
+(1,1)
+
+Original Color:
+
+1
+BFS
+
+Visit:
+
+(1,1)
+↓
+(0,1)
+↓
+(1,0)
+↓
+(0,0)
+↓
+(0,2)
+↓
+(2,0)
+
+All become:
+
+2
+
+Bottom-right (2,2) is not connected.
+
+🔥 Important Points
+
+✅ Use original color, not the new color, for comparison.
+
+✅ If:
+
+oldColor == newColor
+
+return immediately to avoid unnecessary processing.
+
+✅ Change the color before adding to the queue to prevent visiting the same cell multiple times.
+
+🧠 Easy Memory Trick
+Remember Original Color
+          ↓
+Start BFS
+          ↓
+Same Color?
+          ↓
+Paint New Color
+          ↓
+Push into Queue
+          ↓
+Repeat
