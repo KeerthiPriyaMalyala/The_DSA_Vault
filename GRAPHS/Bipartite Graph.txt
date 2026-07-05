@@ -1,0 +1,258 @@
+🌳 Bipartite Graph (Using DFS)
+❓ What is the question asking?
+
+We are given a graph.
+
+We need to check:
+
+✅ Can we divide graph nodes into TWO groups such that:
+
+No adjacent nodes
+belong to same group
+
+If yes:
+
+Graph is Bipartite
+🌟 Another Meaning
+
+We color graph using only:
+
+2 colors
+
+such that:
+
+✅ adjacent nodes have different colors.
+
+🌟 Example
+Bipartite Graph ✅
+0 --- 1
+|     |
+|     |
+3 --- 2
+
+Possible coloring:
+
+0 → Red
+1 → Blue
+2 → Red
+3 → Blue
+
+No adjacent same color ✅
+
+Not Bipartite ❌
+0 --- 1
+ \   /
+   2
+
+Triangle cycle.
+
+Impossible with 2 colors ❌
+
+🧠 Main Idea
+
+Use DFS and color nodes alternately.
+
+Suppose:
+
+0 → color 0
+
+Then neighbors:
+
+1 → color 1
+
+Then neighbor’s neighbors:
+
+0 → color 0
+
+and so on.
+
+🌟 Important Observation
+
+If:
+
+adjacent nodes have same color
+
+then:
+
+❌ NOT bipartite.
+
+⚡ Optimal Approach (DFS)
+💡 Idea
+Maintain color array.
+Initially all = -1.
+Start DFS.
+Assign alternate colors.
+If adjacent nodes get same color:
+return false.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static boolean dfs(int node,
+                       int colorValue,
+                       int[] color,
+                       ArrayList<ArrayList<Integer>> graph) {
+
+        color[node] = colorValue;
+
+        for(int neighbor : graph.get(node)) {
+
+            // Not colored yet
+            if(color[neighbor] == -1) {
+
+                if(!dfs(neighbor,
+                        1-colorValue,
+                        color,
+                        graph)) {
+
+                    return false;
+                }
+            }
+
+            // Same color found
+            else if(color[neighbor] == color[node]) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        int V = 4;
+
+        ArrayList<ArrayList<Integer>> graph =
+                new ArrayList<>();
+
+        for(int i=0;i<V;i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        graph.get(0).add(1);
+        graph.get(1).add(0);
+
+        graph.get(1).add(2);
+        graph.get(2).add(1);
+
+        graph.get(2).add(3);
+        graph.get(3).add(2);
+
+        graph.get(3).add(0);
+        graph.get(0).add(3);
+
+        int[] color = new int[V];
+
+        Arrays.fill(color,-1);
+
+        boolean bipartite = true;
+
+        for(int i=0;i<V;i++) {
+
+            if(color[i] == -1) {
+
+                if(!dfs(i,0,color,graph)) {
+
+                    bipartite = false;
+                    break;
+                }
+            }
+        }
+
+        System.out.println(bipartite);
+    }
+}
+▶️ Output
+true
+🌈 DFS Dry Run
+Start DFS(0)
+
+Assign:
+
+0 → color 0
+Visit Neighbor 1
+
+Assign:
+
+1 → color 1
+Visit Neighbor 2
+
+Assign:
+
+2 → color 0
+Visit Neighbor 3
+
+Assign:
+
+3 → color 1
+
+No adjacent same colors ✅
+
+Graph is bipartite.
+
+❌ Triangle Example
+0 --- 1
+ \   /
+   2
+
+Coloring:
+
+0 → 0
+1 → 1
+2 → 0
+
+But:
+
+0 and 2 adjacent
+same color
+
+❌ Not bipartite.
+
+⏱️ Time Complexity
+O(V + E)
+
+Where:
+
+V = vertices
+E = edges
+📦 Space Complexity
+Auxiliary Space
+O(V)
+
+For:
+
+color array
+recursion stack
+🔥 Important Points
+
+✅ Bipartite graph uses only:
+
+2 colors
+
+✅ Adjacent nodes must have different colors.
+
+✅ Odd cycle graph is NEVER bipartite ❌
+
+✅ Even cycle graph CAN be bipartite ✅
+
+🌟 Special Observation
+Odd Cycle
+NOT Bipartite
+Even Cycle
+Bipartite
+🧠 Easy Memory Trick
+Color Node
+    ↓
+Opposite Color to Neighbor
+    ↓
+Same Color Adjacent?
+    ↓
+YES → Not Bipartite
+NO  → Continue
+🌟 Core Pattern
+
+This problem teaches:
+
+Graph Coloring Pattern 💖
