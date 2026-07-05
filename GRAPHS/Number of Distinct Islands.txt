@@ -1,0 +1,237 @@
+🏝️ Number of Distinct Islands (DFS)
+❓ What is the question asking?
+
+We are given a binary matrix:
+
+1 → land
+0 → water
+
+We need to count:
+
+✅ Number of UNIQUE island shapes.
+
+🌟 Important Point
+
+Two islands are SAME if their shapes are same.
+
+Position does NOT matter ❌
+
+Only shape matters ✅
+
+🌟 Example
+Input
+1 1 0 0 0
+1 0 0 0 0
+0 0 0 1 1
+0 0 0 1 0
+Islands
+Island 1
+1 1
+1
+Island 2
+1 1
+1
+
+Same shape ✅
+
+✅ Output
+1
+
+Only ONE distinct island shape.
+
+🧠 Main Idea
+
+We need to store island shape independent of position.
+
+How?
+
+👉 Store relative positions.
+
+🌟 Example
+
+Suppose DFS starts at:
+
+(2,3)
+
+Another cell:
+
+(3,3)
+
+Store:
+
+(3-2 , 3-3)
+= (1,0)
+
+These relative coordinates define the shape.
+
+⚡ Optimal Approach (DFS)
+💡 Idea
+Traverse matrix.
+If land and not visited:
+start DFS
+store relative coordinates.
+Put island shape into HashSet.
+HashSet size = answer.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int[] row = {-1,1,0,0};
+    static int[] col = {0,0,-1,1};
+
+    static void dfs(int r,
+                    int c,
+                    int baseRow,
+                    int baseCol,
+                    int[][] grid,
+                    boolean[][] visited,
+                    ArrayList<String> shape) {
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        visited[r][c] = true;
+
+        // Store relative position
+        shape.add((r-baseRow) + "," + (c-baseCol));
+
+        for(int k=0;k<4;k++) {
+
+            int nr = r + row[k];
+            int nc = c + col[k];
+
+            if(nr>=0 && nr<n &&
+               nc>=0 && nc<m &&
+               grid[nr][nc]==1 &&
+               !visited[nr][nc]) {
+
+                dfs(nr,nc,
+                    baseRow,baseCol,
+                    grid,visited,shape);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+                {1,1,0,0,0},
+                {1,0,0,0,0},
+                {0,0,0,1,1},
+                {0,0,0,1,0}
+        };
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        boolean[][] visited = new boolean[n][m];
+
+        HashSet<ArrayList<String>> set = new HashSet<>();
+
+        for(int i=0;i<n;i++) {
+
+            for(int j=0;j<m;j++) {
+
+                if(grid[i][j]==1 &&
+                   !visited[i][j]) {
+
+                    ArrayList<String> shape =
+                            new ArrayList<>();
+
+                    dfs(i,j,i,j,
+                        grid,visited,shape);
+
+                    set.add(shape);
+                }
+            }
+        }
+
+        System.out.println(set.size());
+    }
+}
+▶️ Output
+1
+🌈 Dry Run
+First Island
+
+Start:
+
+(0,0)
+
+Relative positions stored:
+
+0,0
+0,1
+1,0
+
+Shape:
+
+[(0,0),(0,1),(1,0)]
+Second Island
+
+Start:
+
+(2,3)
+
+Relative positions:
+
+0,0
+0,1
+1,0
+
+Same shape ✅
+
+HashSet stores only once.
+
+Answer:
+
+1
+⏱️ Time Complexity
+O(N × M)
+
+Every cell visited once.
+
+📦 Space Complexity
+Auxiliary Space
+O(N × M)
+
+For:
+
+visited array
+recursion stack
+shape storage
+🔥 Important Points
+
+✅ Store RELATIVE positions.
+
+❌ Do NOT store actual coordinates.
+
+✅ Same shape → same relative coordinates.
+
+✅ HashSet automatically removes duplicates.
+
+🌟 Why Relative Coordinates?
+
+Actual positions differ:
+
+Island 1 → starts at (0,0)
+Island 2 → starts at (2,3)
+
+But relative shape remains same.
+
+🧠 Easy Memory Trick
+Start DFS
+    ↓
+Store Relative Positions
+    ↓
+Make Shape
+    ↓
+Store in HashSet
+    ↓
+Unique Shapes Count
+🌟 Core Pattern
+
+This problem teaches:
+
+Shape Encoding Pattern 💖
