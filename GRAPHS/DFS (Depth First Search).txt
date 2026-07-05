@@ -1,0 +1,182 @@
+🌳 DFS (Depth First Search) – Graph Traversal Notes
+❓ What is DFS?
+
+DFS (Depth First Search) is a graph traversal algorithm.
+
+👉 It goes deep into one path first before coming back.
+
+Think like this 🪜
+You enter a maze → keep moving forward until no path exists → then come back (backtracking).
+
+🧠 Main Idea
+Start from a node
+Visit it
+Go to one unvisited neighbor
+Again go deeper
+If no neighbor exists → backtrack
+Continue until all nodes are visited
+🌟 DFS Uses
+
+✅ Traversing Graphs
+✅ Detecting Cycles
+✅ Connected Components
+✅ Topological Sort
+✅ Maze Problems
+✅ Path Finding
+
+📌 DFS Traversal Example
+Graph
+    0
+   / \
+  1   2
+ / \
+3   4
+DFS Traversal from 0
+0 → 1 → 3 → backtrack → 4 → backtrack → 2
+Final DFS Order
+0 1 3 4 2
+⚡ DFS Using Recursion
+💡 Idea
+Use recursion
+Visit node
+Mark visited
+Call DFS for neighbors
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static void dfs(int node, boolean[] visited, ArrayList<ArrayList<Integer>> graph) {
+
+        visited[node] = true;
+
+        System.out.print(node + " ");
+
+        for (int neighbor : graph.get(node)) {
+
+            if (!visited[neighbor]) {
+
+                dfs(neighbor, visited, graph);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int V = 5;
+
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        graph.get(0).add(1);
+        graph.get(0).add(2);
+
+        graph.get(1).add(0);
+        graph.get(1).add(3);
+        graph.get(1).add(4);
+
+        graph.get(2).add(0);
+
+        graph.get(3).add(1);
+
+        graph.get(4).add(1);
+
+        boolean[] visited = new boolean[V];
+
+        dfs(0, visited, graph);
+    }
+}
+▶️ Output
+0 1 3 4 2
+⏱️ Time Complexity
+O(V + E)
+
+Where:
+
+V = Vertices
+E = Edges
+📦 Space Complexity
+O(V)
+
+Because:
+
+visited array
+recursion stack
+🌈 DFS Dry Run
+Start DFS(0)
+Visit 0
+
+Neighbors:
+
+1, 2
+
+Go to 1
+
+DFS(1)
+Visit 1
+
+Neighbors:
+
+0, 3, 4
+
+0 already visited ❌
+
+Go to 3
+
+DFS(3)
+Visit 3
+
+No unvisited neighbors
+
+🔙 Backtrack to 1
+
+Go to 4
+
+DFS(4)
+Visit 4
+
+No unvisited neighbors
+
+🔙 Backtrack to 1
+🔙 Backtrack to 0
+
+Go to 2
+
+DFS(2)
+Visit 2
+
+Done ✅
+
+🔥 Important Points
+
+✅ DFS uses:
+
+Recursion OR Stack
+
+✅ BFS uses:
+
+Queue
+
+✅ DFS goes DEEP first
+
+✅ Need visited array to avoid infinite loops
+
+🆚 BFS vs DFS
+BFS	DFS
+Uses Queue	Uses Stack/Recursion
+Level by Level	Depth Wise
+Shortest Path	Not guaranteed
+More memory sometimes	Less memory sometimes
+🧠 Easy Memory Trick
+DFS
+D = Deep
+
+Go DEEP first 🌳
+
+BFS
+B = Broad
+
+Go level by level 🌈
