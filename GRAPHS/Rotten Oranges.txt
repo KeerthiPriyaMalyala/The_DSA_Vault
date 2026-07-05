@@ -1,0 +1,236 @@
+🍊 Rotten Oranges (BFS)
+❓ What is the question asking?
+
+We are given a grid where:
+
+0 → Empty Cell
+1 → Fresh Orange 🍊
+2 → Rotten Orange 🤢
+
+Every minute:
+
+👉 A rotten orange rots all adjacent fresh oranges (Up, Down, Left, Right).
+
+We need to find:
+
+✅ Minimum time required to rot all fresh oranges.
+
+If impossible:
+
+Return -1
+🧠 Main Idea
+
+Instead of starting BFS from one cell,
+
+👉 Start BFS from all rotten oranges at the same time.
+
+This is called:
+
+Multi-Source BFS
+🌟 Example
+Input
+2 1 1
+1 1 0
+0 1 1
+
+Minute 0
+
+2 1 1
+1 1 0
+0 1 1
+
+Minute 1
+
+2 2 1
+2 1 0
+0 1 1
+
+Minute 2
+
+2 2 2
+2 2 0
+0 1 1
+
+Minute 3
+
+2 2 2
+2 2 0
+0 2 1
+
+Minute 4
+
+2 2 2
+2 2 0
+0 2 2
+✅ Answer
+4
+⚡ Optimal Approach (BFS)
+💡 Idea
+Traverse matrix.
+Push all rotten oranges into queue.
+Count fresh oranges.
+Perform BFS level by level.
+Every level = 1 minute.
+Convert adjacent fresh oranges into rotten.
+At the end:
+Fresh = 0 → return minutes.
+Fresh > 0 → return -1.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int[] row = {-1, 1, 0, 0};
+    static int[] col = {0, 0, -1, 1};
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+                {2,1,1},
+                {1,1,0},
+                {0,1,1}
+        };
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+
+        int fresh = 0;
+
+        // Put all rotten oranges into queue
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+
+                if(grid[i][j]==2){
+                    queue.offer(new int[]{i,j});
+                }
+
+                if(grid[i][j]==1){
+                    fresh++;
+                }
+            }
+        }
+
+        int minutes = 0;
+
+        while(!queue.isEmpty() && fresh>0){
+
+            int size = queue.size();
+
+            for(int i=0;i<size;i++){
+
+                int[] current = queue.poll();
+
+                int r = current[0];
+                int c = current[1];
+
+                for(int k=0;k<4;k++){
+
+                    int newRow = r + row[k];
+                    int newCol = c + col[k];
+
+                    if(newRow>=0 && newRow<n &&
+                       newCol>=0 && newCol<m &&
+                       grid[newRow][newCol]==1){
+
+                        grid[newRow][newCol]=2;
+                        fresh--;
+
+                        queue.offer(new int[]{newRow,newCol});
+                    }
+                }
+            }
+
+            minutes++;
+        }
+
+        if(fresh==0)
+            System.out.println(minutes);
+        else
+            System.out.println(-1);
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(N × M)
+
+Every cell is visited at most once.
+
+📦 Space Complexity
+Auxiliary Space
+O(N × M)
+
+Worst case:
+
+Queue may contain many oranges.
+
+🌈 Dry Run
+Initial Queue
+[(0,0)]
+
+Fresh = 6
+
+Minute = 0
+
+Minute 1
+
+Rot:
+
+(0,1)
+(1,0)
+
+Fresh = 4
+
+Minute 2
+
+Rot:
+
+(0,2)
+(1,1)
+
+Fresh = 2
+
+Minute 3
+
+Rot:
+
+(2,1)
+
+Fresh = 1
+
+Minute 4
+
+Rot:
+
+(2,2)
+
+Fresh = 0
+
+Answer = 4
+
+🔥 Important Points
+
+✅ This is Multi-Source BFS.
+
+✅ All rotten oranges are inserted into the queue initially.
+
+✅ One complete BFS level = One minute.
+
+✅ Only fresh oranges (1) can become rotten (2).
+
+🧠 Easy Memory Trick
+All Rotten Oranges
+        ↓
+Put into Queue
+        ↓
+BFS Level by Level
+        ↓
+Each Level = 1 Minute
+        ↓
+Fresh becomes Rotten
+        ↓
+Fresh = 0 ?
+     Yes → Answer
+     No  → -1
