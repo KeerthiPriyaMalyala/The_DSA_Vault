@@ -1,0 +1,226 @@
+🌳 Number of Enclaves (Using BFS)
+❓ What is the question asking?
+
+We are given a binary matrix:
+
+1 → land
+0 → water
+
+We need to count:
+
+✅ Number of land cells that cannot reach the boundary.
+
+These trapped land cells are called:
+
+Enclaves
+🌟 Important Rule
+
+Boundary-connected land is NOT enclave ❌
+
+Because it can escape outside the grid.
+
+Only completely trapped land counts ✅
+
+🌟 Example
+Input
+0 0 0 0
+1 0 1 0
+0 1 1 0
+0 0 0 0
+Output
+3
+🧠 Main Idea
+
+Instead of finding enclaves directly ❌
+
+We first remove all boundary-connected land using BFS ✅
+
+Remaining land = enclaves.
+
+⚡ Optimal Approach (BFS)
+💡 Idea
+Traverse all boundary cells.
+If boundary cell = 1
+Start BFS
+Mark all connected land visited.
+Traverse matrix again.
+Count unvisited land cells.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int[] row = {-1,1,0,0};
+    static int[] col = {0,0,-1,1};
+
+    static void bfs(int i,
+                    int j,
+                    int[][] grid,
+                    boolean[][] visited) {
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+
+        queue.offer(new int[]{i,j});
+
+        visited[i][j] = true;
+
+        while(!queue.isEmpty()) {
+
+            int[] current = queue.poll();
+
+            int r = current[0];
+            int c = current[1];
+
+            for(int k=0;k<4;k++) {
+
+                int nr = r + row[k];
+                int nc = c + col[k];
+
+                if(nr>=0 && nr<n &&
+                   nc>=0 && nc<m &&
+                   grid[nr][nc]==1 &&
+                   !visited[nr][nc]) {
+
+                    visited[nr][nc] = true;
+
+                    queue.offer(new int[]{nr,nc});
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+                {0,0,0,0},
+                {1,0,1,0},
+                {0,1,1,0},
+                {0,0,0,0}
+        };
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        boolean[][] visited = new boolean[n][m];
+
+        // First row and last row
+        for(int j=0;j<m;j++) {
+
+            if(grid[0][j]==1 &&
+               !visited[0][j]) {
+
+                bfs(0,j,grid,visited);
+            }
+
+            if(grid[n-1][j]==1 &&
+               !visited[n-1][j]) {
+
+                bfs(n-1,j,grid,visited);
+            }
+        }
+
+        // First column and last column
+        for(int i=0;i<n;i++) {
+
+            if(grid[i][0]==1 &&
+               !visited[i][0]) {
+
+                bfs(i,0,grid,visited);
+            }
+
+            if(grid[i][m-1]==1 &&
+               !visited[i][m-1]) {
+
+                bfs(i,m-1,grid,visited);
+            }
+        }
+
+        int count = 0;
+
+        // Count remaining land
+        for(int i=0;i<n;i++) {
+
+            for(int j=0;j<m;j++) {
+
+                if(grid[i][j]==1 &&
+                   !visited[i][j]) {
+
+                    count++;
+                }
+            }
+        }
+
+        System.out.println(count);
+    }
+}
+▶️ Output
+3
+🌈 BFS Dry Run
+Boundary Traversal
+
+Boundary land found:
+
+(1,0)
+
+Start BFS.
+
+Mark visited:
+
+(1,0)
+
+This land can escape ❌
+
+Traverse Entire Grid
+
+Remaining unvisited land:
+
+(1,2)
+(2,1)
+(2,2)
+
+Count:
+
+3
+
+Done 🎉
+
+⏱️ Time Complexity
+O(N × M)
+
+Every cell visited at most once.
+
+📦 Space Complexity
+Auxiliary Space
+O(N × M)
+
+For:
+
+queue
+visited array
+🔥 Important Points
+
+✅ BFS starts ONLY from boundary land.
+
+✅ Boundary-connected land is removable/non-enclave.
+
+✅ Remaining land cells are enclaves.
+
+🌟 Similar Problems
+Problem	Core Idea
+Surrounded Regions	Save border-connected O
+Number of Enclaves	Remove border-connected land
+Rotten Oranges	Multi-source BFS
+Flood Fill	Connected component traversal
+🧠 Easy Memory Trick
+Boundary Land
+      ↓
+BFS
+      ↓
+Mark Escapable Cells
+      ↓
+Remaining Land
+      ↓
+Enclaves
