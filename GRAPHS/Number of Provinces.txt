@@ -1,0 +1,156 @@
+🌳 Number of Provinces
+❓ What is the question asking?
+
+We are given:
+
+n cities
+A matrix called isConnected
+
+If:
+
+isConnected[i][j] = 1
+
+👉 city i and city j are directly connected.
+
+A Province means:
+
+✅ A group of directly or indirectly connected cities.
+
+We need to find:
+
+✨ Total number of provinces.
+
+🧠 Main Idea
+
+Every disconnected group = 1 province.
+
+So:
+
+Visit one city
+Traverse all connected cities using DFS
+Increase province count
+Repeat for unvisited cities
+🌟 Example
+Input
+[
+ [1,1,0],
+ [1,1,0],
+ [0,0,1]
+]
+Graph Representation
+0 --- 1
+
+2
+Provinces
+Province 1 → {0,1}
+
+Province 2 → {2}
+✅ Answer
+2
+⚡ Optimal Approach (DFS)
+💡 Idea
+Maintain visited array
+Traverse every city
+If city not visited:
+run DFS
+increment province count
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static void dfs(int city, int[][] isConnected, boolean[] visited) {
+
+        visited[city] = true;
+
+        for (int neighbor = 0; neighbor < isConnected.length; neighbor++) {
+
+            if (isConnected[city][neighbor] == 1 && !visited[neighbor]) {
+
+                dfs(neighbor, isConnected, visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int[][] isConnected = {
+                {1,1,0},
+                {1,1,0},
+                {0,0,1}
+        };
+
+        int n = isConnected.length;
+
+        boolean[] visited = new boolean[n];
+
+        int provinces = 0;
+
+        for (int city = 0; city < n; city++) {
+
+            if (!visited[city]) {
+
+                dfs(city, isConnected, visited);
+
+                provinces++;
+            }
+        }
+
+        System.out.println("Number of Provinces: " + provinces);
+    }
+}
+▶️ Output
+Number of Provinces: 2
+⏱️ Time Complexity
+O(n²)
+
+Because we traverse matrix.
+
+📦 Space Complexity
+O(n)
+
+For visited array + recursion stack.
+
+🌈 Dry Run
+Start from city 0
+visited[0] = true
+
+0 connected to 1
+
+Go to 1
+
+visited[1] = true
+
+Both visited.
+
+✅ Province count = 1
+
+Move to city 2
+
+Not visited.
+
+visited[2] = true
+
+✅ Province count = 2
+
+Done 🎉
+
+🔥 Important Points
+
+✅ Province = Connected Component
+
+✅ DFS/BFS both work
+
+✅ Visited array avoids revisiting
+
+✅ Every new DFS call means:
+
+new province found
+🧠 Easy Memory Trick
+Unvisited City Found
+        ↓
+Start DFS
+        ↓
+One Full Connected Group
+        ↓
+Province +1
