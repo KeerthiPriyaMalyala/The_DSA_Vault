@@ -1,0 +1,217 @@
+🌳 Surrounded Regions (Using DFS)
+❓ What is the question asking?
+
+We are given a board containing:
+
+'X'
+'O'
+
+We need to:
+
+✅ Convert all surrounded 'O' into 'X'.
+
+🌟 Important Rule
+Border 'O' can NEVER be converted ❌
+
+Because they are not surrounded.
+
+Also:
+
+👉 Any 'O' connected to border 'O' is SAFE.
+
+🧠 Main Idea
+Start DFS from border 'O'.
+Mark all connected 'O' as visited/safe.
+Traverse entire board.
+Any unvisited 'O' is surrounded.
+Convert it into 'X'.
+🌟 Example
+Input
+X X X X
+X O O X
+X X O X
+X O X X
+Output
+X X X X
+X X X X
+X X X X
+X O X X
+⚡ Optimal Approach (DFS)
+💡 Idea
+DFS from borders
+Save all border-connected 'O'
+Remaining 'O' → convert to 'X'
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int[] row = {-1,1,0,0};
+    static int[] col = {0,0,-1,1};
+
+    static void dfs(int i,
+                    int j,
+                    char[][] board,
+                    boolean[][] visited) {
+
+        int n = board.length;
+        int m = board[0].length;
+
+        visited[i][j] = true;
+
+        for(int k=0;k<4;k++) {
+
+            int nr = i + row[k];
+            int nc = j + col[k];
+
+            if(nr>=0 && nr<n &&
+               nc>=0 && nc<m &&
+               board[nr][nc]=='O' &&
+               !visited[nr][nc]) {
+
+                dfs(nr,nc,board,visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        char[][] board = {
+                {'X','X','X','X'},
+                {'X','O','O','X'},
+                {'X','X','O','X'},
+                {'X','O','X','X'}
+        };
+
+        int n = board.length;
+        int m = board[0].length;
+
+        boolean[][] visited = new boolean[n][m];
+
+        // First row and last row
+        for(int j=0;j<m;j++) {
+
+            if(board[0][j]=='O' &&
+               !visited[0][j]) {
+
+                dfs(0,j,board,visited);
+            }
+
+            if(board[n-1][j]=='O' &&
+               !visited[n-1][j]) {
+
+                dfs(n-1,j,board,visited);
+            }
+        }
+
+        // First column and last column
+        for(int i=0;i<n;i++) {
+
+            if(board[i][0]=='O' &&
+               !visited[i][0]) {
+
+                dfs(i,0,board,visited);
+            }
+
+            if(board[i][m-1]=='O' &&
+               !visited[i][m-1]) {
+
+                dfs(i,m-1,board,visited);
+            }
+        }
+
+        // Convert surrounded O to X
+        for(int i=0;i<n;i++) {
+
+            for(int j=0;j<m;j++) {
+
+                if(board[i][j]=='O' &&
+                   !visited[i][j]) {
+
+                    board[i][j]='X';
+                }
+            }
+        }
+
+        // Print final board
+        for(char[] r : board) {
+
+            System.out.println(Arrays.toString(r));
+        }
+    }
+}
+▶️ Output
+[X, X, X, X]
+[X, X, X, X]
+[X, X, X, X]
+[X, O, X, X]
+🌈 DFS Dry Run
+Border Traversal
+
+Border 'O' found:
+
+(3,1)
+
+Start DFS.
+
+Mark visited:
+
+(3,1)
+
+SAFE ✅
+
+Traverse Entire Board
+
+Cells:
+
+(1,1)
+(1,2)
+(2,2)
+
+are:
+
+✅ 'O'
+✅ NOT visited
+
+So convert to:
+
+'X'
+
+Done 🎉
+
+⏱️ Time Complexity
+O(N × M)
+
+Every cell visited once.
+
+📦 Space Complexity
+Auxiliary Space
+O(N × M)
+
+For:
+
+visited array
+recursion stack
+🔥 Important Points
+
+✅ DFS starts ONLY from border 'O'.
+
+✅ Border-connected 'O' are SAFE.
+
+✅ Remaining 'O' become 'X'.
+
+🧠 Easy Memory Trick
+Border O
+   ↓
+DFS
+   ↓
+Mark SAFE
+   ↓
+Remaining O
+   ↓
+Convert to X
+🌟 Core Pattern
+
+This teaches:
+
+Save border-connected cells first 💖
