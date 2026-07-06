@@ -1,0 +1,290 @@
+📚 Course Schedule I
+❓ What is the question asking?
+
+We are given:
+
+numCourses
+
+and:
+
+prerequisites
+
+Each pair:
+
+[a,b]
+
+means:
+
+To take course a,
+you must finish course b first
+
+So graph edge becomes:
+
+b → a
+🌟 Goal
+
+Return:
+
+true
+
+if we can finish all courses.
+
+Else:
+
+false
+🌟 Main Idea
+
+This problem is asking:
+
+Does directed graph contain cycle?
+
+Because:
+
+✅ No cycle → all courses possible
+❌ Cycle → impossible
+
+🌟 Why Cycle Causes Problem?
+
+Example:
+
+0 → 1
+1 → 0
+
+Means:
+
+To take 0 → need 1
+To take 1 → need 0
+
+Impossible forever ❌
+
+🧠 Core Logic
+
+We use:
+
+Kahn's Algorithm
+
+(BFS Topological Sort)
+
+🌟 Important Observation
+
+If all nodes are processed:
+
+No cycle
+
+If some nodes remain unprocessed:
+
+Cycle exists
+⚡ Optimal Approach (BFS / Kahn's Algorithm)
+💡 Idea
+Build graph.
+Calculate indegree.
+Push indegree 0 nodes into queue.
+Perform BFS.
+Count processed nodes.
+If count == numCourses:
+return true
+Else:
+return false
+💻 Java Code
+import java.util.*;
+
+class Solution {
+
+    public boolean canFinish(int numCourses,
+                             int[][] prerequisites) {
+
+        ArrayList<ArrayList<Integer>> graph =
+                new ArrayList<>();
+
+        for(int i=0;i<numCourses;i++) {
+
+            graph.add(new ArrayList<>());
+        }
+
+        // Build graph
+        for(int[] p : prerequisites) {
+
+            int course = p[0];
+            int prereq = p[1];
+
+            graph.get(prereq).add(course);
+        }
+
+        // Calculate indegree
+        int[] indegree = new int[numCourses];
+
+        for(int i=0;i<numCourses;i++) {
+
+            for(int neighbor : graph.get(i)) {
+
+                indegree[neighbor]++;
+            }
+        }
+
+        // Push indegree 0 nodes
+        Queue<Integer> queue =
+                new LinkedList<>();
+
+        for(int i=0;i<numCourses;i++) {
+
+            if(indegree[i] == 0) {
+
+                queue.offer(i);
+            }
+        }
+
+        int count = 0;
+
+        // BFS
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            count++;
+
+            for(int neighbor : graph.get(node)) {
+
+                indegree[neighbor]--;
+
+                if(indegree[neighbor] == 0) {
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        // Cycle check
+        return count == numCourses;
+    }
+}
+▶️ Example
+Input
+numCourses = 2
+
+prerequisites =
+[
+ [1,0]
+]
+🌟 Graph
+0 → 1
+▶️ Output
+true
+
+Because:
+
+0 can be completed first
+then 1
+🌈 Dry Run
+Indegree
+Course	Indegree
+0	0
+1	1
+🌟 Initial Queue
+[0]
+🌟 Remove 0
+
+Processed:
+
+count = 1
+
+Reduce indegree of 1:
+
+1 → 0
+
+Push 1.
+
+🌟 Remove 1
+
+Processed:
+
+count = 2
+🌟 Final
+count == numCourses
+
+✅ return true
+
+❌ Cycle Example
+Input
+numCourses = 2
+
+[
+ [1,0],
+ [0,1]
+]
+🌟 Graph
+0 → 1
+1 → 0
+
+Cycle exists ❌
+
+🌟 Indegree
+Node	Indegree
+0	1
+1	1
+
+No indegree 0 node ❌
+
+Queue empty immediately.
+
+Processed:
+
+0
+
+Since:
+
+count < numCourses
+
+return:
+
+false
+⏱️ Time Complexity
+O(V + E)
+
+Where:
+
+V = courses
+E = prerequisites
+📦 Space Complexity
+Auxiliary Space
+O(V + E)
+
+For:
+
+adjacency list
+indegree array
+queue
+🔥 Important Points
+
+✅ Course Schedule I = Cycle Detection in Directed Graph.
+
+✅ Uses:
+
+Kahn's Algorithm
+
+✅ If all nodes processed:
+
+no cycle.
+
+✅ If some nodes not processed:
+
+cycle exists.
+🌟 Difference from Course Schedule II
+Problem	Return
+Course Schedule I	true / false
+Course Schedule II	actual order
+🧠 Easy Memory Trick
+Indegree 0
+      ↓
+Take Course
+      ↓
+Reduce Dependencies
+      ↓
+All Courses Done?
+      ↓
+YES → true
+NO  → false
+🌟 Core Pattern
+
+This problem teaches:
+
+Dependency Cycle Detection 💖
