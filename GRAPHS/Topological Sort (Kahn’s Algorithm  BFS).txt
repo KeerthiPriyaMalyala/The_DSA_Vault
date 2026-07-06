@@ -1,0 +1,258 @@
+🌳 Topological Sort (Kahn’s Algorithm / BFS)
+❓ What is the question asking?
+
+We are given a:
+
+Directed Acyclic Graph (DAG)
+
+We need to arrange nodes such that:
+
+✅ If:
+
+u → v
+
+then:
+
+u comes BEFORE v
+
+This ordering is called:
+
+Topological Order
+🌟 What is Kahn’s Algorithm?
+
+It is:
+
+BFS based Topological Sort
+
+using:
+
+Indegree
+🧠 What is Indegree?
+
+Indegree of a node means:
+
+Number of incoming edges
+🌟 Example
+5 → 0
+5 → 2
+4 → 0
+4 → 1
+2 → 3
+3 → 1
+🌟 Indegree
+Node	Indegree
+0	2
+1	2
+2	1
+3	1
+4	0
+5	0
+🧠 Main Idea
+
+Nodes having:
+
+indegree = 0
+
+have NO dependencies.
+
+So they can come first in topo order ✅
+
+⚡ Optimal Approach (BFS)
+💡 Idea
+Calculate indegree of every node.
+Push all indegree 0 nodes into queue.
+Remove node from queue.
+Add it to topo order.
+Reduce indegree of neighbors.
+If neighbor indegree becomes 0:
+push into queue.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int V = 6;
+
+        ArrayList<ArrayList<Integer>> graph =
+                new ArrayList<>();
+
+        for(int i=0;i<V;i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        graph.get(5).add(0);
+        graph.get(5).add(2);
+
+        graph.get(4).add(0);
+        graph.get(4).add(1);
+
+        graph.get(2).add(3);
+
+        graph.get(3).add(1);
+
+        // Step 1: Calculate indegree
+        int[] indegree = new int[V];
+
+        for(int i=0;i<V;i++) {
+
+            for(int neighbor : graph.get(i)) {
+
+                indegree[neighbor]++;
+            }
+        }
+
+        // Step 2: Push indegree 0 nodes
+        Queue<Integer> queue =
+                new LinkedList<>();
+
+        for(int i=0;i<V;i++) {
+
+            if(indegree[i] == 0) {
+
+                queue.offer(i);
+            }
+        }
+
+        ArrayList<Integer> topo =
+                new ArrayList<>();
+
+        // Step 3: BFS
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            topo.add(node);
+
+            for(int neighbor : graph.get(node)) {
+
+                indegree[neighbor]--;
+
+                if(indegree[neighbor] == 0) {
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        System.out.println(topo);
+    }
+}
+▶️ Output
+[4, 5, 0, 2, 3, 1]
+
+(Topo order may vary)
+
+🌈 Dry Run
+Initial Indegree
+0 → 2
+1 → 2
+2 → 1
+3 → 1
+4 → 0
+5 → 0
+Queue Initially
+[4,5]
+
+Because indegree = 0.
+
+Remove 4
+
+Topo:
+
+[4]
+
+Neighbors:
+
+0
+1
+
+Reduce indegree:
+
+0 → 1
+1 → 1
+Remove 5
+
+Topo:
+
+[4,5]
+
+Reduce:
+
+0 → 0
+2 → 0
+
+Push:
+
+0
+2
+
+Continue BFS 😚
+
+Final topo:
+
+[4,5,0,2,3,1]
+⏱️ Time Complexity
+O(V + E)
+
+Where:
+
+V = vertices
+E = edges
+📦 Space Complexity
+Auxiliary Space
+O(V)
+
+For:
+
+indegree array
+queue
+topo list
+🔥 Important Points
+
+✅ Kahn’s Algorithm = BFS Topological Sort
+
+✅ Nodes with:
+
+indegree = 0
+
+come first.
+
+✅ Remove node → reduce neighbor indegree.
+
+🌟 Cycle Detection Trick
+
+If topo list size:
+
+< V
+
+then:
+
+Cycle Exists ❌
+
+Because some nodes never become indegree 0.
+
+🌟 DFS vs BFS Topo Sort
+DFS Topo	Kahn’s Algorithm
+Uses Stack	Uses Queue
+DFS traversal	BFS traversal
+Push after DFS	Use indegree
+Harder for cycle detection	Easy cycle detection
+🧠 Easy Memory Trick
+Indegree 0
+      ↓
+Push into Queue
+      ↓
+Remove Node
+      ↓
+Reduce Neighbor Indegree
+      ↓
+New Indegree 0?
+      ↓
+Push Again
+🌟 Core Pattern
+
+This problem teaches:
+
+Dependency Removal Pattern 💖
