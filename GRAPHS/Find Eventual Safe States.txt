@@ -1,0 +1,285 @@
+🌳 Find Eventual Safe States
+❓ What is the question asking?
+
+We are given a:
+
+Directed Graph
+
+We need to find:
+
+✅ Nodes from which every possible path ends safely.
+
+Meaning:
+
+path should NOT enter a cycle
+
+These nodes are called:
+
+Safe Nodes
+🌟 Unsafe Nodes
+
+A node is UNSAFE if:
+
+✅ it is part of cycle
+OR
+✅ it can reach a cycle
+
+🌟 Example
+Graph
+0 → 1 → 2 → 3
+     ↑     ↓
+     └─────┘
+
+4 → 5
+🌟 Cycle
+1 → 2 → 3 → 1
+
+So:
+
+1 2 3
+
+are unsafe ❌
+
+Also:
+
+0
+
+is unsafe because it reaches cycle ❌
+
+🌟 Safe Nodes
+4
+5
+
+because paths end safely.
+
+🧠 Main Idea
+
+Safe nodes are nodes that:
+
+cannot reach cycle
+🌟 Important Trick
+
+We reverse the graph.
+
+Why? 😚
+
+Because:
+
+Terminal nodes
+(outdegree 0)
+are always safe
+
+Then we work backwards using topo sort.
+
+🌟 What is Terminal Node?
+
+Node having:
+
+outdegree = 0
+
+No outgoing edges.
+
+Always safe ✅
+
+⚡ Optimal Approach (BFS / Kahn’s Algorithm)
+💡 Idea
+Reverse graph.
+Store indegree using original outdegree.
+Nodes with outdegree 0 are safe initially.
+Start BFS.
+Reduce indegree.
+New indegree 0 nodes also become safe.
+💻 Java Code
+import java.util.*;
+
+class Solution {
+
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+        int V = graph.length;
+
+        ArrayList<ArrayList<Integer>> reverse =
+                new ArrayList<>();
+
+        for(int i=0;i<V;i++) {
+
+            reverse.add(new ArrayList<>());
+        }
+
+        int[] indegree = new int[V];
+
+        // Reverse graph
+        for(int i=0;i<V;i++) {
+
+            for(int neighbor : graph[i]) {
+
+                reverse.get(neighbor).add(i);
+
+                indegree[i]++;
+            }
+        }
+
+        Queue<Integer> queue =
+                new LinkedList<>();
+
+        // Terminal nodes
+        for(int i=0;i<V;i++) {
+
+            if(indegree[i] == 0) {
+
+                queue.offer(i);
+            }
+        }
+
+        ArrayList<Integer> safe =
+                new ArrayList<>();
+
+        // BFS
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            safe.add(node);
+
+            for(int neighbor : reverse.get(node)) {
+
+                indegree[neighbor]--;
+
+                if(indegree[neighbor] == 0) {
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        Collections.sort(safe);
+
+        return safe;
+    }
+}
+▶️ Example
+Input
+graph =
+[
+ [1],
+ [2],
+ [3],
+ [1],
+ [5],
+ []
+]
+▶️ Output
+[4,5]
+🌈 Dry Run
+Original Graph
+0 → 1
+1 → 2
+2 → 3
+3 → 1
+4 → 5
+🌟 Reverse Graph
+1 ← 0
+2 ← 1
+3 ← 2
+1 ← 3
+5 ← 4
+🌟 Outdegree / Indegree Array
+Node	Outdegree
+0	1
+1	1
+2	1
+3	1
+4	1
+5	0
+🌟 Initial Queue
+[5]
+
+Because terminal node.
+
+🌟 Remove 5
+
+Safe:
+
+[5]
+
+Reverse neighbor:
+
+4
+
+Reduce indegree:
+
+4 → 0
+
+Push 4.
+
+🌟 Remove 4
+
+Safe:
+
+[5,4]
+
+Done 🎉
+
+Cycle nodes never become indegree 0 ❌
+
+🌟 Final Safe Nodes
+[4,5]
+
+(sorted answer)
+
+⏱️ Time Complexity
+O(V + E)
+
+Where:
+
+V = vertices
+E = edges
+📦 Space Complexity
+Auxiliary Space
+O(V + E)
+
+For:
+
+reverse graph
+indegree array
+queue
+🔥 Important Points
+
+✅ Terminal nodes are always safe.
+
+✅ Reverse graph helps us move backwards.
+
+✅ Cycle nodes never become indegree 0.
+
+✅ Nodes reaching cycle are also unsafe.
+
+🌟 Why Reverse Graph?
+
+We want:
+
+safe propagation backwards
+
+If a node points ONLY to safe nodes:
+
+👉 it also becomes safe.
+
+🌟 Key Observation
+Safe Node Means
+every path ends safely
+
+NOT:
+
+at least one path safe
+🧠 Easy Memory Trick
+Terminal Nodes
+       ↓
+Safe
+       ↓
+Reverse Graph
+       ↓
+Propagate Safety Backwards
+🌟 Core Pattern
+
+This problem teaches:
+
+Reverse Topological Pattern 💖
