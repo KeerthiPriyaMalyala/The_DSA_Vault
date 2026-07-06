@@ -1,0 +1,136 @@
+🌳 Detect Cycle in Directed Graph (BFS / Kahn’s Algorithm)
+❓ What is the question asking?
+
+We are given a:
+
+Directed Graph
+
+We need to check:
+
+✅ Does the graph contain a cycle?
+
+🌟 Main Idea
+
+We use:
+
+Topological Sort (Kahn's Algorithm)
+🌟 Important Observation
+
+A graph can have:
+
+Topological Order
+
+ONLY IF:
+
+No cycle exists
+
+Meaning:
+
+Graph must be DAG
+🧠 Core Logic
+
+If cycle exists:
+
+👉 Some nodes will NEVER become:
+
+indegree = 0
+
+So BFS cannot process all nodes.
+
+🌟 Trick
+
+After Kahn’s Algorithm:
+
+If:
+topoCount == V
+
+✅ No cycle
+
+Else:
+topoCount < V
+
+❌ Cycle exists
+
+⚡ Optimal Approach (BFS)
+💡 Idea
+Calculate indegree.
+Push indegree 0 nodes into queue.
+Perform BFS.
+Count processed nodes.
+If processed nodes < total nodes:
+cycle exists.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int V = 4;
+
+        ArrayList<ArrayList<Integer>> graph =
+                new ArrayList<>();
+
+        for(int i=0;i<V;i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        graph.get(0).add(1);
+        graph.get(1).add(2);
+        graph.get(2).add(3);
+        graph.get(3).add(1);
+
+        // Step 1: Calculate indegree
+        int[] indegree = new int[V];
+
+        for(int i=0;i<V;i++) {
+
+            for(int neighbor : graph.get(i)) {
+
+                indegree[neighbor]++;
+            }
+        }
+
+        // Step 2: Push indegree 0 nodes
+        Queue<Integer> queue =
+                new LinkedList<>();
+
+        for(int i=0;i<V;i++) {
+
+            if(indegree[i] == 0) {
+
+                queue.offer(i);
+            }
+        }
+
+        int count = 0;
+
+        // Step 3: BFS
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            count++;
+
+            for(int neighbor : graph.get(node)) {
+
+                indegree[neighbor]--;
+
+                if(indegree[neighbor] == 0) {
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        // Step 4: Check cycle
+        if(count == V) {
+
+            System.out.println("No Cycle");
+        }
+        else {
+
+            System.out.println("Cycle Exists");
+        }
+    }
+}
