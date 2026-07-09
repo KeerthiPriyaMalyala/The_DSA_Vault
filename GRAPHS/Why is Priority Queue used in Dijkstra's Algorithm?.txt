@@ -1,0 +1,193 @@
+🌟 Why is Priority Queue used in Dijkstra's Algorithm?
+❓ The Problem
+
+In Dijkstra's Algorithm, we must always process:
+
+The node having
+the smallest distance
+from the source.
+
+Question is:
+
+How do we always get
+the minimum distance node?
+
+Answer:
+
+Priority Queue (Min Heap)
+🌟 Why Not a Normal Queue?
+
+Suppose we have:
+
+0 --10--> 1
+0 --2--> 2
+
+Source:
+
+0
+After visiting node 0
+
+Distances become:
+
+Node 1 = 10
+Node 2 = 2
+If we use a Normal Queue
+
+Queue:
+
+[1,2]
+
+The queue removes:
+
+1
+
+first because it follows:
+
+FIFO
+
+(First In First Out)
+
+But:
+
+Distance of 1 = 10
+Distance of 2 = 2
+
+This is WRONG ❌
+
+We should process node 2 first because it is closer to the source.
+
+🌟 If We Use Priority Queue
+
+Priority Queue stores:
+
+(node, distance)
+
+After visiting node 0:
+
+(1,10)
+
+(2,2)
+
+Priority Queue automatically removes:
+
+(2,2)
+
+first because:
+
+2 < 10
+
+This is exactly what Dijkstra needs. ✅
+
+🌈 Example
+
+Graph:
+
+0 --4--> 1
+
+0 --1--> 2
+
+2 --2--> 1
+Step 1
+
+Source:
+
+0
+
+Distance:
+
+0 = 0
+
+1 = ∞
+
+2 = ∞
+Visit 0
+
+Update:
+
+1 = 4
+
+2 = 1
+
+Priority Queue:
+
+(2,1)
+
+(1,4)
+Remove Minimum
+
+Priority Queue removes:
+
+(2,1)
+
+because:
+
+1 < 4
+Relax Node 2
+
+New distance to 1:
+
+1 + 2 = 3
+
+Old distance:
+
+4
+
+Update:
+
+1 = 3
+
+Without processing node 2 first, we would have missed this shorter path.
+
+🌟 Why Priority Queue Works
+
+Priority Queue always keeps elements in:
+
+Ascending order of distance
+
+So whenever we do:
+
+pq.poll();
+
+we always get:
+
+Node with minimum distance
+⏱️ Time Complexity
+
+Priority Queue operations:
+
+offer()
+poll()
+
+take:
+
+O(log V)
+🔥 Important Points
+
+✅ Priority Queue is a Min Heap.
+
+✅ Stores:
+
+(node, distance)
+
+✅ Always removes the node with the smallest distance.
+
+✅ This guarantees that Dijkstra always expands the closest node first.
+
+❌ A normal queue processes nodes in insertion order, not distance order.
+
+🧠 Easy Memory Trick
+Shortest Distance Needed
+          ↓
+Use Min Heap
+(Priority Queue)
+          ↓
+Smallest Distance
+Comes Out First
+          ↓
+Relax Edges
+          ↓
+Repeat
+🌟 Core Pattern
+Need Minimum Distance First
+          ↓
+Priority Queue 💖
