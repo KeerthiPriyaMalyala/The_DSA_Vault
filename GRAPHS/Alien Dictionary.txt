@@ -1,0 +1,354 @@
+👽 Alien Dictionary
+❓ What is the question asking?
+
+We are given:
+
+A dictionary of words
+
+These words are already sorted according to an:
+
+Alien Language
+
+Our task is to:
+
+✅ Find the order of characters in the alien language.
+
+🌟 Example
+Input
+dict = {
+    "baa",
+    "abcd",
+    "abca",
+    "cab",
+    "cad"
+}
+
+Number of characters:
+
+K = 4
+
+Characters are:
+
+a b c d
+❓ What do we need to return?
+
+One valid character order.
+
+Example:
+
+bdac
+🧠 Main Idea
+
+We compare:
+
+Adjacent words
+
+ONLY.
+
+Why?
+
+Because the dictionary is already sorted.
+
+🌟 Important Rule
+
+Compare:
+
+word1
+word2
+
+Find the:
+
+First different character
+
+That tells us:
+
+character1 comes before character2
+
+Create an edge:
+
+character1 → character2
+🌟 Example
+
+Compare:
+
+baa
+abcd
+
+Compare character by character:
+
+b != a
+
+So:
+
+b → a
+
+Compare:
+
+abcd
+abca
+
+First difference:
+
+d != a
+
+Edge:
+
+d → a
+
+Compare:
+
+abca
+cab
+
+First difference:
+
+a != c
+
+Edge:
+
+a → c
+
+Compare:
+
+cab
+cad
+
+First difference:
+
+b != d
+
+Edge:
+
+b → d
+🌟 Final Graph
+b → a
+b → d
+d → a
+a → c
+🧠 Main Idea After Building Graph
+
+Now the problem becomes:
+
+Topological Sort
+
+because:
+
+If x → y
+then x must come before y
+⚡ Optimal Approach (Kahn's Algorithm)
+💡 Idea
+Compare adjacent words.
+Build graph.
+Calculate indegree.
+Perform Kahn's BFS.
+Topological order = answer.
+💻 Java Code
+import java.util.*;
+
+class Solution {
+
+    public String findOrder(String[] dict, int N, int K) {
+
+        ArrayList<ArrayList<Integer>> graph =
+                new ArrayList<>();
+
+        for(int i=0;i<K;i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Build graph
+        for(int i=0;i<N-1;i++) {
+
+            String s1 = dict[i];
+            String s2 = dict[i+1];
+
+            int len = Math.min(s1.length(), s2.length());
+
+            for(int j=0;j<len;j++) {
+
+                if(s1.charAt(j) != s2.charAt(j)) {
+
+                    graph.get(s1.charAt(j)-'a')
+                         .add(s2.charAt(j)-'a');
+
+                    break;
+                }
+            }
+        }
+
+        // Calculate indegree
+        int[] indegree = new int[K];
+
+        for(int i=0;i<K;i++) {
+
+            for(int neighbor : graph.get(i)) {
+
+                indegree[neighbor]++;
+            }
+        }
+
+        Queue<Integer> queue =
+                new LinkedList<>();
+
+        for(int i=0;i<K;i++) {
+
+            if(indegree[i] == 0) {
+
+                queue.offer(i);
+            }
+        }
+
+        StringBuilder ans =
+                new StringBuilder();
+
+        while(!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            ans.append((char)(node + 'a'));
+
+            for(int neighbor : graph.get(node)) {
+
+                indegree[neighbor]--;
+
+                if(indegree[neighbor] == 0) {
+
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        return ans.toString();
+    }
+}
+🌈 Dry Run
+Dictionary
+baa
+abcd
+abca
+cab
+cad
+Step 1: Build Graph
+
+Edges:
+
+b → a
+d → a
+a → c
+b → d
+Step 2: Indegree
+Character	Indegree
+a	2
+b	0
+c	1
+d	1
+Step 3: Initial Queue
+[b]
+Step 4: BFS
+
+Remove:
+
+b
+
+Answer:
+
+b
+
+Decrease indegree:
+
+a → 1
+d → 0
+
+Push:
+
+d
+
+Remove:
+
+d
+
+Answer:
+
+bd
+
+Decrease indegree:
+
+a → 0
+
+Push:
+
+a
+
+Remove:
+
+a
+
+Answer:
+
+bda
+
+Decrease indegree:
+
+c → 0
+
+Push:
+
+c
+
+Remove:
+
+c
+
+Final answer:
+
+bdac
+⏱️ Time Complexity
+O(N × L + K + E)
+
+Where:
+
+N = number of words
+L = average word length
+K = number of characters
+E = number of character relations
+📦 Space Complexity
+Auxiliary Space
+O(K + E)
+
+For:
+
+adjacency list
+indegree array
+queue
+🔥 Important Points
+
+✅ Compare only adjacent words.
+
+✅ Use the first different character.
+
+✅ Add only one edge, then break.
+
+✅ After building the graph, it's a Topological Sort problem.
+
+🌟 Pattern Recognition
+Question Says...	Think...
+Dictionary already sorted	Compare adjacent words
+First different character	Create edge
+Character order	Topological Sort
+🧠 Easy Memory Trick
+Compare Words
+      ↓
+First Difference
+      ↓
+Create Edge
+      ↓
+Build Graph
+      ↓
+Topological Sort
+      ↓
+Alien Alphabet Order
+🌟 Core Pattern
+
+This problem teaches:
+
+Character Dependency Pattern 💖
