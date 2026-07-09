@@ -1,0 +1,285 @@
+🚀 Shortest Path in DAG (Directed Acyclic Graph)
+❓ What is the question asking?
+
+We are given:
+
+A Directed Acyclic Graph (DAG)
+Every edge has a weight
+A source node (usually 0)
+
+We need to find:
+
+Shortest distance
+from source
+to every other vertex.
+
+If a node cannot be reached:
+
+Distance = -1
+🌟 Main Idea
+
+Since the graph is a:
+
+DAG
+
+it has a:
+
+Topological Order
+
+If we process nodes in Topological Order:
+
+Parent always comes
+before Child
+
+So when we reach a node, its shortest distance is already known.
+
+Then we simply:
+
+Relax all outgoing edges.
+🌟 What is Relaxation?
+
+Suppose:
+
+u ----(wt)----> v
+
+If going through u gives a shorter path:
+
+dist[u] + wt < dist[v]
+
+Update:
+
+dist[v] = dist[u] + wt
+
+This is called:
+
+Edge Relaxation
+⚡ Optimal Approach
+💡 Idea
+Build adjacency list.
+Find Topological Order using DFS.
+Initialize all distances to:
+∞ (Integer.MAX_VALUE)
+Set:
+dist[source] = 0
+Pop nodes from the stack (Topological Order).
+Relax all outgoing edges.
+Convert unreachable nodes (∞) to -1.
+💻 Java Code
+import java.util.*;
+
+class Pair {
+    int node;
+    int weight;
+
+    Pair(int node, int weight) {
+        this.node = node;
+        this.weight = weight;
+    }
+}
+
+class Solution {
+
+    void dfs(int node,
+             ArrayList<ArrayList<Pair>> adj,
+             boolean[] visited,
+             Stack<Integer> st) {
+
+        visited[node] = true;
+
+        for(Pair it : adj.get(node)) {
+
+            if(!visited[it.node]) {
+
+                dfs(it.node, adj, visited, st);
+            }
+        }
+
+        st.push(node);
+    }
+
+    public int[] shortestPath(int N, int M, int[][] edges) {
+
+        ArrayList<ArrayList<Pair>> adj =
+                new ArrayList<>();
+
+        for(int i=0;i<N;i++) {
+
+            adj.add(new ArrayList<>());
+        }
+
+        // Build graph
+        for(int i=0;i<M;i++) {
+
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int wt = edges[i][2];
+
+            adj.get(u).add(new Pair(v, wt));
+        }
+
+        Stack<Integer> st = new Stack<>();
+
+        boolean[] visited = new boolean[N];
+
+        // Topological Sort
+        for(int i=0;i<N;i++) {
+
+            if(!visited[i]) {
+
+                dfs(i, adj, visited, st);
+            }
+        }
+
+        int[] dist = new int[N];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        dist[0] = 0;
+
+        // Process in Topological Order
+        while(!st.isEmpty()) {
+
+            int node = st.pop();
+
+            if(dist[node] != Integer.MAX_VALUE) {
+
+                for(Pair it : adj.get(node)) {
+
+                    if(dist[node] + it.weight < dist[it.node]) {
+
+                        dist[it.node] =
+                                dist[node] + it.weight;
+                    }
+                }
+            }
+        }
+
+        for(int i=0;i<N;i++) {
+
+            if(dist[i] == Integer.MAX_VALUE) {
+
+                dist[i] = -1;
+            }
+        }
+
+        return dist;
+    }
+}
+▶️ Example
+Input
+Edges
+
+0 → 1 (2)
+0 → 4 (1)
+1 → 2 (3)
+4 → 2 (2)
+2 → 3 (6)
+4 → 5 (4)
+5 → 3 (1)
+
+Source:
+
+0
+🌈 Dry Run
+Topological Order
+0 4 5 1 2 3
+Initial Distance
+[0,∞,∞,∞,∞,∞]
+Process 0
+
+Relax:
+
+0 → 1
+
+dist[1] = 2
+0 → 4
+
+dist[4] = 1
+Process 4
+
+Relax:
+
+4 → 2
+
+dist[2] = 3
+4 → 5
+
+dist[5] = 5
+Process 5
+
+Relax:
+
+5 → 3
+
+dist[3] = 6
+Process 1
+
+Relax:
+
+1 → 2
+
+2 + 3 = 5
+
+Already have 3
+
+No update
+Final Distance
+[0,2,3,6,1,5]
+⏱️ Time Complexity
+O(V + E)
+
+Reason:
+
+DFS Topological Sort → O(V + E)
+Edge Relaxation → O(E)
+📦 Space Complexity
+Auxiliary Space
+O(V)
+
+Used for:
+
+Visited array
+Stack
+Distance array
+DFS recursion stack
+
+(Adjacency list stores the graph and is usually not counted as auxiliary space.)
+
+🔥 Important Points
+
+✅ Graph must be a DAG.
+
+✅ Topological Order ensures parents are processed before children.
+
+✅ Relax every outgoing edge.
+
+✅ Can handle weighted edges.
+
+✅ Faster than Dijkstra for DAGs.
+
+🌟 When to Use This?
+
+Question contains:
+
+Directed Graph ✅
+Acyclic Graph (DAG) ✅
+Weighted Edges ✅
+Shortest Path ✅
+
+Immediately think:
+
+Topological Sort + Relaxation
+🧠 Easy Memory Trick
+DAG
+   ↓
+Topological Sort
+   ↓
+Relax Edges
+   ↓
+Shortest Path
+🌟 Core Pattern
+Weighted DAG
+       +
+Shortest Path
+       ↓
+Topological Sort + Edge Relaxation 💖
