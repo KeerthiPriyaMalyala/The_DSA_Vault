@@ -1,0 +1,296 @@
+🚀 Network Delay Time
+❓ What is the question asking?
+
+We are given:
+
+n nodes (1 to n)
+A list of directed edges.
+
+Each edge contains:
+
+Source Node
+Destination Node
+Time taken
+
+Also given:
+
+Starting node k
+
+We need to find:
+
+The minimum time required for the signal sent from node k to reach all nodes.
+
+If even one node cannot receive the signal,
+
+Return
+
+-1
+
+Otherwise,
+
+Return
+
+Maximum time among all shortest distances
+🌟 Main Idea
+
+Every edge has
+
+Different Weight (Time)
+
+Whenever a graph has
+
+Positive Weighted Edges
+
+and asks for
+
+Shortest Time
+
+Think
+
+Dijkstra
+🌟 Graph Representation
+
+Each edge
+
+u → v → time
+
+Store as
+
+adj.get(u).add(new Pair(v, time));
+⚡ Optimal Approach (Dijkstra)
+💡 Idea
+Build the adjacency list.
+Create a distance array.
+Initialize every node with
+∞
+Set
+distance[k] = 0
+Create a Priority Queue.
+
+Store
+
+(time, node)
+Remove the node having the minimum time.
+Visit all neighbours.
+Calculate
+newTime = currentTime + edgeWeight
+If
+newTime < distance[neighbour]
+
+Update
+
+Push into Priority Queue.
+
+After Dijkstra,
+
+Find the maximum value in the distance array.
+
+If any node still has
+∞
+
+Return
+
+-1
+
+Else return
+
+Maximum Distance
+💻 Java Code
+import java.util.*;
+
+class Pair {
+    int node;
+    int time;
+
+    Pair(int node, int time) {
+        this.node = node;
+        this.time = time;
+    }
+}
+
+class Solution {
+
+    public int networkDelayTime(int[][] times, int n, int k) {
+
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+
+        for(int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] edge : times) {
+            adj.get(edge[0]).add(new Pair(edge[1], edge[2]));
+        }
+
+        int[] distance = new int[n + 1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+
+        PriorityQueue<Pair> pq =
+                new PriorityQueue<>((a, b) -> a.time - b.time);
+
+        distance[k] = 0;
+        pq.offer(new Pair(k, 0));
+
+        while(!pq.isEmpty()) {
+
+            Pair current = pq.poll();
+
+            int node = current.node;
+            int time = current.time;
+
+            for(Pair neighbour : adj.get(node)) {
+
+                int nextNode = neighbour.node;
+                int newTime = time + neighbour.time;
+
+                if(newTime < distance[nextNode]) {
+
+                    distance[nextNode] = newTime;
+
+                    pq.offer(new Pair(nextNode, newTime));
+                }
+            }
+        }
+
+        int answer = 0;
+
+        for(int i = 1; i <= n; i++) {
+
+            if(distance[i] == Integer.MAX_VALUE)
+                return -1;
+
+            answer = Math.max(answer, distance[i]);
+        }
+
+        return answer;
+    }
+}
+▶️ Example
+
+Input
+
+times = [[2,1,1],
+         [2,3,1],
+         [3,4,1]]
+
+n = 4
+
+k = 2
+
+Output
+
+2
+🌈 Dry Run
+
+Start
+
+Node = 2
+
+Time = 0
+
+Visit
+
+2 → 1
+
+Time = 1
+
+Visit
+
+2 → 3
+
+Time = 1
+
+Visit
+
+3 → 4
+
+Time = 2
+
+Distance Array
+
+Node 1 = 1
+
+Node 2 = 0
+
+Node 3 = 1
+
+Node 4 = 2
+
+Maximum Distance
+
+2
+
+Answer
+
+2
+⏱️ Time Complexity
+O((V + E) log V)
+
+Reason:
+
+Every edge is relaxed once.
+Every Priority Queue operation takes
+log V
+📦 Space Complexity
+
+Auxiliary Space
+
+O(V + E)
+
+Used for:
+
+Adjacency List
+Distance Array
+Priority Queue
+🔥 Important Points
+
+✅ Directed graph.
+
+✅ Weighted edges.
+
+✅ Positive edge weights.
+
+✅ Use Dijkstra.
+
+✅ Store
+
+Node
+Current Time
+
+in the Priority Queue.
+
+✅ Final answer is the
+
+Maximum Shortest Distance
+
+not the minimum.
+
+🌟 Pattern Recognition
+Question Says...	Think...
+Network	Graph
+Time	Edge Weight
+Minimum Time	Dijkstra
+Reach All Nodes	Find Maximum Distance
+Positive Weights	Priority Queue
+🧠 Easy Memory Trick
+Network
+      ↓
+Build Graph
+      ↓
+Dijkstra
+      ↓
+Shortest Time
+      ↓
+Maximum Distance
+      ↓
+Answer
+🌟 Core Pattern
+Graph
+   +
+Positive Weighted Edges
+   +
+Shortest Time
+   +
+Reach All Nodes
+      ↓
+Dijkstra 💖
