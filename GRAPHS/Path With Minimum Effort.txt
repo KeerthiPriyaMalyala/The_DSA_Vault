@@ -1,0 +1,364 @@
+🚀 Path With Minimum Effort
+❓ What is the question asking?
+
+We are given:
+
+A grid of heights.
+Start from:
+
+Top Left → (0,0)
+
+Reach:
+
+Bottom Right → (n-1,m-1)
+
+We need to find:
+
+The minimum effort required to reach the destination.
+
+🌟 What is Effort?
+
+Effort is NOT the total sum of differences.
+
+Instead,
+
+For every path,
+
+calculate:
+
+Maximum Absolute Height Difference
+between consecutive cells.
+
+Among all possible paths,
+
+return the minimum such maximum.
+
+🌟 Example
+
+Heights
+
+1 2 2
+3 8 2
+5 3 5
+
+One path:
+
+1 → 2 → 2 → 2 → 5
+
+Differences:
+
+1
+0
+0
+3
+
+Maximum Difference
+
+3
+
+Another path:
+
+1 → 3 → 5 → 3 → 5
+
+Differences
+
+2
+2
+2
+2
+
+Maximum Difference
+
+2
+
+Answer:
+
+2
+
+because
+
+2 < 3
+🌟 Main Idea
+
+Moving to a neighbour has a cost:
+
+|currentHeight - neighbourHeight|
+
+But,
+
+Path Cost =
+
+Maximum edge cost
+
+not
+
+Sum of edge costs.
+
+So,
+
+Normal BFS ❌
+
+Normal DFS ❌
+
+Dijkstra ✅
+
+🌟 Why Dijkstra?
+
+Normally,
+
+Dijkstra stores
+
+Shortest Distance
+
+Here,
+
+we store
+
+Minimum Effort
+
+Whenever we move,
+
+New Effort =
+
+max(Current Effort,
+Current Height Difference)
+
+Always choose the path with the smallest effort first.
+
+🌟 How do we move?
+
+Only in
+
+↑
+↓
+←
+→
+
+Direction arrays
+
+int[] row = {-1,1,0,0};
+int[] col = {0,0,-1,1};
+⚡ Optimal Approach (Dijkstra)
+💡 Idea
+Create an effort matrix.
+Initialize every cell with
+∞
+Set
+effort[0][0] = 0
+Use a Priority Queue.
+
+Store
+
+(row, col, effort)
+Pop the cell having the minimum effort.
+Visit all four neighbours.
+Calculate
+heightDifference =
+abs(currentHeight - neighbourHeight)
+New Effort
+max(currentEffort,
+heightDifference)
+If new effort is smaller,
+
+Update
+
+Push into Priority Queue.
+
+First time reaching destination,
+
+Return effort.
+
+💻 Java Code
+import java.util.*;
+
+class Tuple {
+    int effort;
+    int row;
+    int col;
+
+    Tuple(int effort, int row, int col) {
+        this.effort = effort;
+        this.row = row;
+        this.col = col;
+    }
+}
+
+class Solution {
+
+    public int minimumEffortPath(int[][] heights) {
+
+        int n = heights.length;
+        int m = heights[0].length;
+
+        int[][] effort = new int[n][m];
+
+        for(int i=0;i<n;i++) {
+            Arrays.fill(effort[i], Integer.MAX_VALUE);
+        }
+
+        PriorityQueue<Tuple> pq =
+                new PriorityQueue<>(
+                        (a,b)->a.effort-b.effort);
+
+        effort[0][0] = 0;
+
+        pq.offer(new Tuple(0,0,0));
+
+        int[] row = {-1,1,0,0};
+        int[] col = {0,0,-1,1};
+
+        while(!pq.isEmpty()) {
+
+            Tuple current = pq.poll();
+
+            int diff = current.effort;
+            int r = current.row;
+            int c = current.col;
+
+            if(r==n-1 && c==m-1) {
+                return diff;
+            }
+
+            for(int k=0;k<4;k++) {
+
+                int nr = r + row[k];
+                int nc = c + col[k];
+
+                if(nr>=0 && nr<n &&
+                   nc>=0 && nc<m) {
+
+                    int newEffort =
+                            Math.max(
+                                    diff,
+                                    Math.abs(
+                                            heights[r][c]
+                                            - heights[nr][nc]
+                                    )
+                            );
+
+                    if(newEffort < effort[nr][nc]) {
+
+                        effort[nr][nc] = newEffort;
+
+                        pq.offer(
+                                new Tuple(
+                                        newEffort,
+                                        nr,
+                                        nc
+                                )
+                        );
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+}
+▶️ Example
+
+Input
+
+1 2 2
+3 8 2
+5 3 5
+
+Output
+
+2
+🌈 Dry Run
+
+Start
+
+(0,0)
+
+Effort = 0
+
+Move to
+
+(0,1)
+
+Difference = 1
+
+Effort = max(0,1)=1
+
+Move to
+
+(0,2)
+
+Difference = 0
+
+Effort = max(1,0)=1
+
+Eventually reach
+
+(2,2)
+
+Minimum Effort = 2
+⏱️ Time Complexity
+O(N × M × log(N × M))
+
+Reason:
+
+Each cell may enter the Priority Queue.
+
+Each Priority Queue operation takes
+
+log(N × M)
+📦 Space Complexity
+
+Auxiliary Space
+
+O(N × M)
+
+Used for
+
+Effort Matrix
+Priority Queue
+🔥 Important Points
+
+✅ Grid problem.
+
+✅ Edge cost is
+
+Absolute Height Difference
+
+✅ Path cost is
+
+Maximum Difference
+
+not
+
+Sum
+
+✅ Use Dijkstra.
+
+✅ Priority Queue always gives the minimum effort path first.
+
+🌟 Pattern Recognition
+Question Says...	Think...
+Grid	Matrix Problem
+Heights	Edge Weight
+Minimum Effort	Dijkstra
+Maximum Difference	max()
+Minimum of Maximum	Dijkstra
+🧠 Easy Memory Trick
+Grid
+      ↓
+Height Difference
+      ↓
+Maximum Difference
+      ↓
+Minimum Effort
+      ↓
+Dijkstra
+      ↓
+Priority Queue
+🌟 Core Pattern
+Grid
+   +
+Weighted Moves
+   +
+Minimum of Maximum Cost
+      ↓
+Dijkstra 💖
