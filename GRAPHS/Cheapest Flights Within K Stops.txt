@@ -1,0 +1,359 @@
+🚀 Cheapest Flights Within K Stops
+❓ What is the question asking?
+
+We are given:
+
+n cities.
+A list of flights.
+
+Each flight contains:
+
+Source City
+Destination City
+Flight Cost
+
+Also given:
+
+Source city (src)
+Destination city (dst)
+Maximum K stops
+
+We need to find:
+
+The minimum cost to travel from src to dst
+
+such that
+
+the journey uses at most K stops.
+
+If no such path exists,
+
+Return
+
+-1
+🌟 What is a Stop?
+
+If we travel
+
+0 → 1 → 2 → 3
+
+Flights used = 3
+
+Stops =
+
+1, 2
+
+Number of Stops =
+
+2
+
+Remember:
+
+Stops = Intermediate Cities
+🌟 Main Idea
+
+Every flight has:
+
+Different Cost
+
+Normally,
+
+Different weights
+
+→ Dijkstra
+
+But here,
+
+There is one extra condition:
+
+Maximum K Stops
+
+So,
+
+We cannot use normal Dijkstra directly.
+
+Instead,
+
+Use
+
+BFS + Cost Tracking
+
+because
+
+we process paths level by level according to stops.
+
+🌟 Graph Representation
+
+Each flight
+
+u → v → cost
+
+Store as
+
+adj.get(u).add(new Pair(v,cost));
+⚡ Optimal Approach (BFS)
+💡 Idea
+Build the adjacency list.
+Create a cost array.
+Initialize every city with
+∞
+Set
+cost[src] = 0
+Push into queue
+
+Store
+
+(stops, city, totalCost)
+Remove one city from queue.
+If stops exceed K
+
+Skip.
+
+Visit all neighbours.
+Calculate
+newCost = currentCost + flightCost
+If
+newCost < cost[neighbour]
+
+Update
+
+Push into queue.
+
+After BFS,
+
+If destination is unreachable,
+
+Return
+
+-1
+
+Else return
+
+cost[dst]
+💻 Java Code
+import java.util.*;
+
+class Pair {
+    int city;
+    int cost;
+
+    Pair(int city, int cost) {
+        this.city = city;
+        this.cost = cost;
+    }
+}
+
+class Tuple {
+    int stops;
+    int city;
+    int cost;
+
+    Tuple(int stops, int city, int cost) {
+        this.stops = stops;
+        this.city = city;
+        this.cost = cost;
+    }
+}
+
+class Solution {
+
+    public int findCheapestPrice(int n, int[][] flights,
+                                 int src, int dst, int k) {
+
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+
+        for(int i=0;i<n;i++)
+            adj.add(new ArrayList<>());
+
+        for(int[] flight : flights) {
+
+            adj.get(flight[0]).add(
+                    new Pair(flight[1], flight[2]));
+        }
+
+        int[] cost = new int[n];
+        Arrays.fill(cost, Integer.MAX_VALUE);
+
+        Queue<Tuple> queue = new LinkedList<>();
+
+        queue.offer(new Tuple(0, src, 0));
+
+        cost[src] = 0;
+
+        while(!queue.isEmpty()) {
+
+            Tuple current = queue.poll();
+
+            int stops = current.stops;
+            int city = current.city;
+            int currCost = current.cost;
+
+            if(stops > k)
+                continue;
+
+            for(Pair neighbour : adj.get(city)) {
+
+                int nextCity = neighbour.city;
+                int newCost = currCost + neighbour.cost;
+
+                if(newCost < cost[nextCity]) {
+
+                    cost[nextCity] = newCost;
+
+                    queue.offer(
+                        new Tuple(
+                            stops + 1,
+                            nextCity,
+                            newCost
+                        )
+                    );
+                }
+            }
+        }
+
+        if(cost[dst] == Integer.MAX_VALUE)
+            return -1;
+
+        return cost[dst];
+    }
+}
+▶️ Example
+
+Input
+
+n = 4
+
+Flights
+
+0 → 1 (100)
+1 → 2 (100)
+2 → 3 (100)
+0 → 2 (500)
+
+src = 0
+
+dst = 3
+
+k = 2
+
+Output
+
+300
+🌈 Dry Run
+
+Start
+
+Queue
+
+(0 Stops, City 0, Cost 0)
+
+Visit
+
+City 0
+
+Push
+
+City 1
+
+Cost =100
+
+Stops =1
+
+Push
+
+City 2
+
+Cost =500
+
+Stops =1
+
+Visit
+
+City 1
+
+Update
+
+City 2
+
+Cost =200
+
+Stops =2
+
+Visit
+
+City 2
+
+Update
+
+City 3
+
+Cost =300
+
+Stops =3
+
+Minimum Cost
+
+300
+⏱️ Time Complexity
+O(E)
+
+Reason:
+
+Each flight (edge) is processed while exploring valid stop levels.
+
+📦 Space Complexity
+
+Auxiliary Space
+
+O(V + E)
+
+Used for:
+
+Adjacency List
+Cost Array
+Queue
+🔥 Important Points
+
+✅ Graph problem.
+
+✅ Flight costs are different.
+
+✅ Maximum K stops condition.
+
+✅ BFS using Queue.
+
+✅ Store
+
+Stops
+City
+Cost
+
+✅ Update only if a cheaper cost is found.
+
+🌟 Pattern Recognition
+Question Says...	Think...
+Flights	Graph
+Cheapest Cost	Cost Tracking
+Maximum K Stops	BFS by Levels
+Weighted Edges	Cost Array
+At Most K Stops	Queue with Stops
+🧠 Easy Memory Trick
+Flights
+      ↓
+Build Graph
+      ↓
+Queue
+      ↓
+Track Stops
+      ↓
+Track Cost
+      ↓
+Cheapest Path
+🌟 Core Pattern
+Graph
+   +
+Weighted Edges
+   +
+Maximum K Stops
+      ↓
+BFS + Cost Tracking 💖
