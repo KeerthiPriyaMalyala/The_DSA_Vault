@@ -1,0 +1,340 @@
+🚀 Number of Ways to Arrive at Destination
+❓ What is the question asking?
+
+We are given:
+
+n cities.
+A list of roads.
+
+Each road contains:
+
+City u
+City v
+Travel Time
+
+Also given:
+
+Start city = 0
+Destination city = n - 1
+
+We need to find:
+
+The number of different shortest paths
+from city 0
+to city n-1.
+
+Return the answer modulo
+
+10^9 + 7
+🌟 Main Idea
+
+Every road has
+
+Different Travel Time
+
+We need:
+
+Shortest Distance ✅
+Number of Shortest Paths ✅
+
+Whenever a graph has
+
+Positive Weighted Edges
+
+Think
+
+Dijkstra
+
+But here,
+
+Along with distance,
+
+we also maintain
+
+Ways[]
+
+which stores
+
+Number of shortest paths
+🌟 Graph Representation
+
+Each road
+
+u ↔ v → time
+
+Store as
+
+adj.get(u).add(new Pair(v,time));
+adj.get(v).add(new Pair(u,time));
+
+because the graph is
+
+Undirected
+⚡ Optimal Approach (Dijkstra + Counting Paths)
+💡 Idea
+Build the adjacency list.
+Create a distance array.
+
+Initialize every node with
+
+∞
+Create a ways array.
+
+Initially
+
+ways[0] = 1
+
+because there is one way to reach the source.
+
+Create a Priority Queue.
+
+Store
+
+(distance, node)
+Remove the node having the minimum distance.
+Visit all neighbours.
+Calculate
+newDistance =
+currentDistance + edgeWeight
+If
+newDistance < distance[neighbour]
+
+Update
+
+distance[neighbour]
+
+ways[neighbour] = ways[current]
+
+Push into Priority Queue.
+
+Else if
+newDistance == distance[neighbour]
+
+Another shortest path is found.
+
+Update
+
+ways[neighbour] =
+(ways[neighbour] + ways[current]) % MOD
+Finally,
+
+Return
+
+ways[n-1]
+💻 Java Code
+import java.util.*;
+
+class Pair {
+    int node;
+    long distance;
+
+    Pair(int node, long distance) {
+        this.node = node;
+        this.distance = distance;
+    }
+}
+
+class Solution {
+
+    public int countPaths(int n, int[][] roads) {
+
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+
+        for(int i = 0; i < n; i++)
+            adj.add(new ArrayList<>());
+
+        for(int[] road : roads) {
+
+            adj.get(road[0]).add(new Pair(road[1], road[2]));
+            adj.get(road[1]).add(new Pair(road[0], road[2]));
+        }
+
+        long[] distance = new long[n];
+        Arrays.fill(distance, Long.MAX_VALUE);
+
+        int[] ways = new int[n];
+
+        int MOD = 1000000007;
+
+        PriorityQueue<Pair> pq =
+                new PriorityQueue<>(
+                        (a,b)->Long.compare(a.distance,b.distance));
+
+        distance[0] = 0;
+        ways[0] = 1;
+
+        pq.offer(new Pair(0,0));
+
+        while(!pq.isEmpty()) {
+
+            Pair current = pq.poll();
+
+            int node = current.node;
+            long dist = current.distance;
+
+            for(Pair neighbour : adj.get(node)) {
+
+                int nextNode = neighbour.node;
+                long newDist = dist + neighbour.distance;
+
+                if(newDist < distance[nextNode]) {
+
+                    distance[nextNode] = newDist;
+
+                    ways[nextNode] = ways[node];
+
+                    pq.offer(new Pair(nextNode,newDist));
+                }
+
+                else if(newDist == distance[nextNode]) {
+
+                    ways[nextNode] =
+                            (ways[nextNode] + ways[node]) % MOD;
+                }
+            }
+        }
+
+        return ways[n-1];
+    }
+}
+▶️ Example
+
+Input
+
+n = 7
+
+roads =
+[[0,6,7],
+ [0,1,2],
+ [1,2,3],
+ [1,3,3],
+ [6,3,3],
+ [3,5,1],
+ [6,5,1],
+ [2,5,1],
+ [0,4,5],
+ [4,6,2]]
+
+Output
+
+4
+🌈 Dry Run
+
+Start
+
+City 0
+
+Distance = 0
+
+Ways = 1
+
+Visit neighbours
+
+Update
+
+Distance
+
+Ways
+
+Whenever a
+
+Smaller Distance
+
+is found
+
+Replace Distance
+
+Copy Ways
+
+Whenever
+
+Same Distance
+
+is found
+
+Add Ways
+
+Finally
+
+Ways[n-1] = 4
+⏱️ Time Complexity
+O((V + E) log V)
+
+Reason:
+
+Every edge is relaxed.
+Priority Queue operations take
+log V
+📦 Space Complexity
+
+Auxiliary Space
+
+O(V + E)
+
+Used for
+
+Adjacency List
+Distance Array
+Ways Array
+Priority Queue
+🔥 Important Points
+
+✅ Graph problem.
+
+✅ Weighted edges.
+
+✅ Positive weights.
+
+✅ Use Dijkstra.
+
+✅ Maintain
+
+Distance Array
+Ways Array
+
+✅ If
+
+New Distance < Old Distance
+
+Replace distance
+
+Copy ways.
+
+✅ If
+
+New Distance == Old Distance
+
+Add ways.
+
+✅ Answer is
+
+ways[n-1]
+🌟 Pattern Recognition
+Question Says...	Think...
+Roads	Graph
+Travel Time	Weighted Edge
+Shortest Path	Dijkstra
+Number of Ways	Ways Array
+Count Shortest Paths	Dijkstra + Counting
+🧠 Easy Memory Trick
+Roads
+      ↓
+Build Graph
+      ↓
+Dijkstra
+      ↓
+Distance Array
+      ↓
+Ways Array
+      ↓
+Shortest Paths Count
+🌟 Core Pattern
+Graph
+   +
+Positive Weighted Edges
+   +
+Shortest Distance
+   +
+Count Shortest Paths
+      ↓
+Dijkstra + Ways Array 💖
