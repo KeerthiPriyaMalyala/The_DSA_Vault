@@ -1,0 +1,478 @@
+📘 Dynamic Programming (DP) - Introduction
+❓What is Dynamic Programming?
+
+Dynamic Programming (DP) is a technique used to solve problems by:
+
+✅ Breaking a big problem into smaller subproblems.
+
+✅ Solving each subproblem only once.
+
+✅ Storing the answer so we don't calculate it again.
+
+One-line Definition
+
+Dynamic Programming = Recursion + Storing Previous Answers
+
+🤔 Why do we need DP?
+
+Imagine finding:
+
+Fib(5)
+
+Formula:
+
+Fib(n) = Fib(n-1) + Fib(n-2)
+
+Recursive Tree:
+
+                Fib(5)
+              /       \
+          Fib(4)      Fib(3)
+         /    \       /    \
+    Fib(3) Fib(2) Fib(2) Fib(1)
+     /  \
+ Fib(2) Fib(1)
+
+Notice something?
+
+👉 Fib(3) is calculated multiple times.
+
+👉 Fib(2) is calculated even more times.
+
+This repeated work makes recursion slow.
+
+These repeated calculations are called:
+
+⭐ Overlapping Subproblems
+
+This is the biggest sign that Dynamic Programming can be used.
+
+🧠 Two Ways to do DP
+
+There are only 2 approaches.
+
+Dynamic Programming
+       |
+ -------------------------
+ |                       |
+Memoization         Tabulation
+(Top Down)         (Bottom Up)
+
+We'll learn both.
+
+Part 1️⃣ Memoization (Top Down)
+💡Idea
+
+We solve the problem exactly like recursion.
+
+But...
+
+Before solving,
+
+we ask:
+
+"Did I already calculate this answer?"
+
+If yes,
+
+return it immediately.
+
+Otherwise,
+
+calculate it,
+
+store it,
+
+return it.
+
+Step 1
+
+Create DP array
+
+dp[]
+
+Initially
+
+dp = [-1,-1,-1,-1,-1,-1]
+
+-1 means
+
+Not Calculated Yet
+Step 2
+
+Whenever fib(n) is called
+
+if(dp[n]!=-1)
+
+return dp[n];
+
+Already solved?
+
+Return answer.
+
+No recursion needed.
+
+Step 3
+
+If not calculated
+
+dp[n]=fib(n-1)+fib(n-2);
+
+Store answer.
+
+Return it.
+
+Done.
+
+🖼️ Flow
+fib(5)
+
+↓
+
+Is dp[5] available?
+
+↓
+
+No
+
+↓
+
+Find fib(4)+fib(3)
+
+↓
+
+Store in dp[5]
+
+↓
+
+Return answer
+
+Next time
+
+fib(5)
+
+↓
+
+dp[5] exists
+
+↓
+
+Return immediately
+
+No recursion.
+
+📦 Memoization Java Code
+import java.util.*;
+
+public class Main {
+
+    static int fib(int n, int[] dp) {
+
+        if (n <= 1)
+            return n;
+
+        if (dp[n] != -1)
+            return dp[n];
+
+        dp[n] = fib(n - 1, dp) + fib(n - 2, dp);
+
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+
+        int n = 10;
+
+        int[] dp = new int[n + 1];
+
+        Arrays.fill(dp, -1);
+
+        System.out.println(fib(n, dp));
+    }
+}
+⏱ Complexity
+
+Time
+
+O(N)
+
+Why?
+
+Each Fibonacci number is calculated only once.
+
+Space
+
+O(N)
+
+DP array
+
+O(N)
+
+Recursion stack
+
+Total
+
+O(N)
+Part 2️⃣ Tabulation (Bottom-Up)
+
+Now we remove recursion.
+
+Instead of asking
+
+Find Fib(10)
+
+we build answers from the smallest values.
+
+Like climbing stairs.
+
+Fib(0)
+
+↓
+
+Fib(1)
+
+↓
+
+Fib(2)
+
+↓
+
+Fib(3)
+
+↓
+
+...
+
+↓
+
+Fib(10)
+Step 1
+
+Create DP array
+
+dp[]
+Step 2
+
+Fill base cases
+
+dp[0]=0
+
+dp[1]=1
+Step 3
+
+Loop
+
+for(i=2;i<=n;i++)
+
+Formula
+
+dp[i]=dp[i-1]+dp[i-2]
+Example
+n=6
+
+Initially
+
+Index
+
+0 1 2 3 4 5 6
+
+Value
+
+0 1 _ _ _ _ _
+
+Now
+
+dp[2]=1
+0 1 1 _ _ _ _
+
+Next
+
+dp[3]=2
+0 1 1 2 _ _ _
+
+Next
+
+dp[4]=3
+0 1 1 2 3 _ _
+
+Next
+
+dp[5]=5
+0 1 1 2 3 5 _
+
+Next
+
+dp[6]=8
+0 1 1 2 3 5 8
+
+Done.
+
+📦 Tabulation Java Code
+public class Main {
+
+    static int fib(int n) {
+
+        if (n <= 1)
+            return n;
+
+        int[] dp = new int[n + 1];
+
+        dp[0] = 0;
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+
+            dp[i] = dp[i - 1] + dp[i - 2];
+
+        }
+
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(fib(10));
+
+    }
+}
+⏱ Complexity
+
+Time
+
+O(N)
+
+Space
+
+O(N)
+
+No recursion stack.
+
+Part 3️⃣ Space Optimization
+
+Observe this formula
+
+dp[i]=dp[i-1]+dp[i-2]
+
+Question
+
+Do we really need
+
+dp[0]
+
+dp[1]
+
+dp[2]
+
+dp[3]
+
+...
+
+dp[n]
+
+❌ No.
+
+We only need
+
+Previous value
+
+Previous Previous value
+
+Example
+
+prev2=0
+
+prev=1
+
+Now
+
+curr=prev+prev2
+
+curr=1
+
+Update
+
+prev2=prev
+
+prev=curr
+
+Again
+
+curr=1+1=2
+
+Update
+
+prev2=1
+
+prev=2
+
+Continue.
+
+Finally
+
+prev
+
+contains answer.
+📦 Space Optimized Java Code
+public class Main {
+
+    static int fib(int n) {
+
+        if (n == 0)
+            return 0;
+
+        if (n == 1)
+            return 1;
+
+        int prev2 = 0;
+        int prev = 1;
+
+        for (int i = 2; i <= n; i++) {
+
+            int curr = prev + prev2;
+
+            prev2 = prev;
+            prev = curr;
+        }
+
+        return prev;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(fib(10));
+
+    }
+}
+⏱ Complexity
+
+Time
+
+O(N)
+
+Space
+
+O(1)
+
+Best solution.
+
+🆚 Memoization vs Tabulation
+Memoization	Tabulation
+Top Down	Bottom Up
+Uses Recursion	Uses Loops
+Needs Recursion Stack	No Recursion Stack
+Easy to Write	More Efficient
+Space = O(N) + Stack	Space = O(N)
+⭐ Space Optimization
+Time	Space
+O(N)	O(1)
+🌟 How to Identify a DP Problem?
+
+Whenever you see these two properties:
+
+✅ 1. Overlapping Subproblems
+The same subproblem is solved multiple times (like Fib(3), Fib(2)).
+
+✅ 2. Optimal Substructure
+The answer to a bigger problem can be built using answers to smaller subproblems.
+
+If both are present, think Dynamic Programming.
