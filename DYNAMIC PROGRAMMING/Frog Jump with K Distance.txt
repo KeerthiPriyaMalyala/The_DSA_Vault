@@ -1,0 +1,455 @@
+<4. Frog Jump with K Distance>
+❓ What is the question asking?
+
+A frog is standing on the 0th stone and wants to reach the (N-1)th stone.
+
+The frog can jump at most K steps at a time.
+
+Whenever the frog jumps from stone i to stone j, the energy consumed is
+
+abs(height[i] - height[j])
+
+Return the minimum energy required to reach the last stone.
+
+📝 Example
+Input
+height = [10, 20, 30, 10]
+k = 2
+
+One optimal path:
+
+0 → 1 → 3
+
+Energy
+
+|10-20| + |20-10|
+
+=10+10
+
+=20
+
+Output
+
+20
+🧠 Observation
+
+To reach stone i, the frog can come from
+
+i-1
+
+i-2
+
+i-3
+
+...
+
+i-k
+
+Take the minimum energy among all possible jumps.
+
+⭐ Recurrence Relation
+dp[i] = Minimum of
+
+dp[i-j] + abs(height[i]-height[i-j])
+
+where
+
+1 <= j <= k
+
+Base Case
+
+dp[0]=0
+🪨 Recursive Approach
+💡 Idea
+
+For every stone,
+
+try all possible jumps from
+
+1
+
+to
+
+K
+
+Return the minimum energy.
+
+📦 Java Code
+public class Main {
+
+    static int frogJump(int ind, int[] height, int k) {
+
+        if (ind == 0)
+            return 0;
+
+        int minEnergy = Integer.MAX_VALUE;
+
+        for (int j = 1; j <= k; j++) {
+
+            if (ind - j >= 0) {
+
+                int jump = frogJump(ind - j, height, k)
+                        + Math.abs(height[ind] - height[ind - j]);
+
+                minEnergy = Math.min(minEnergy, jump);
+            }
+        }
+
+        return minEnergy;
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {10, 20, 30, 10};
+
+        int k = 2;
+
+        System.out.println(frogJump(height.length - 1, height, k));
+    }
+}
+▶️ Output
+20
+⏱ Time Complexity
+O(K^N)
+
+Very slow because many subproblems are repeated.
+
+📦 Space Complexity
+O(N)
+
+Recursion stack.
+
+🟢 Memoization (Top-Down DP)
+💡 Idea
+
+Use recursion.
+
+Before solving a stone,
+
+check whether its answer is already stored in dp[].
+
+If yes,
+
+return it.
+
+Otherwise,
+
+calculate,
+
+store,
+
+return.
+
+📦 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int frogJump(int ind, int[] height, int k, int[] dp) {
+
+        if (ind == 0)
+            return 0;
+
+        if (dp[ind] != -1)
+            return dp[ind];
+
+        int minEnergy = Integer.MAX_VALUE;
+
+        for (int j = 1; j <= k; j++) {
+
+            if (ind - j >= 0) {
+
+                int jump = frogJump(ind - j, height, k, dp)
+                        + Math.abs(height[ind] - height[ind - j]);
+
+                minEnergy = Math.min(minEnergy, jump);
+            }
+        }
+
+        dp[ind] = minEnergy;
+
+        return dp[ind];
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {10, 20, 30, 10};
+
+        int k = 2;
+
+        int[] dp = new int[height.length];
+
+        Arrays.fill(dp, -1);
+
+        System.out.println(frogJump(height.length - 1, height, k, dp));
+    }
+}
+▶️ Output
+20
+⏱ Time Complexity
+O(N × K)
+
+Each index is solved once, and for each index we try at most K jumps.
+
+📦 Space Complexity
+O(N)
+
+DP array
+
+O(N)
+
+Recursion stack
+
+Total
+
+O(N)
+🟡 Tabulation (Bottom-Up DP)
+💡 Idea
+
+Start from the first stone.
+
+For every stone,
+
+check all possible jumps from
+
+1
+
+to
+
+K
+
+Store the minimum energy in the DP array.
+
+📦 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int frogJump(int[] height, int k) {
+
+        int n = height.length;
+
+        int[] dp = new int[n];
+
+        Arrays.fill(dp, Integer.MAX_VALUE);
+
+        dp[0] = 0;
+
+        for (int i = 1; i < n; i++) {
+
+            for (int j = 1; j <= k; j++) {
+
+                if (i - j >= 0) {
+
+                    dp[i] = Math.min(dp[i],
+                            dp[i - j] + Math.abs(height[i] - height[i - j]));
+                }
+            }
+        }
+
+        return dp[n - 1];
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {10, 20, 30, 10};
+
+        int k = 2;
+
+        System.out.println(frogJump(height, k));
+    }
+}
+▶️ Output
+20
+⏱ Time Complexity
+O(N × K)
+
+Outer loop → N
+
+Inner loop → K
+
+Total
+
+O(N×K)
+📦 Space Complexity
+O(N)
+
+DP array.
+
+⚡ Space Optimization
+💡 Idea
+
+Unlike the normal Frog Jump,
+
+here
+
+dp[i]
+
+depends on
+
+dp[i-1]
+
+dp[i-2]
+
+...
+
+dp[i-k]
+
+Since K values are needed, we cannot reduce it to only two variables like prev and prev2.
+
+Therefore,
+
+Space Optimization is NOT possible in the general case.
+
+⏱ Time Complexity
+O(N × K)
+📦 Space Complexity
+O(N)
+🎯 Dry Run
+Input
+height = [10,20,30,10]
+
+k = 2
+
+Initially
+
+dp = [0,∞,∞,∞]
+i = 1
+
+Possible jumps
+
+0 → 1
+
+Cost
+
+0+|20-10|
+
+=10
+dp = [0,10,∞,∞]
+i = 2
+
+Jump from 1
+
+10+|30-20|
+
+=20
+
+Jump from 0
+
+0+|30-10|
+
+=20
+
+Minimum
+
+20
+dp=[0,10,20,∞]
+i = 3
+
+Jump from 2
+
+20+|10-30|
+
+=40
+
+Jump from 1
+
+10+|10-20|
+
+=20
+
+Minimum
+
+20
+dp=[0,10,20,20]
+
+Answer
+
+20
+🌟 Key Observation
+
+Normal Frog Jump
+
+2 Choices
+
+↓
+
+Jump 1
+
+Jump 2
+
+Frog Jump with K Distance
+
+K Choices
+
+↓
+
+Jump 1
+
+Jump 2
+
+Jump 3
+
+...
+
+Jump K
+
+The only change is that the two fixed choices become a loop from 1 to K.
+
+📝 DP Pattern Learned
+State
+
+dp[i] = Minimum energy to reach ith stone.
+
+        ↓
+
+Choices
+
+Try every jump
+
+1 to K
+
+        ↓
+
+Recurrence
+
+dp[i] = min(
+
+dp[i-j] + cost
+
+)
+
+where
+
+1 <= j <= K
+
+        ↓
+
+Memoization
+
+        ↓
+
+Tabulation
+
+        ↓
+
+Space Optimization ❌ (Not Possible)
+🎯 Interview Trick
+
+Whenever a problem changes from:
+
+2 choices
+
+to
+
+K choices
+
+don't write separate code for each jump. Replace the fixed choices with a loop:
+
+for (int j = 1; j <= k; j++) {
+    if (i - j >= 0) {
+        // Try this jump
+    }
+}
+
+This is the key idea behind Frog Jump with K Distance and appears in many advanced DP problems. 💖🐸🚀
