@@ -1,0 +1,509 @@
+<3. Frog Jump>
+❓ What is the question asking?
+
+A frog is standing on the 0th stone and wants to reach the (N-1)th stone.
+
+The frog can jump:
+
+1 step
+2 steps
+
+Each stone has a height.
+
+Whenever the frog jumps from stone i to stone j, the energy consumed is
+
+abs(height[i] - height[j])
+
+Our task is to find the minimum energy required to reach the last stone.
+
+📝 Example
+Input
+height = [30,10,60,10,60,50]
+
+One optimal path is
+
+0 → 2 → 4 → 5
+
+Energy =
+|30-60| + |60-60| + |60-50|
+
+= 30 + 0 + 10
+
+= 40
+
+Output
+
+40
+🧠 Observation
+
+To reach stone i, the frog has only 2 choices.
+
+Choice 1
+
+Come from previous stone.
+
+i-1 → i
+
+Energy
+
+dp[i-1] + abs(height[i]-height[i-1])
+Choice 2
+
+Come from two stones back.
+
+i-2 → i
+
+Energy
+
+dp[i-2] + abs(height[i]-height[i-2])
+
+Take the minimum.
+
+⭐ Recurrence Relation
+dp[i] =
+min(
+
+dp[i-1] + abs(height[i]-height[i-1]),
+
+dp[i-2] + abs(height[i]-height[i-2])
+
+)
+
+Base Case
+
+dp[0]=0
+🪨 Recursive Approach
+💡 Idea
+
+For every stone,
+
+find
+
+Minimum energy from previous stone.
+Minimum energy from two stones back.
+
+Return the smaller one.
+
+📦 Java Code
+public class Main {
+
+    static int frogJump(int ind, int[] height) {
+
+        if (ind == 0)
+            return 0;
+
+        int jumpOne = frogJump(ind - 1, height)
+                + Math.abs(height[ind] - height[ind - 1]);
+
+        int jumpTwo = Integer.MAX_VALUE;
+
+        if (ind > 1) {
+            jumpTwo = frogJump(ind - 2, height)
+                    + Math.abs(height[ind] - height[ind - 2]);
+        }
+
+        return Math.min(jumpOne, jumpTwo);
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {30, 10, 60, 10, 60, 50};
+
+        System.out.println(frogJump(height.length - 1, height));
+    }
+}
+▶️ Output
+40
+⏱ Time Complexity
+O(2^N)
+
+Many subproblems are solved repeatedly.
+
+📦 Space Complexity
+O(N)
+
+Recursion stack.
+
+🟢 Memoization (Top-Down DP)
+💡 Idea
+
+Use recursion.
+
+Before solving a stone,
+
+check
+
+dp[ind]
+
+Already calculated?
+
+✅ Return it.
+
+Otherwise
+
+Calculate it.
+Store it.
+Return it.
+
+Thus every index is solved only once.
+
+📦 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int frogJump(int ind, int[] height, int[] dp) {
+
+        if (ind == 0)
+            return 0;
+
+        if (dp[ind] != -1)
+            return dp[ind];
+
+        int jumpOne = frogJump(ind - 1, height, dp)
+                + Math.abs(height[ind] - height[ind - 1]);
+
+        int jumpTwo = Integer.MAX_VALUE;
+
+        if (ind > 1) {
+            jumpTwo = frogJump(ind - 2, height, dp)
+                    + Math.abs(height[ind] - height[ind - 2]);
+        }
+
+        dp[ind] = Math.min(jumpOne, jumpTwo);
+
+        return dp[ind];
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {30, 10, 60, 10, 60, 50};
+
+        int[] dp = new int[height.length];
+
+        Arrays.fill(dp, -1);
+
+        System.out.println(frogJump(height.length - 1, height, dp));
+    }
+}
+▶️ Output
+40
+⏱ Time Complexity
+O(N)
+
+Each index is solved only once.
+
+📦 Space Complexity
+O(N)
+
+DP Array
+
+O(N)
+
+Recursion Stack
+
+Total
+
+O(N)
+🟡 Tabulation (Bottom-Up DP)
+💡 Idea
+
+Instead of recursion,
+
+start from the first stone.
+
+We already know
+
+dp[0]=0
+
+Now calculate
+
+dp[1]
+
+↓
+
+dp[2]
+
+↓
+
+dp[3]
+
+↓
+
+...
+
+↓
+
+dp[n-1]
+
+using the recurrence relation.
+
+📦 Java Code
+public class Main {
+
+    static int frogJump(int[] height) {
+
+        int n = height.length;
+
+        int[] dp = new int[n];
+
+        dp[0] = 0;
+
+        for (int i = 1; i < n; i++) {
+
+            int jumpOne = dp[i - 1]
+                    + Math.abs(height[i] - height[i - 1]);
+
+            int jumpTwo = Integer.MAX_VALUE;
+
+            if (i > 1) {
+                jumpTwo = dp[i - 2]
+                        + Math.abs(height[i] - height[i - 2]);
+            }
+
+            dp[i] = Math.min(jumpOne, jumpTwo);
+        }
+
+        return dp[n - 1];
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {30, 10, 60, 10, 60, 50};
+
+        System.out.println(frogJump(height));
+    }
+}
+▶️ Output
+40
+⏱ Time Complexity
+O(N)
+
+Single loop.
+
+📦 Space Complexity
+O(N)
+
+DP Array.
+
+⚡ Space Optimization
+💡 Idea
+
+Observe
+
+dp[i]
+
+depends only on
+
+dp[i-1]
+
+and
+
+dp[i-2]
+
+So,
+
+there is no need to store the entire DP array.
+
+Store only
+
+prev
+
+(previous answer)
+
+and
+
+prev2
+
+(second previous answer)
+
+For every stone,
+
+calculate current answer,
+
+then update
+
+prev2
+
+↓
+
+prev
+
+↓
+
+current
+
+Finally,
+
+prev
+
+contains the answer.
+
+📦 Java Code
+public class Main {
+
+    static int frogJump(int[] height) {
+
+        int n = height.length;
+
+        int prev = 0;
+        int prev2 = 0;
+
+        for (int i = 1; i < n; i++) {
+
+            int jumpOne = prev
+                    + Math.abs(height[i] - height[i - 1]);
+
+            int jumpTwo = Integer.MAX_VALUE;
+
+            if (i > 1) {
+                jumpTwo = prev2
+                        + Math.abs(height[i] - height[i - 2]);
+            }
+
+            int curr = Math.min(jumpOne, jumpTwo);
+
+            prev2 = prev;
+            prev = curr;
+        }
+
+        return prev;
+    }
+
+    public static void main(String[] args) {
+
+        int[] height = {30, 10, 60, 10, 60, 50};
+
+        System.out.println(frogJump(height));
+    }
+}
+▶️ Output
+40
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(1)
+
+Only three variables are used.
+
+🎯 Dry Run
+Input
+height = [30,10,60,10,60,50]
+
+Initially
+
+prev2 = 0
+prev = 0
+i = 1
+jumpOne = 0 + |10-30| = 20
+
+jumpTwo = ∞
+
+curr = 20
+
+Update
+
+prev2 = 0
+
+prev = 20
+i = 2
+jumpOne = 20 + |60-10| = 70
+
+jumpTwo = 0 + |60-30| = 30
+
+curr = 30
+
+Update
+
+prev2 = 20
+
+prev = 30
+i = 3
+jumpOne = 30 + |10-60| = 80
+
+jumpTwo = 20 + |10-10| = 20
+
+curr = 20
+
+Update
+
+prev2 = 30
+
+prev = 20
+i = 4
+jumpOne = 20 + |60-10| = 70
+
+jumpTwo = 30 + |60-60| = 30
+
+curr = 30
+
+Update
+
+prev2 = 20
+
+prev = 30
+i = 5
+jumpOne = 30 + |50-60| = 40
+
+jumpTwo = 20 + |50-10| = 60
+
+curr = 40
+
+Answer
+
+40
+🌟 Key Observation
+
+Unlike Climbing Stairs, here we are not counting the number of ways.
+
+Instead, we are choosing the minimum energy.
+
+So the recurrence changes from
+
++
+
+to
+
+min()
+📝 DP Pattern Learned
+State
+
+dp[i] = Minimum energy to reach ith stone.
+
+        ↓
+
+Choices
+
+Jump 1 step
+
+Jump 2 steps
+
+        ↓
+
+Recurrence
+
+dp[i] =
+min(
+
+dp[i-1] + cost,
+
+dp[i-2] + cost
+
+)
+
+        ↓
+
+Memoization
+
+        ↓
+
+Tabulation
+
+        ↓
+
+Space Optimization
+🎯 Trick to Remember
+Climbing Stairs ➜ Count total ways ➜ Use +
+Frog Jump ➜ Find minimum energy ➜ Use min()
+
+This is the first DP problem where the state stores an optimization value (minimum cost) instead of a count, making it a very important pattern for future DP problems like Frog Jump K Distance, House Robber, and Grid DP. 💖🐸🚀
