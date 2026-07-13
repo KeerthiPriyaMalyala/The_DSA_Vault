@@ -1,0 +1,439 @@
+<5. Maximum Sum of Non-Adjacent Elements>
+❓ Problem Understanding
+
+Given an integer array arr[], find the maximum sum such that no two selected elements are adjacent.
+
+You can either pick an element or not pick it.
+
+If you pick an element, you cannot pick its adjacent element.
+
+Return the maximum possible sum.
+
+Example
+
+Input
+
+arr = [2, 1, 4, 9]
+
+Possible selections:
+
+2 + 4 = 6
+
+2 + 9 = 11
+
+1 + 9 = 10
+
+4 = 4
+
+9 = 9
+
+Output
+
+11
+
+Because 2 + 9 = 11 is the maximum sum.
+
+🧠 Observation & Recurrence
+
+At every index i, we have only 2 choices:
+
+Choice 1 → Pick the current element
+
+If we pick arr[i], we cannot pick arr[i-1].
+
+So we move to:
+
+i - 2
+
+Sum becomes:
+
+arr[i] + solve(i-2)
+Choice 2 → Don't Pick
+
+Skip the current element.
+
+Move to:
+
+i - 1
+
+Sum becomes:
+
+solve(i-1)
+⭐ Recurrence Relation
+dp[i] = max(
+
+arr[i] + dp[i-2],
+
+dp[i-1]
+
+)
+
+Base Cases
+
+dp[0] = arr[0]
+
+If index < 0
+
+return 0
+🪨 Recursive Approach
+💡 Idea
+
+At every index,
+
+either
+
+✅ Pick
+
+or
+
+❌ Don't Pick
+
+Return whichever gives the larger sum.
+
+Java Code
+
+public class Main {
+
+    static int solve(int ind, int[] arr) {
+
+        if (ind == 0)
+            return arr[0];
+
+        if (ind < 0)
+            return 0;
+
+        int pick = arr[ind] + solve(ind - 2, arr);
+
+        int notPick = solve(ind - 1, arr);
+
+        return Math.max(pick, notPick);
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {2, 1, 4, 9};
+
+        System.out.println(solve(arr.length - 1, arr));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(2^N)
+📦 Space Complexity
+O(N)
+
+(Recursion Stack)
+
+🟢 Memoization
+💡 Idea
+
+Use recursion.
+
+Before solving an index,
+
+check whether it is already present in the DP array.
+
+If yes,
+
+return it.
+
+Else,
+
+calculate,
+
+store,
+
+return.
+
+Java Code
+
+import java.util.Arrays;
+
+public class Main {
+
+    static int solve(int ind, int[] arr, int[] dp) {
+
+        if (ind == 0)
+            return arr[0];
+
+        if (ind < 0)
+            return 0;
+
+        if (dp[ind] != -1)
+            return dp[ind];
+
+        int pick = arr[ind] + solve(ind - 2, arr, dp);
+
+        int notPick = solve(ind - 1, arr, dp);
+
+        dp[ind] = Math.max(pick, notPick);
+
+        return dp[ind];
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {2, 1, 4, 9};
+
+        int[] dp = new int[arr.length];
+
+        Arrays.fill(dp, -1);
+
+        System.out.println(solve(arr.length - 1, arr, dp));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+
+DP Array
+
+O(N)
+
+Recursion Stack
+
+Total
+
+O(N)
+🟡 Tabulation
+💡 Idea
+
+Instead of recursion,
+
+start from index 0 and build the DP array.
+
+For every index,
+
+calculate:
+
+Pick
+Not Pick
+
+Store the maximum.
+
+Java Code
+
+public class Main {
+
+    static int maximumSum(int[] arr) {
+
+        int n = arr.length;
+
+        int[] dp = new int[n];
+
+        dp[0] = arr[0];
+
+        for (int i = 1; i < n; i++) {
+
+            int pick = arr[i];
+
+            if (i > 1)
+                pick += dp[i - 2];
+
+            int notPick = dp[i - 1];
+
+            dp[i] = Math.max(pick, notPick);
+        }
+
+        return dp[n - 1];
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {2, 1, 4, 9};
+
+        System.out.println(maximumSum(arr));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+⚡ Space Optimization
+💡 Idea
+
+Observe the recurrence:
+
+dp[i]
+
+depends only on
+
+dp[i-1]
+
+and
+
+dp[i-2]
+
+So,
+
+instead of keeping the entire DP array,
+
+store only:
+
+prev
+
+prev2
+
+Update them after every iteration.
+
+Java Code
+
+public class Main {
+
+    static int maximumSum(int[] arr) {
+
+        int n = arr.length;
+
+        int prev = arr[0];
+
+        int prev2 = 0;
+
+        for (int i = 1; i < n; i++) {
+
+            int pick = arr[i];
+
+            if (i > 1)
+                pick += prev2;
+
+            int notPick = prev;
+
+            int curr = Math.max(pick, notPick);
+
+            prev2 = prev;
+
+            prev = curr;
+        }
+
+        return prev;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {2, 1, 4, 9};
+
+        System.out.println(maximumSum(arr));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(1)
+🎯 Dry Run
+Input
+arr = [2, 1, 4, 9]
+
+Initially
+
+prev = 2
+
+prev2 = 0
+i = 1
+pick = 1
+
+notPick = 2
+
+curr = 2
+
+Update
+
+prev2 = 2
+
+prev = 2
+i = 2
+pick = 4 + 2 = 6
+
+notPick = 2
+
+curr = 6
+
+Update
+
+prev2 = 2
+
+prev = 6
+i = 3
+pick = 9 + 2 = 11
+
+notPick = 6
+
+curr = 11
+
+Update
+
+prev2 = 6
+
+prev = 11
+
+Answer
+
+11
+🌟 Key Observation
+
+This is the first DP problem based on the "Pick / Not Pick" pattern.
+
+At every index:
+
+Pick
+
+OR
+
+Not Pick
+
+Take the maximum of the two choices.
+
+📝 DP Pattern Learned
+State
+
+dp[i] = Maximum sum till index i
+
+        ↓
+
+Choices
+
+Pick
+
+Not Pick
+
+        ↓
+
+Recurrence
+
+dp[i] = max(
+
+arr[i] + dp[i-2],
+
+dp[i-1]
+
+)
+
+        ↓
+
+Memoization
+
+        ↓
+
+Tabulation
+
+        ↓
+
+Space Optimization
+🎯 Interview Trick
+
+Whenever a DP problem says:
+
+Choose or Skip
+Cannot choose adjacent
+Maximum Profit
+Maximum Sum
+
+👉 Think of the Pick / Not Pick DP Pattern.
+
+This exact pattern is used again in House Robber, so once you master this problem, House Robber becomes almost identical. 💖🚀
