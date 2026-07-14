@@ -1,0 +1,421 @@
+<13. Ninja and His Friends>
+❓ Problem Understanding
+
+A grid contains chocolates.
+
+There are 2 friends (Alice & Bob).
+
+Alice starts at (0,0).
+Bob starts at (0,m-1) (top-right corner).
+
+Every move, both go one row down.
+
+Each friend can move:
+
+↙ Down Left
+
+↓
+
+Down
+
+↘ Down Right
+
+Each collects chocolates from the cells they visit.
+
+⚠️ If both stand on the same cell, count the chocolates only once.
+
+Find the maximum chocolates they can collect.
+
+Example
+2   3   1   2
+
+3   4   2   2
+
+5   6   3   5
+
+Alice
+
+Start → (0,0)
+
+Bob
+
+Start → (0,3)
+
+Need
+
+Maximum Chocolates
+🧠 Observation & Recurrence
+
+In all previous Grid DP problems,
+
+our state was
+
+(i,j)
+
+Now,
+
+two people move simultaneously.
+
+So one row is common, but both have different columns.
+
+State becomes
+
+(i, j1, j2)
+
+Where
+
+i  = current row
+
+j1 = Alice's column
+
+j2 = Bob's column
+
+This is the biggest change in this problem.
+
+Choices
+
+Alice has 3 moves:
+
+↙ ↓ ↘
+
+Bob also has 3 moves:
+
+↙ ↓ ↘
+
+Total possibilities
+
+3 × 3 = 9
+
+At every state, try all 9 combinations.
+
+Chocolate Collection
+
+If
+
+j1 == j2
+
+Both are on the same cell.
+
+Collect only once.
+
+value = grid[i][j1];
+
+Otherwise
+
+value = grid[i][j1] + grid[i][j2];
+⭐ Recurrence
+dp(i,j1,j2)
+
+=
+
+Current Chocolates
+
++
+
+Maximum of all
+
+9 Moves
+Base Case
+
+Last row
+
+i == n-1
+
+If
+
+j1 == j2
+
+Return
+
+grid[i][j1]
+
+Else
+
+Return
+
+grid[i][j1] + grid[i][j2]
+Invalid Position
+
+If
+
+j1 < 0
+
+or
+
+j1 >= m
+
+or
+
+j2 < 0
+
+or
+
+j2 >= m
+
+Return
+
+-1e9
+
+A very small number so this path is never chosen.
+
+🪨 Recursive Approach
+💡 Idea
+
+At every row,
+
+both friends move.
+
+Each has 3 options.
+
+Try all 9 combinations.
+
+Take the maximum.
+
+💻 Java Code
+public class Main {
+
+    static int solve(int i, int j1, int j2, int[][] grid) {
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        if (j1 < 0 || j1 >= m || j2 < 0 || j2 >= m)
+            return -(int)1e9;
+
+        if (i == n - 1) {
+
+            if (j1 == j2)
+                return grid[i][j1];
+
+            return grid[i][j1] + grid[i][j2];
+        }
+
+        int maxi = -(int)1e9;
+
+        for (int dj1 = -1; dj1 <= 1; dj1++) {
+
+            for (int dj2 = -1; dj2 <= 1; dj2++) {
+
+                int value;
+
+                if (j1 == j2)
+                    value = grid[i][j1];
+                else
+                    value = grid[i][j1] + grid[i][j2];
+
+                value += solve(i + 1,
+                        j1 + dj1,
+                        j2 + dj2,
+                        grid);
+
+                maxi = Math.max(maxi, value);
+            }
+        }
+
+        return maxi;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+
+                {2,3,1,2},
+
+                {3,4,2,2},
+
+                {5,6,3,5}
+
+        };
+
+        System.out.println(solve(0,0,3,grid));
+    }
+}
+▶️ Output
+21
+⏱ Time Complexity
+O(9^N)
+📦 Space Complexity
+O(N)
+🟢 Memoization
+💡 Idea
+
+State has 3 variables, so DP becomes
+
+dp[row][aliceCol][bobCol]
+
+If already solved,
+
+return it.
+
+DP State
+dp[i][j1][j2]
+⏱ Time Complexity
+O(N × M × M × 9)
+
+≈ O(N × M²)
+📦 Space Complexity
+O(N × M²)
+
++
+
+O(N)
+🟡 Tabulation
+💡 Idea
+
+Create
+
+dp[n][m][m]
+
+Start from
+
+Last Row
+
+Move upwards.
+
+For every
+
+(row, j1, j2)
+
+try all
+
+9 Moves
+⏱ Time Complexity
+O(N × M² × 9)
+📦 Space Complexity
+O(N × M²)
+⚡ Space Optimization
+💡 Idea
+
+Current row depends only on
+
+Next Row
+
+Instead of
+
+dp[n][m][m]
+
+Store only
+
+front[m][m]
+
+curr[m][m]
+⏱ Time Complexity
+O(N × M² × 9)
+📦 Space Complexity
+O(M²)
+🎯 Dry Run
+
+Grid
+
+2   3   1   2
+
+3   4   2   2
+
+5   6   3   5
+
+Initially
+
+Alice → Column 0
+
+Bob → Column 3
+
+Current chocolates
+
+2 + 2 = 4
+
+Now,
+
+Alice has
+
+3 moves
+
+Bob has
+
+3 moves
+
+Total
+
+9 combinations
+
+Check every combination.
+
+Pick the maximum.
+
+🌟 Key Observation
+
+Compare previous Grid DP problems:
+
+Unique Paths
+
+↓
+
+State
+
+(i,j)
+Triangle
+
+↓
+
+State
+
+(i,j)
+Minimum Falling Path Sum
+
+↓
+
+State
+
+(i,j)
+
+Now
+
+Ninja & Friends
+
+↓
+
+State
+
+(i,j1,j2)
+
+Because two people move together.
+
+📝 DP Pattern Learned
+State
+
+(Row,
+
+Alice Column,
+
+Bob Column)
+
+        ↓
+
+Alice
+
+3 Moves
+
+×
+
+Bob
+
+3 Moves
+
+        ↓
+
+9 Choices
+
+        ↓
+
+Take Maximum
+
+        ↓
+
+Memoization
+
+↓
+
+Tabulation
+
+↓
+
+Space Optimization
