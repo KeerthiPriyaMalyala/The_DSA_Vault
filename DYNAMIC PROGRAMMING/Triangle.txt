@@ -1,0 +1,384 @@
+<11. Triangle>
+❓ Problem Understanding
+
+You are given a triangle.
+
+Start from the top.
+
+Reach the last row with the minimum path sum.
+
+From any cell, you can move only to:
+
+↓  Down
+
+↘ Down Right
+
+Find the minimum path sum.
+
+Example
+        2
+
+      3   4
+
+    6   5   7
+
+  4   1   8   3
+
+Best Path
+
+2
+
+↓
+
+3
+
+↓
+
+5
+
+↓
+
+1
+
+Answer
+
+2 + 3 + 5 + 1 = 11
+🧠 Observation & Recurrence
+
+Suppose we are at
+
+(i,j)
+
+We have only 2 choices:
+
+↓ Down
+
+or
+
+↘ Diagonal
+
+Visual
+
+        (i,j)
+
+        /   \
+
+     Down  Diagonal
+
+Take the smaller path.
+
+⭐ Recurrence
+dp[i][j]
+
+=
+
+triangle[i][j]
+
++
+
+min(
+
+Down,
+
+Diagonal
+
+)
+Base Case
+
+If we reach the last row,
+
+there is nowhere to go.
+
+So,
+
+if(i == n-1)
+
+return triangle[i][j];
+🪨 Recursive Approach
+💡 Idea
+
+From every cell,
+
+try
+
+Down
+Diagonal
+
+Take the minimum.
+
+💻 Java Code
+public class Main {
+
+    static int solve(int i, int j, int[][] triangle, int n) {
+
+        if (i == n - 1)
+            return triangle[i][j];
+
+        int down = triangle[i][j] + solve(i + 1, j, triangle, n);
+
+        int diagonal = triangle[i][j] + solve(i + 1, j + 1, triangle, n);
+
+        return Math.min(down, diagonal);
+    }
+
+    public static void main(String[] args) {
+
+        int[][] triangle = {
+                {2,0,0,0},
+                {3,4,0,0},
+                {6,5,7,0},
+                {4,1,8,3}
+        };
+
+        int n = 4;
+
+        System.out.println(solve(0,0,triangle,n));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(2^N)
+📦 Space Complexity
+O(N)
+🟢 Memoization
+💡 Idea
+
+Store
+
+dp[i][j]
+
+If already solved,
+
+return it.
+
+💻 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int solve(int i, int j, int[][] triangle, int[][] dp, int n) {
+
+        if (i == n - 1)
+            return triangle[i][j];
+
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int down = triangle[i][j] + solve(i + 1, j, triangle, dp, n);
+
+        int diagonal = triangle[i][j] + solve(i + 1, j + 1, triangle, dp, n);
+
+        return dp[i][j] = Math.min(down, diagonal);
+    }
+
+    public static void main(String[] args) {
+
+        int[][] triangle = {
+                {2,0,0,0},
+                {3,4,0,0},
+                {6,5,7,0},
+                {4,1,8,3}
+        };
+
+        int n = 4;
+
+        int[][] dp = new int[n][n];
+
+        for(int[] row : dp)
+            Arrays.fill(row,-1);
+
+        System.out.println(solve(0,0,triangle,dp,n));
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N²)
+📦 Space Complexity
+O(N²)
+
++
+
+O(N)
+🟡 Tabulation
+💡 Idea
+
+Start from the last row because it is the base case.
+
+Move upwards.
+
+Each cell depends on:
+
+Down
+Diagonal
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] triangle = {
+                {2,0,0,0},
+                {3,4,0,0},
+                {6,5,7,0},
+                {4,1,8,3}
+        };
+
+        int n = 4;
+
+        int[][] dp = new int[n][n];
+
+        for(int j=0;j<n;j++)
+            dp[n-1][j]=triangle[n-1][j];
+
+        for(int i=n-2;i>=0;i--){
+
+            for(int j=i;j>=0;j--){
+
+                int down = triangle[i][j] + dp[i+1][j];
+
+                int diagonal = triangle[i][j] + dp[i+1][j+1];
+
+                dp[i][j]=Math.min(down,diagonal);
+            }
+        }
+
+        System.out.println(dp[0][0]);
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N²)
+📦 Space Complexity
+O(N²)
+⚡ Space Optimization
+💡 Idea
+
+Each row depends only on the row below.
+
+So,
+
+instead of storing the whole DP table,
+
+store only:
+
+front[]
+
+curr[]
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] triangle = {
+                {2,0,0,0},
+                {3,4,0,0},
+                {6,5,7,0},
+                {4,1,8,3}
+        };
+
+        int n = 4;
+
+        int[] front = new int[n];
+
+        for(int j=0;j<n;j++)
+            front[j]=triangle[n-1][j];
+
+        for(int i=n-2;i>=0;i--){
+
+            int[] curr=new int[n];
+
+            for(int j=i;j>=0;j--){
+
+                int down=triangle[i][j]+front[j];
+
+                int diagonal=triangle[i][j]+front[j+1];
+
+                curr[j]=Math.min(down,diagonal);
+            }
+
+            front=curr;
+        }
+
+        System.out.println(front[0]);
+    }
+}
+▶️ Output
+11
+⏱ Time Complexity
+O(N²)
+📦 Space Complexity
+O(N)
+🎯 Dry Run
+
+Triangle
+
+        2
+
+      3   4
+
+    6   5   7
+
+  4   1   8   3
+Base Row
+4   1   8   3
+Next Row
+7   6   10
+
+Explanation
+
+6 + min(4,1) = 7
+
+5 + min(1,8) = 6
+
+7 + min(8,3) = 10
+Next Row
+9   10
+3 + min(7,6) = 9
+
+4 + min(6,10) = 10
+Top Row
+11
+2 + min(9,10) = 11
+
+Answer
+
+11
+🌟 Key Observation
+
+Compare all Grid DP problems:
+
+Problem	Moves	Goal
+Unique Paths	Right, Down	Count Paths
+Minimum Path Sum	Right, Down	Minimum Sum
+Triangle	Down, Diagonal	Minimum Sum
+Minimum Falling Path Sum	Down, Left Diagonal, Right Diagonal	Minimum Sum
+📝 DP Pattern Learned
+State
+
+(Row, Column)
+
+        ↓
+
+Choices
+
+Down
+
+Diagonal
+
+        ↓
+
+Take Minimum
+
+        ↓
+
+Memoization
+
+↓
+
+Tabulation
+
+↓
+
+Space Optimization
