@@ -1,0 +1,508 @@
+<6. House Robber>
+❓ Problem Understanding
+
+A robber wants to rob houses.
+
+Each house contains some money.
+
+The robber cannot rob two adjacent houses because the alarm will be triggered.
+
+Also,
+
+the first and last houses are adjacent (houses are arranged in a circle).
+
+Return the maximum money the robber can steal.
+
+Example
+
+Input
+
+nums = [2,3,2]
+
+Possible choices
+
+Rob 2(first) + 2(last) ❌
+
+Not allowed
+
+Choose
+
+3
+
+Output
+
+3
+
+Another Example
+
+nums = [1,2,3,1]
+
+Choose
+
+1 + 3 = 4
+
+Output
+
+4
+🧠 Observation & Recurrence
+
+This is exactly Maximum Sum of Non-Adjacent Elements.
+
+But there is one extra condition.
+
+First House
+
+↓
+
+Adjacent
+
+↓
+
+Last House
+
+So
+
+we cannot rob both together.
+
+Therefore,
+
+there are only 2 possibilities.
+
+Case 1
+
+Rob houses
+
+0
+
+↓
+
+n-2
+
+Ignore the last house.
+
+Case 2
+
+Rob houses
+
+1
+
+↓
+
+n-1
+
+Ignore the first house.
+
+Now solve both cases using
+
+Maximum Sum of Non Adjacent Elements
+
+Take the maximum answer.
+
+⭐ Recurrence
+
+Exactly same as previous problem.
+
+dp[i] = max(
+
+nums[i] + dp[i-2],
+
+dp[i-1]
+
+)
+🪨 Recursive Approach
+💡 Idea
+
+Create two arrays.
+
+temp1
+
+↓
+
+Ignore last house
+temp2
+
+↓
+
+Ignore first house
+
+Solve both recursively.
+
+Return maximum.
+
+📦 Java Code
+import java.util.ArrayList;
+
+public class Main {
+
+    static int solve(int ind, ArrayList<Integer> arr) {
+
+        if (ind == 0)
+            return arr.get(0);
+
+        if (ind < 0)
+            return 0;
+
+        int pick = arr.get(ind) + solve(ind - 2, arr);
+
+        int notPick = solve(ind - 1, arr);
+
+        return Math.max(pick, notPick);
+    }
+
+    static int houseRobber(int[] nums) {
+
+        int n = nums.length;
+
+        if (n == 1)
+            return nums[0];
+
+        ArrayList<Integer> temp1 = new ArrayList<>();
+        ArrayList<Integer> temp2 = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            if (i != n - 1)
+                temp1.add(nums[i]);
+
+            if (i != 0)
+                temp2.add(nums[i]);
+        }
+
+        return Math.max(
+                solve(temp1.size() - 1, temp1),
+                solve(temp2.size() - 1, temp2));
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,3,2};
+
+        System.out.println(houseRobber(nums));
+    }
+}
+▶️ Output
+3
+⏱ Time Complexity
+O(2^N)
+📦 Space Complexity
+O(N)
+🟢 Memoization
+💡 Idea
+
+Exactly same as Maximum Sum of Non Adjacent.
+
+Only difference
+
+Solve
+
+temp1
+
+temp2
+
+using memoization.
+
+Take maximum.
+
+📦 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int solve(int ind, ArrayList<Integer> arr, int[] dp) {
+
+        if (ind == 0)
+            return arr.get(0);
+
+        if (ind < 0)
+            return 0;
+
+        if (dp[ind] != -1)
+            return dp[ind];
+
+        int pick = arr.get(ind) + solve(ind - 2, arr, dp);
+
+        int notPick = solve(ind - 1, arr, dp);
+
+        return dp[ind] = Math.max(pick, notPick);
+    }
+
+    static int houseRobber(int[] nums) {
+
+        int n = nums.length;
+
+        if (n == 1)
+            return nums[0];
+
+        ArrayList<Integer> temp1 = new ArrayList<>();
+        ArrayList<Integer> temp2 = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            if (i != n - 1)
+                temp1.add(nums[i]);
+
+            if (i != 0)
+                temp2.add(nums[i]);
+        }
+
+        int[] dp1 = new int[temp1.size()];
+        int[] dp2 = new int[temp2.size()];
+
+        Arrays.fill(dp1, -1);
+        Arrays.fill(dp2, -1);
+
+        return Math.max(
+                solve(temp1.size() - 1, temp1, dp1),
+                solve(temp2.size() - 1, temp2, dp2));
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,3,2};
+
+        System.out.println(houseRobber(nums));
+    }
+}
+▶️ Output
+3
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+🟡 Tabulation
+💡 Idea
+
+Solve Maximum Sum of Non Adjacent using DP array.
+
+Do it
+
+twice.
+
+Take maximum.
+
+📦 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int solve(ArrayList<Integer> arr) {
+
+        int n = arr.size();
+
+        int[] dp = new int[n];
+
+        dp[0] = arr.get(0);
+
+        for (int i = 1; i < n; i++) {
+
+            int pick = arr.get(i);
+
+            if (i > 1)
+                pick += dp[i - 2];
+
+            int notPick = dp[i - 1];
+
+            dp[i] = Math.max(pick, notPick);
+        }
+
+        return dp[n - 1];
+    }
+
+    static int houseRobber(int[] nums) {
+
+        int n = nums.length;
+
+        if (n == 1)
+            return nums[0];
+
+        ArrayList<Integer> temp1 = new ArrayList<>();
+        ArrayList<Integer> temp2 = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            if (i != n - 1)
+                temp1.add(nums[i]);
+
+            if (i != 0)
+                temp2.add(nums[i]);
+        }
+
+        return Math.max(solve(temp1), solve(temp2));
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,3,2};
+
+        System.out.println(houseRobber(nums));
+    }
+}
+▶️ Output
+3
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+⚡ Space Optimization
+💡 Idea
+
+Instead of DP array,
+
+use
+
+prev
+
+prev2
+
+Solve
+
+temp1
+
+temp2
+
+Return maximum.
+
+📦 Java Code
+import java.util.*;
+
+public class Main {
+
+    static int solve(ArrayList<Integer> arr) {
+
+        int prev = arr.get(0);
+        int prev2 = 0;
+
+        for (int i = 1; i < arr.size(); i++) {
+
+            int pick = arr.get(i);
+
+            if (i > 1)
+                pick += prev2;
+
+            int notPick = prev;
+
+            int curr = Math.max(pick, notPick);
+
+            prev2 = prev;
+            prev = curr;
+        }
+
+        return prev;
+    }
+
+    static int houseRobber(int[] nums) {
+
+        int n = nums.length;
+
+        if (n == 1)
+            return nums[0];
+
+        ArrayList<Integer> temp1 = new ArrayList<>();
+        ArrayList<Integer> temp2 = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            if (i != n - 1)
+                temp1.add(nums[i]);
+
+            if (i != 0)
+                temp2.add(nums[i]);
+        }
+
+        return Math.max(solve(temp1), solve(temp2));
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,3,2};
+
+        System.out.println(houseRobber(nums));
+    }
+}
+▶️ Output
+3
+⏱ Time Complexity
+O(N)
+📦 Space Complexity
+O(1)
+🎯 Dry Run
+nums = [2,3,2]
+Case 1
+
+Ignore last house
+
+[2,3]
+
+Maximum sum
+
+3
+Case 2
+
+Ignore first house
+
+[3,2]
+
+Maximum sum
+
+3
+
+Take maximum
+
+max(3,3)=3
+
+Answer
+
+3
+🌟 Key Observation
+
+The only difference between Maximum Sum of Non-Adjacent Elements and House Robber is:
+
+Maximum Sum of Non-Adjacent	House Robber
+Array is linear	Array is circular
+Solve once	Solve twice (exclude first / exclude last)
+📝 DP Pattern Learned
+House Robber
+
+        ↓
+
+Convert Circular Array
+
+into
+
+Two Linear Arrays
+
+        ↓
+
+Maximum Sum of
+Non Adjacent Elements
+
+        ↓
+
+Take Maximum
+
+        ↓
+
+Memoization
+
+↓
+
+Tabulation
+
+↓
+
+Space Optimization
+🎯 Interview Trick
+
+Whenever the interviewer says:
+
+"The array is circular."
+"First and last elements are adjacent."
+
+👉 Think:
+
+Exclude the first element.
+Exclude the last element.
+Solve the linear DP problem twice.
+Return the maximum of the two answers.
+
+This is the standard and optimal approach for the House Robber II pattern. 💖🏠🚀
