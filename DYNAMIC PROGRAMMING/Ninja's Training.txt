@@ -1,0 +1,561 @@
+<7. Ninja's Training>
+❓ Problem Understanding
+
+A ninja has to train for N days.
+
+Every day, he can perform 3 different tasks:
+
+Task 0
+Task 1
+Task 2
+
+Each task gives some points.
+
+The points are stored in:
+
+points[day][task]
+
+Condition:
+
+The ninja cannot perform the same task on two consecutive days.
+
+Return the maximum points the ninja can earn.
+
+Example
+
+Input
+
+points = {
+
+{10,40,70},
+
+{20,50,80},
+
+{30,60,90}
+
+}
+
+Output
+
+210
+
+Explanation
+
+Day 0 → Task 2 → 70
+
+Day 1 → Task 1 → 50
+
+Day 2 → Task 2 → 90
+
+Total = 210
+🧠 Observation & Recurrence
+
+Unlike previous DP problems,
+
+here there are 3 choices every day.
+
+But,
+
+you cannot repeat yesterday's task.
+
+So,
+
+our DP state should remember
+
+Current Day
+
++
+
+Last Task Performed
+DP State
+dp[day][last]
+
+means
+
+Maximum points till
+
+day
+
+when
+
+last task performed yesterday = last
+
+where
+
+last =
+
+0
+
+1
+
+2
+
+3
+
+Here
+
+3
+
+means
+
+No previous task
+
+(used only for the first call)
+
+⭐ Recurrence
+
+For every task
+
+task = 0 to 2
+
+If
+
+task != last
+
+then
+
+answer =
+
+points[day][task]
+
++
+
+solve(day-1,task)
+
+Take the maximum.
+
+🪨 Recursive Approach
+💡 Idea
+
+For every day,
+
+try all 3 tasks.
+
+Skip the task that is equal to
+
+last
+
+Return the maximum.
+
+💻 Java Code
+public class Main {
+
+    static int solve(int day, int last, int[][] points) {
+
+        if (day == 0) {
+
+            int maxi = 0;
+
+            for (int task = 0; task < 3; task++) {
+
+                if (task != last)
+
+                    maxi = Math.max(maxi, points[0][task]);
+            }
+
+            return maxi;
+        }
+
+        int maxi = 0;
+
+        for (int task = 0; task < 3; task++) {
+
+            if (task != last) {
+
+                int point = points[day][task]
+                        + solve(day - 1, task, points);
+
+                maxi = Math.max(maxi, point);
+            }
+        }
+
+        return maxi;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] points = {
+
+                {10,40,70},
+
+                {20,50,80},
+
+                {30,60,90}
+
+        };
+
+        int n = points.length;
+
+        System.out.println(solve(n - 1, 3, points));
+    }
+}
+▶️ Output
+210
+⏱ Time Complexity
+O(3^N)
+📦 Space Complexity
+O(N)
+
+(Recursion Stack)
+
+🟢 Memoization
+💡 Idea
+
+Store
+
+dp[day][last]
+
+If already computed,
+
+return it.
+
+Else,
+
+calculate,
+
+store,
+
+return.
+
+💻 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int solve(int day, int last, int[][] points, int[][] dp) {
+
+        if (dp[day][last] != -1)
+            return dp[day][last];
+
+        if (day == 0) {
+
+            int maxi = 0;
+
+            for (int task = 0; task < 3; task++) {
+
+                if (task != last)
+                    maxi = Math.max(maxi, points[0][task]);
+            }
+
+            return dp[day][last] = maxi;
+        }
+
+        int maxi = 0;
+
+        for (int task = 0; task < 3; task++) {
+
+            if (task != last) {
+
+                int point = points[day][task]
+                        + solve(day - 1, task, points, dp);
+
+                maxi = Math.max(maxi, point);
+            }
+        }
+
+        return dp[day][last] = maxi;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] points = {
+
+                {10,40,70},
+
+                {20,50,80},
+
+                {30,60,90}
+
+        };
+
+        int n = points.length;
+
+        int[][] dp = new int[n][4];
+
+        for (int[] row : dp)
+            Arrays.fill(row, -1);
+
+        System.out.println(solve(n - 1, 3, points, dp));
+    }
+}
+▶️ Output
+210
+⏱ Time Complexity
+O(N × 4 × 3)
+
+≈ O(N)
+📦 Space Complexity
+O(N × 4)
+
++
+
+O(N)
+
+=
+
+O(N)
+🟡 Tabulation
+💡 Idea
+
+Instead of recursion,
+
+build the DP table from Day 0.
+
+Fill all
+
+dp[day][last]
+
+iteratively.
+
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] points = {
+
+                {10,40,70},
+
+                {20,50,80},
+
+                {30,60,90}
+
+        };
+
+        int n = points.length;
+
+        int[][] dp = new int[n][4];
+
+        dp[0][0] = Math.max(points[0][1], points[0][2]);
+        dp[0][1] = Math.max(points[0][0], points[0][2]);
+        dp[0][2] = Math.max(points[0][0], points[0][1]);
+        dp[0][3] = Math.max(points[0][0],
+                     Math.max(points[0][1], points[0][2]));
+
+        for (int day = 1; day < n; day++) {
+
+            for (int last = 0; last < 4; last++) {
+
+                dp[day][last] = 0;
+
+                for (int task = 0; task < 3; task++) {
+
+                    if (task != last) {
+
+                        dp[day][last] = Math.max(
+
+                                dp[day][last],
+
+                                points[day][task]
+                                        + dp[day - 1][task]);
+                    }
+                }
+            }
+        }
+
+        System.out.println(dp[n - 1][3]);
+    }
+}
+▶️ Output
+210
+⏱ Time Complexity
+O(N × 4 × 3)
+
+≈ O(N)
+📦 Space Complexity
+O(N × 4)
+
+≈ O(N)
+⚡ Space Optimization
+💡 Idea
+
+Observe
+
+dp[day]
+
+depends only on
+
+dp[day-1]
+
+So,
+
+instead of storing all days,
+
+store only
+
+prev[]
+
+and
+
+temp[]
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] points = {
+
+                {10,40,70},
+
+                {20,50,80},
+
+                {30,60,90}
+
+        };
+
+        int n = points.length;
+
+        int[] prev = new int[4];
+
+        prev[0] = Math.max(points[0][1], points[0][2]);
+        prev[1] = Math.max(points[0][0], points[0][2]);
+        prev[2] = Math.max(points[0][0], points[0][1]);
+        prev[3] = Math.max(points[0][0],
+                Math.max(points[0][1], points[0][2]));
+
+        for (int day = 1; day < n; day++) {
+
+            int[] temp = new int[4];
+
+            for (int last = 0; last < 4; last++) {
+
+                for (int task = 0; task < 3; task++) {
+
+                    if (task != last) {
+
+                        temp[last] = Math.max(
+
+                                temp[last],
+
+                                points[day][task]
+                                        + prev[task]);
+                    }
+                }
+            }
+
+            prev = temp;
+        }
+
+        System.out.println(prev[3]);
+    }
+}
+▶️ Output
+210
+⏱ Time Complexity
+O(N × 4 × 3)
+
+≈ O(N)
+📦 Space Complexity
+O(4)
+
+≈ O(1)
+🎯 Dry Run
+Day 0
+
+Tasks
+
+10
+
+40
+
+70
+Choose
+
+70
+Day 1
+
+Cannot choose Task 2 again
+
+Choose
+
+50
+
+Total
+
+70 + 50 = 120
+Day 2
+
+Cannot choose Task 1 again
+
+Choose
+
+90
+
+Total
+
+120 + 90 = 210
+
+Answer
+
+210
+🌟 Key Observation
+
+Unlike previous DP problems:
+
+State
+
+↓
+
+Only Index
+
+Here,
+
+State becomes
+
+Day
+
++
+
+Last Task
+
+because today's decision depends on what was done yesterday.
+
+📝 DP Pattern Learned
+State
+
+(day, last)
+
+        ↓
+
+Choices
+
+Try all 3 Tasks
+
+        ↓
+
+Skip
+
+last task
+
+        ↓
+
+Take Maximum
+
+        ↓
+
+Memoization
+
+↓
+
+Tabulation
+
+↓
+
+Space Optimization
+🎯 Interview Trick
+
+Whenever a problem says:
+
+Don't repeat the previous choice
+Previous day's decision matters
+Previous color/task/activity cannot be reused
+
+Immediately think:
+
+DP State =
+
+(Current Position,
+
+Previous Choice)
+
+This "State = Current + Previous" pattern appears again in many advanced DP problems. Once you recognize it, solving them becomes much easier.
