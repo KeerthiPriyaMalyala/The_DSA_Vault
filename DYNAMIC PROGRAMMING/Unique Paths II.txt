@@ -1,0 +1,626 @@
+DP-9 : Unique Paths II
+❓ Problem Understanding
+
+We have a grid.
+
+Robot starts from
+
+(0,0)
+
+and wants to reach
+
+(m-1,n-1)
+
+Robot can move only
+
+↓
+
+Down
+
+or
+
+→
+
+Right
+
+But...
+
+Some cells are blocked.
+
+-1 = Obstacle
+
+Robot cannot stand on obstacle cells.
+
+Need to find
+
+Number of Unique Paths
+Example
+0   0   0
+
+0  -1   0
+
+0   0   0
+
+Start
+
+S
+
+Finish
+
+E
+S  .  .
+
+.  X  .
+
+.  .  E
+
+There are only
+
+2
+
+paths.
+
+🧠 Observation & Recurrence
+
+Exactly same as
+
+Unique Paths
+
+To reach
+
+(i,j)
+
+we can come from
+
+↑ Up
+
+or
+
+← Left
+
+So
+
+dp[i][j]
+
+=
+
+up
+
++
+
+left
+But Wait!!
+
+Suppose current cell is
+
+Obstacle
+
+Can robot stand there?
+
+NO ❌
+
+So
+
+dp[i][j]
+
+=
+
+0
+
+because
+
+No path can reach an obstacle.
+
+⭐ Recurrence
+If obstacle
+
+↓
+
+0
+
+Else
+
+↓
+
+Up + Left
+
+or
+
+if(grid[i][j]==-1)
+
+return 0;
+
+else
+
+return up+left;
+🪨 Recursive Approach
+💡 Idea
+
+Every cell asks
+
+Can I come from Up?
+
++
+
+Can I come from Left?
+
+If obstacle
+
+Return 0
+💻 Java Code
+public class Main {
+
+    static int solve(int i, int j, int[][] grid) {
+
+        // Obstacle
+        if (i >= 0 && j >= 0 && grid[i][j] == -1)
+            return 0;
+
+        // Starting Cell
+        if (i == 0 && j == 0)
+            return 1;
+
+        // Outside Grid
+        if (i < 0 || j < 0)
+            return 0;
+
+        int up = solve(i - 1, j, grid);
+
+        int left = solve(i, j - 1, grid);
+
+        return up + left;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+
+                {0,0,0},
+
+                {0,-1,0},
+
+                {0,0,0}
+
+        };
+
+        System.out.println(solve(2,2,grid));
+
+    }
+}
+▶️ Output
+2
+⏱ Time Complexity
+O(2^(m+n))
+📦 Space Complexity
+O(m+n)
+🟢 Memoization
+💡 Idea
+
+Store answer of every cell.
+
+Before solving
+
+(i,j)
+
+check
+
+Already solved?
+
+Yes
+
+↓
+
+Return it.
+
+No
+
+↓
+
+Calculate
+
+↓
+
+Store
+
+↓
+
+Return
+
+💻 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    static int solve(int i, int j, int[][] grid, int[][] dp) {
+
+        if (i >= 0 && j >= 0 && grid[i][j] == -1)
+            return 0;
+
+        if (i == 0 && j == 0)
+            return 1;
+
+        if (i < 0 || j < 0)
+            return 0;
+
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int up = solve(i - 1, j, grid, dp);
+
+        int left = solve(i, j - 1, grid, dp);
+
+        return dp[i][j] = up + left;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+
+                {0,0,0},
+
+                {0,-1,0},
+
+                {0,0,0}
+
+        };
+
+        int[][] dp = new int[3][3];
+
+        for (int[] row : dp)
+            Arrays.fill(row,-1);
+
+        System.out.println(solve(2,2,grid,dp));
+    }
+}
+▶️ Output
+2
+⏱ Time Complexity
+O(M × N)
+📦 Space Complexity
+O(M × N)
+
++
+
+O(M+N)
+🟡 Tabulation
+💡 Idea
+
+Fill DP table from
+
+(0,0)
+
+to
+
+(m-1,n-1)
+
+Rules
+
+Obstacle
+
+↓
+
+0
+
+Else
+
+↓
+
+Up + Left
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+
+                {0,0,0},
+
+                {0,-1,0},
+
+                {0,0,0}
+
+        };
+
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[][] dp = new int[m][n];
+
+        for(int i=0;i<m;i++){
+
+            for(int j=0;j<n;j++){
+
+                if(grid[i][j]==-1){
+
+                    dp[i][j]=0;
+
+                }
+
+                else if(i==0 && j==0){
+
+                    dp[i][j]=1;
+
+                }
+
+                else{
+
+                    int up=0;
+                    int left=0;
+
+                    if(i>0)
+                        up=dp[i-1][j];
+
+                    if(j>0)
+                        left=dp[i][j-1];
+
+                    dp[i][j]=up+left;
+
+                }
+            }
+        }
+
+        System.out.println(dp[m-1][n-1]);
+    }
+}
+▶️ Output
+2
+⏱ Time Complexity
+O(M × N)
+📦 Space Complexity
+O(M × N)
+⚡ Space Optimization
+💡 Idea
+
+Observe
+
+Current Cell
+
+↓
+
+Needs
+
+Previous Row
+
++
+
+Current Row Left
+
+No need for complete matrix.
+
+Use
+
+prev[]
+
+curr[]
+💻 Java Code
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[][] grid = {
+
+                {0,0,0},
+
+                {0,-1,0},
+
+                {0,0,0}
+
+        };
+
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[] prev = new int[n];
+
+        for(int i=0;i<m;i++){
+
+            int[] curr=new int[n];
+
+            for(int j=0;j<n;j++){
+
+                if(grid[i][j]==-1){
+
+                    curr[j]=0;
+
+                }
+
+                else if(i==0 && j==0){
+
+                    curr[j]=1;
+
+                }
+
+                else{
+
+                    int up=0;
+                    int left=0;
+
+                    if(i>0)
+                        up=prev[j];
+
+                    if(j>0)
+                        left=curr[j-1];
+
+                    curr[j]=up+left;
+
+                }
+            }
+
+            prev=curr;
+        }
+
+        System.out.println(prev[n-1]);
+    }
+}
+▶️ Output
+2
+⏱ Time Complexity
+O(M × N)
+📦 Space Complexity
+O(N)
+🎯 Dry Run
+
+Grid
+
+0  0  0
+
+0 -1  0
+
+0  0  0
+
+Initially
+
+1 0 0
+
+0 0 0
+
+0 0 0
+
+Fill First Row
+
+1 1 1
+
+0 0 0
+
+0 0 0
+
+Obstacle
+
+1 1 1
+
+1 0 0
+
+0 0 0
+
+Notice
+
+Obstacle
+
+↓
+
+No path
+
+↓
+
+0
+
+Complete Table
+
+1 1 1
+
+1 0 1
+
+1 1 2
+
+Answer
+
+2
+🌟 Key Observation
+
+Unique Paths
+
+Current
+
+=
+
+Up
+
++
+
+Left
+
+Unique Paths II
+
+Obstacle?
+
+↓
+
+Yes
+
+↓
+
+0
+
+No
+
+↓
+
+Up
+
++
+
+Left
+
+Only one extra if-condition is added.
+
+Everything else is exactly the same.
+
+📝 DP Pattern Learned
+State
+
+↓
+
+(Row, Column)
+
+        ↓
+
+If Obstacle
+
+↓
+
+Return 0
+
+        ↓
+
+Else
+
+↓
+
+Up
+
++
+
+Left
+
+        ↓
+
+Memoization
+
+↓
+
+Tabulation
+
+↓
+
+Space Optimization
+🎯 Didu's Super Memory Trick 💖
+
+Think of water flowing through pipes:
+
+1  1  1
+
+1  X  1
+
+1  1  2
+
+The X (obstacle) blocks the water.
+
+No path can go through it.
+
+So simply remember:
+
+Obstacle
+
+=
+
+Dead Cell
+
+=
+
+0 Ways
+
+🌸 One-line formula to remember forever:
+
+Unique Paths II = Unique Paths + Obstacle Check
+
+That's literally the only difference! 😄💖🚀
