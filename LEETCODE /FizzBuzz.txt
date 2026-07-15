@@ -1,0 +1,140 @@
+412. Fizz Buzz
+❓ What is the question asking?
+
+You are given an integer n.
+
+Print numbers from 1 to n, but:
+
+If the number is divisible by 3, print "Fizz".
+If the number is divisible by 5, print "Buzz".
+If the number is divisible by both 3 and 5, print "FizzBuzz".
+Otherwise, print the number itself as a string.
+
+Return all answers in a List<String>.
+
+Example
+
+Input:
+
+n = 5
+
+Output:
+
+["1","2","Fizz","4","Buzz"]
+🪨 Brute Force Approach
+💡 Idea
+
+Loop from 1 to n.
+
+For every number:
+
+Check if divisible by 3 and 5 → "FizzBuzz"
+Else if divisible by 3 → "Fizz"
+Else if divisible by 5 → "Buzz"
+Else → convert number to String.
+
+Since every number is checked only once, this is already the best possible approach.
+
+✅ There is no Better or Optimal approach beyond this because every number must be processed.
+
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static List<String> fizzBuzz(int n) {
+
+        List<String> ans = new ArrayList<>();
+
+        for (int i = 1; i <= n; i++) {
+
+            if (i % 3 == 0 && i % 5 == 0)
+                ans.add("FizzBuzz");
+
+            else if (i % 3 == 0)
+                ans.add("Fizz");
+
+            else if (i % 5 == 0)
+                ans.add("Buzz");
+
+            else
+                ans.add(String.valueOf(i));
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int n = 15;
+
+        List<String> result = fizzBuzz(n);
+
+        System.out.println(result);
+    }
+}
+▶️ Output
+[1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz]
+⏱️ Time Complexity
+O(n)
+We visit each number exactly once.
+📦 Space Complexity
+O(n)
+The answer list stores n strings.
+⚡️ Optimal Approach
+💡 Idea
+
+There is no separate optimal approach.
+
+The above solution is already optimal because:
+
+Every number from 1 to n must be checked.
+We cannot solve it in less than O(n) time since every output has to be generated.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static List<String> fizzBuzz(int n) {
+
+        List<String> ans = new ArrayList<>();
+
+        for (int i = 1; i <= n; i++) {
+
+            if (i % 15 == 0)
+                ans.add("FizzBuzz");
+
+            else if (i % 3 == 0)
+                ans.add("Fizz");
+
+            else if (i % 5 == 0)
+                ans.add("Buzz");
+
+            else
+                ans.add(String.valueOf(i));
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int n = 15;
+
+        List<String> result = fizzBuzz(n);
+
+        System.out.println(result);
+    }
+}
+▶️ Output
+[1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz]
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+📝 Interview Notes 💖
+✅ Check i % 15 == 0 first (or i % 3 == 0 && i % 5 == 0 first).
+✅ Use String.valueOf(i) to convert integers to strings.
+✅ Every number must be processed, so O(n) is the best possible time complexity.
+✅ There is no Better Approach because the brute-force solution is already optimal.
+✅ Common beginner mistake: checking %3 or %5 before %15, which causes 15 to become "Fizz" instead of "FizzBuzz".
