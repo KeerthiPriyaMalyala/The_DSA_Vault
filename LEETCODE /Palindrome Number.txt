@@ -1,0 +1,136 @@
+9. Palindrome Number
+❓ What is the question asking?
+
+You are given an integer x.
+
+Determine whether the number reads the same forward and backward.
+
+Return true if it is a palindrome.
+Return false otherwise.
+
+A negative number is never a palindrome because of the minus (-) sign.
+
+Example 1
+
+Input:
+
+x = 121
+
+Output:
+
+true
+Example 2
+
+Input:
+
+x = -121
+
+Output:
+
+false
+Example 3
+
+Input:
+
+x = 10
+
+Output:
+
+false
+🪨 Brute Force Approach
+💡 Idea
+Store the original number.
+Reverse the entire number.
+Compare the reversed number with the original.
+If both are equal, it is a palindrome.
+💻 Java Code
+class Main {
+
+    public static boolean isPalindrome(int x) {
+
+        if (x < 0)
+            return false;
+
+        int original = x;
+        int reverse = 0;
+
+        while (x != 0) {
+            int digit = x % 10;
+            reverse = reverse * 10 + digit;
+            x = x / 10;
+        }
+
+        return original == reverse;
+    }
+
+    public static void main(String[] args) {
+
+        int x = 121;
+
+        System.out.println(isPalindrome(x));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(log10 n)
+We process each digit once.
+📦 Space Complexity
+O(1)
+Only a few variables are used.
+⚡️ Optimal Approach
+💡 Idea
+
+Instead of reversing the entire number, reverse only half of it.
+
+Steps:
+
+Negative numbers are not palindromes.
+Numbers ending in 0 (except 0 itself) are not palindromes.
+Reverse only the last half of the digits.
+Compare:
+x == reversedHalf (even number of digits)
+x == reversedHalf / 10 (odd number of digits)
+
+This avoids reversing the whole number and also prevents integer overflow.
+
+💻 Java Code
+class Main {
+
+    public static boolean isPalindrome(int x) {
+
+        if (x < 0 || (x % 10 == 0 && x != 0))
+            return false;
+
+        int reversedHalf = 0;
+
+        while (x > reversedHalf) {
+            reversedHalf = reversedHalf * 10 + x % 10;
+            x /= 10;
+        }
+
+        return x == reversedHalf || x == reversedHalf / 10;
+    }
+
+    public static void main(String[] args) {
+
+        int x = 121;
+
+        System.out.println(isPalindrome(x));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(log10 n)
+📦 Space Complexity
+O(1)
+📝 Interview Notes 💖
+✅ Negative numbers are never palindromes.
+✅ If a number ends with 0 and is not 0, it cannot be a palindrome.
+✅ Brute Force reverses the entire number.
+✅ Optimal reverses only half of the number.
+✅ Reversing only half avoids integer overflow.
+✅ Time Complexity is O(log10 n) because we process each digit once.
+✅ Space Complexity is O(1).
+⭐ LeetCode's expected optimal solution is the "reverse half of the number" approach.
