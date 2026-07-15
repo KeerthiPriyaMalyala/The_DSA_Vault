@@ -1,0 +1,180 @@
+202. Happy Number
+❓ What is the question asking?
+
+You are given a positive integer n.
+
+Repeatedly:
+
+Find the sum of the squares of its digits.
+Replace the number with this sum.
+If the number eventually becomes 1, return true.
+If it enters a cycle and never reaches 1, return false.
+🪨 Brute Force Approach (Recursive Trick)
+💡 Idea
+Every Happy Number eventually becomes 1.
+Every Unhappy Number eventually enters the fixed cycle:
+4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4
+
+So,
+
+If n == 1, return true.
+If n == 4, return false.
+Otherwise:
+Find the sum of the squares of the digits.
+Recursively call the function with the new sum.
+💻 Java Code
+class Main {
+
+    public static boolean isHappy(int n) {
+
+        if (n == 1)
+            return true;
+
+        if (n == 4)
+            return false;
+
+        int sum = 0;
+
+        while (n != 0) {
+
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+
+        return isHappy(sum);
+    }
+
+    public static void main(String[] args) {
+
+        int n = 19;
+
+        System.out.println(isHappy(n));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(log n)
+Due to the recursion call stack.
+🟡 Better Approach
+💡 Idea
+Use a HashSet to store all previously seen numbers.
+Keep calculating the sum of the squares of digits.
+If the number becomes 1, return true.
+If the number is already present in the HashSet, a cycle is detected, so return false.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static int getNext(int n) {
+
+        int sum = 0;
+
+        while (n != 0) {
+
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+
+        return sum;
+    }
+
+    public static boolean isHappy(int n) {
+
+        HashSet<Integer> set = new HashSet<>();
+
+        while (n != 1 && !set.contains(n)) {
+
+            set.add(n);
+            n = getNext(n);
+        }
+
+        return n == 1;
+    }
+
+    public static void main(String[] args) {
+
+        int n = 19;
+
+        System.out.println(isHappy(n));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(log n)
+⚡️ Optimal Approach
+💡 Idea
+
+Use Floyd's Cycle Detection Algorithm (Slow & Fast Pointers).
+
+slow moves one step.
+fast moves two steps.
+If fast reaches 1, the number is happy.
+If slow == fast, a cycle exists, so return false.
+
+This removes the need for a HashSet.
+
+💻 Java Code
+class Main {
+
+    public static int getNext(int n) {
+
+        int sum = 0;
+
+        while (n != 0) {
+
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+
+        return sum;
+    }
+
+    public static boolean isHappy(int n) {
+
+        int slow = n;
+        int fast = getNext(n);
+
+        while (fast != 1 && slow != fast) {
+
+            slow = getNext(slow);
+            fast = getNext(getNext(fast));
+        }
+
+        return fast == 1;
+    }
+
+    public static void main(String[] args) {
+
+        int n = 19;
+
+        System.out.println(isHappy(n));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(1)
+📝 Interview Notes 💖
+✅ A Happy Number eventually becomes 1.
+
+✅ Every unhappy number enters the fixed cycle:
+
+4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4
+✅ Recursive Trick:
+n == 1 → true
+n == 4 → false
+✅ Better Approach: Use a HashSet to detect repeated numbers.
+✅ Optimal Approach: Use Floyd's Cycle Detection (Slow & Fast Pointers) for O(1) extra space.
+⭐ LeetCode's expected optimal solution is Floyd's Cycle Detection Algorithm.
