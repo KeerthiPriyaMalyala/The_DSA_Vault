@@ -1,0 +1,195 @@
+258. Add Digits
+❓ What is the question asking?
+
+You are given an integer num.
+
+Repeatedly add all of its digits until the result has only one digit.
+
+Return that single-digit number.
+
+Example 1
+
+Input:
+
+num = 38
+
+Output:
+
+2
+
+Explanation:
+
+38
+↓
+3 + 8 = 11
+
+11
+↓
+1 + 1 = 2
+
+Answer = 2
+Example 2
+
+Input:
+
+num = 0
+
+Output:
+
+0
+🪨 Brute Force Approach (Recursion)
+💡 Idea
+If the number is already a single digit, return it.
+Otherwise:
+Find the sum of its digits.
+Recursively call the function with the new sum.
+Continue until a single-digit number is obtained.
+💻 Java Code
+class Main {
+
+    public static int addDigits(int num) {
+
+        if (num == 0)
+            return 0;
+
+        if (num >= 1 && num <= 9)
+            return num;
+
+        int sum = 0;
+
+        while (num != 0) {
+
+            int digit = num % 10;
+            sum += digit;
+            num /= 10;
+        }
+
+        return addDigits(sum);
+    }
+
+    public static void main(String[] args) {
+
+        int num = 38;
+
+        System.out.println(addDigits(num));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+O(log n)
+Each recursive call processes all digits of the current number.
+📦 Space Complexity
+O(log n)
+Due to the recursion call stack.
+🟡 Better Approach (Iteration)
+💡 Idea
+Instead of recursion, repeatedly calculate the sum of digits using a loop.
+Continue until the number becomes a single digit.
+💻 Java Code
+class Main {
+
+    public static int addDigits(int num) {
+
+        while (num >= 10) {
+
+            int sum = 0;
+
+            while (num != 0) {
+
+                sum += num % 10;
+                num /= 10;
+            }
+
+            num = sum;
+        }
+
+        return num;
+    }
+
+    public static void main(String[] args) {
+
+        int num = 38;
+
+        System.out.println(addDigits(num));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach (Digital Root)
+💡 Idea
+
+This problem has a mathematical pattern called the Digital Root.
+
+Formula:
+
+If num == 0 → return 0
+If num % 9 == 0 → return 9
+Otherwise → return num % 9
+
+Or simply:
+
+return 1 + (num - 1) % 9;
+
+This computes the answer directly without any loop or recursion.
+
+💻 Java Code
+class Main {
+
+    public static int addDigits(int num) {
+
+        if (num == 0)
+            return 0;
+
+        return 1 + (num - 1) % 9;
+    }
+
+    public static void main(String[] args) {
+
+        int num = 38;
+
+        System.out.println(addDigits(num));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+O(1)
+📦 Space Complexity
+O(1)
+📝 Interview Notes 💖
+✅ Repeatedly add the digits until only one digit remains.
+✅ Brute Force: Use recursion to keep summing digits.
+✅ Better: Use iteration to avoid recursion.
+✅ Optimal: Use the Digital Root formula.
+
+✅ Digital Root Formula:
+
+if (num == 0)
+    return 0;
+
+return 1 + (num - 1) % 9;
+✅ Time Complexity:
+Recursion → O(log n)
+Iteration → O(log n)
+Digital Root → O(1)
+✅ Space Complexity:
+Recursion → O(log n)
+Iteration → O(1)
+Digital Root → O(1)
+🌟 Digital Root Pattern
+Number	Answer
+0	0
+9	9
+18	9
+27	9
+38	2
+99	9
+123	6
+🎯 Interview One-Liner
+
+The optimal solution uses the Digital Root property of numbers. Instead of repeatedly summing digits, we directly compute the answer in O(1) time using 1 + (num - 1) % 9.
