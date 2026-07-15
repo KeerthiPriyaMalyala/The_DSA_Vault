@@ -1,0 +1,185 @@
+13. Roman to Integer
+❓ What is the question asking?
+
+You are given a Roman numeral string s.
+
+Convert the Roman numeral into its corresponding integer value.
+
+Roman Symbols
+Symbol	Value
+I	1
+V	5
+X	10
+L	50
+C	100
+D	500
+M	1000
+Special Cases (Subtraction Rule)
+Roman	Value
+IV	4
+IX	9
+XL	40
+XC	90
+CD	400
+CM	900
+Example 1
+
+Input:
+
+s = "III"
+
+Output:
+
+3
+Example 2
+
+Input:
+
+s = "LVIII"
+
+Output:
+
+58
+
+Explanation:
+
+L = 50
+V = 5
+III = 3
+
+50 + 5 + 3 = 58
+Example 3
+
+Input:
+
+s = "MCMXCIV"
+
+Output:
+
+1994
+🪨 Brute Force Approach
+💡 Idea
+Create a map for Roman symbols and their values.
+Traverse the string from left to right.
+For every character:
+If the current value is less than the next value, subtract it.
+Otherwise, add it.
+The final sum is the answer.
+
+✅ This is already the best possible approach because every character must be processed once.
+
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static int romanToInt(String s) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int ans = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            int current = map.get(s.charAt(i));
+
+            if (i < s.length() - 1 && current < map.get(s.charAt(i + 1)))
+                ans -= current;
+            else
+                ans += current;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "MCMXCIV";
+
+        System.out.println(romanToInt(s));
+    }
+}
+▶️ Output
+1994
+⏱️ Time Complexity
+O(n)
+We traverse the string only once.
+📦 Space Complexity
+O(1)
+The Roman symbol map always contains only 7 entries, so it is considered constant space.
+⚡️ Optimal Approach
+💡 Idea
+
+There is no separate optimal approach.
+
+The above solution is already optimal because:
+
+Every character must be read at least once.
+We process each character only once.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static int romanToInt(String s) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int ans = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            int current = map.get(s.charAt(i));
+
+            if (i < s.length() - 1 && current < map.get(s.charAt(i + 1)))
+                ans -= current;
+            else
+                ans += current;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "MCMXCIV";
+
+        System.out.println(romanToInt(s));
+    }
+}
+▶️ Output
+1994
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+📝 Interview Notes 💖
+✅ Roman numerals are usually added from left to right.
+✅ If a smaller value appears before a larger value, subtract it instead of adding it.
+✅ The 6 subtraction pairs are:
+IV = 4
+IX = 9
+XL = 40
+XC = 90
+CD = 400
+CM = 900
+✅ Traverse the string once and compare the current symbol with the next symbol.
+✅ Time Complexity is O(n).
+✅ Space Complexity is O(1) since the map size is fixed.
+⭐ LeetCode's expected solution is this single-pass traversal with the subtraction rule.
