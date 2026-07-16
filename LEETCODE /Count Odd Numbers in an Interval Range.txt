@@ -1,0 +1,183 @@
+1523. Count Odd Numbers in an Interval Range
+❓ What is the question asking?
+
+You are given two integers:
+
+low
+high
+
+Return the number of odd numbers between low and high (inclusive).
+
+Example 1
+
+Input:
+
+low = 3, high = 7
+
+Output:
+
+3
+
+Explanation:
+
+Odd Numbers = 3, 5, 7
+
+Count = 3
+Example 2
+
+Input:
+
+low = 8, high = 10
+
+Output:
+
+1
+
+Explanation:
+
+Odd Numbers = 9
+
+Count = 1
+🪨 Brute Force Approach
+💡 Idea
+Traverse from low to high.
+Check if each number is odd using % 2.
+Count all odd numbers.
+💻 Java Code
+class Main {
+
+    public static int countOdds(int low, int high) {
+
+        int count = 0;
+
+        for (int i = low; i <= high; i++) {
+
+            if (i % 2 != 0)
+                count++;
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        int low = 3;
+        int high = 7;
+
+        System.out.println(countOdds(low, high));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(high - low + 1)
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach
+💡 Idea
+
+Instead of checking every number:
+
+Total numbers in the range:
+high - low + 1
+Half of them are odd.
+If both low and high are odd, one extra odd number exists.
+
+Formula:
+
+count = (high - low) / 2;
+
+if (low % 2 != 0 || high % 2 != 0)
+    count++;
+
+return count;
+
+Or more simply:
+
+return (high - low) / 2 + ((low % 2 != 0 || high % 2 != 0) ? 1 : 0);
+💻 Java Code
+class Main {
+
+    public static int countOdds(int low, int high) {
+
+        int count = (high - low) / 2;
+
+        if (low % 2 != 0 || high % 2 != 0)
+            count++;
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        int low = 3;
+        int high = 7;
+
+        System.out.println(countOdds(low, high));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(1)
+📦 Space Complexity
+O(1)
+📝 Dry Run
+Example 1
+low = 3
+high = 7
+
+Difference = 7 - 3 = 4
+
+count = 4 / 2 = 2
+
+Both are odd
+
+count++
+
+Answer = 3
+Example 2
+low = 8
+high = 10
+
+Difference = 10 - 8 = 2
+
+count = 2 / 2 = 1
+
+Both are even
+
+Answer = 1
+Example 3
+low = 4
+high = 7
+
+Difference = 7 - 4 = 3
+
+count = 3 / 2 = 1
+
+High is odd
+
+count++
+
+Answer = 2
+📝 Interview Notes 💖
+✅ Brute Force: Traverse the entire range and count odd numbers.
+✅ Optimal: No traversal is needed.
+
+✅ Formula:
+
+int count = (high - low) / 2;
+
+if (low % 2 != 0 || high % 2 != 0)
+    count++;
+
+return count;
+✅ If both ends are even, exactly half the numbers are odd.
+✅ If either end is odd, there is one additional odd number.
+✅ Time Complexity:
+Brute Force → O(high - low + 1)
+Optimal → O(1)
+✅ Space Complexity → O(1)
+🎯 Interview One-Liner
+
+Instead of checking every number, calculate half the numbers in the range and add one if either low or high is odd. This gives an O(1) solution. 💖🚀
