@@ -1,0 +1,157 @@
+69. Sqrt(x)
+❓ What is the question asking?
+
+You are given a non-negative integer x.
+
+Return the integer square root of x.
+
+The returned value should be the floor of the square root.
+Do not use built-in functions like Math.sqrt().
+Example 1
+
+Input:
+
+x = 4
+
+Output:
+
+2
+Example 2
+
+Input:
+
+x = 8
+
+Output:
+
+2
+
+Explanation:
+
+√8 = 2.828...
+
+Floor value = 2
+🪨 Brute Force Approach
+💡 Idea
+Start from 1.
+Keep checking i * i <= x.
+The largest i satisfying the condition is the answer.
+💻 Java Code
+class Main {
+
+    public static int mySqrt(int x) {
+
+        int ans = 0;
+
+        for (long i = 1; i * i <= x; i++) {
+            ans = (int) i;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int x = 8;
+
+        System.out.println(mySqrt(x));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+O(√x)
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach (Binary Search)
+💡 Idea
+The square root lies between 0 and x.
+Use Binary Search to find the answer.
+If:
+mid * mid == x → return mid
+mid * mid < x → store mid as answer and search right.
+mid * mid > x → search left.
+Use long for multiplication to avoid overflow.
+💻 Java Code
+class Main {
+
+    public static int mySqrt(int x) {
+
+        int low = 0;
+        int high = x;
+        int ans = 0;
+
+        while (low <= high) {
+
+            int mid = low + (high - low) / 2;
+            long square = (long) mid * mid;
+
+            if (square == x)
+                return mid;
+
+            if (square < x) {
+                ans = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int x = 8;
+
+        System.out.println(mySqrt(x));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+O(log x)
+📦 Space Complexity
+O(1)
+📝 Dry Run
+Example
+x = 8
+
+low = 0
+high = 8
+
+mid = 4
+4 × 4 = 16 > 8
+high = 3
+
+mid = 1
+1 × 1 = 1 < 8
+ans = 1
+low = 2
+
+mid = 2
+2 × 2 = 4 < 8
+ans = 2
+low = 3
+
+mid = 3
+3 × 3 = 9 > 8
+high = 2
+
+Stop
+
+Answer = 2
+📝 Interview Notes 💖
+✅ Return the floor of the square root.
+❌ Do not use Math.sqrt().
+✅ Brute Force: Check every number from 1 until i * i > x.
+✅ Optimal: Use Binary Search.
+✅ Store the last valid mid in ans.
+✅ Use long for mid * mid to avoid integer overflow.
+✅ Time Complexity:
+Brute Force → O(√x)
+Optimal → O(log x)
+✅ Space Complexity → O(1)
+🎯 Interview One-Liner
+
+Use Binary Search because the square of numbers increases in sorted order. Keep the last valid mid as the answer and use long to prevent overflow. 💖🚀
