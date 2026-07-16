@@ -1,0 +1,328 @@
+3867. Sum of GCD of Formed Pairs
+❓ What is the question asking?
+
+You are given an integer array nums.
+
+Step 1
+
+Construct an array prefixGcd:
+
+For every index i:
+
+Find the maximum element from nums[0] to nums[i].
+Calculate:
+prefixGcd[i] = gcd(nums[i], maximum_so_far)
+Step 2
+
+Sort the prefixGcd array.
+
+Step 3
+
+Form pairs:
+
+Smallest element ↔ Largest element
+Second smallest ↔ Second largest
+Continue until all possible pairs are formed.
+
+If the array size is odd, ignore the middle element.
+
+Step 4
+
+Find the GCD of every formed pair.
+
+Return the sum of all GCDs.
+
+Example 1
+
+Input
+
+nums = [2,6,4]
+
+Output
+
+2
+Explanation
+nums = [2,6,4]
+
+Maximum so far
+
+2
+6
+6
+
+prefixGcd
+
+gcd(2,2)=2
+gcd(6,6)=6
+gcd(4,6)=2
+
+prefixGcd = [2,6,2]
+
+Sort
+
+[2,2,6]
+
+Pairs
+
+(2,6)
+
+gcd(2,6)=2
+
+Middle element ignored
+
+Answer = 2
+Example 2
+
+Input
+
+nums = [3,6,2,8]
+
+Output
+
+5
+Explanation
+Maximum so far
+
+3
+6
+6
+8
+
+prefixGcd
+
+3
+6
+2
+8
+
+Sort
+
+[2,3,6,8]
+
+Pairs
+
+(2,8) → gcd=2
+
+(3,6) → gcd=3
+
+Answer = 5
+🪨 Brute Force Approach
+💡 Idea
+Build prefixGcd.
+Sort it.
+Pair smallest with largest.
+Find GCD using a simple divisor loop.
+💻 Java Code
+class Main {
+
+    static int gcd(int a, int b) {
+
+        int ans = 1;
+
+        for (int i = 1; i <= Math.min(a, b); i++) {
+
+            if (a % i == 0 && b % i == 0)
+                ans = i;
+        }
+
+        return ans;
+    }
+
+    static long gcdSum(int[] nums) {
+
+        int n = nums.length;
+        int[] prefix = new int[n];
+
+        int max = nums[0];
+
+        for (int i = 0; i < n; i++) {
+
+            max = Math.max(max, nums[i]);
+
+            prefix[i] = gcd(nums[i], max);
+        }
+
+        java.util.Arrays.sort(prefix);
+
+        long sum = 0;
+
+        int l = 0;
+        int r = n - 1;
+
+        while (l < r) {
+
+            sum += gcd(prefix[l], prefix[r]);
+
+            l++;
+            r--;
+        }
+
+        return sum;
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {3,6,2,8};
+
+        System.out.println(gcdSum(nums));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n × min(a,b) + n log n)
+📦 Space Complexity
+O(n)
+⚡️ Optimal Approach
+💡 Idea
+
+Improve only the GCD calculation using Euclid's Algorithm.
+
+Steps:
+
+Build prefixGcd.
+Sort it.
+Pair smallest with largest.
+Compute GCD using Euclid's Algorithm.
+Add all GCD values.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    static int gcd(int a, int b) {
+
+        while (b != 0) {
+
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+
+        return a;
+    }
+
+    static long gcdSum(int[] nums) {
+
+        int n = nums.length;
+
+        int[] prefix = new int[n];
+
+        int max = nums[0];
+
+        for (int i = 0; i < n; i++) {
+
+            max = Math.max(max, nums[i]);
+
+            prefix[i] = gcd(nums[i], max);
+        }
+
+        Arrays.sort(prefix);
+
+        long sum = 0;
+
+        int l = 0;
+        int r = n - 1;
+
+        while (l < r) {
+
+            sum += gcd(prefix[l], prefix[r]);
+
+            l++;
+            r--;
+        }
+
+        return sum;
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {3,6,2,8};
+
+        System.out.println(gcdSum(nums));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n log(max(nums)) + n log n)
+Building prefixGcd → O(n log(max(nums)))
+Sorting → O(n log n)
+Pairing → O(n)
+
+Overall:
+
+O(n log n + n log(max(nums)))
+📦 Space Complexity
+O(n)
+📝 Dry Run
+nums = [3,6,2,8]
+
+Step 1
+
+Maximum So Far
+
+3
+6
+6
+8
+
+-------------------
+
+Step 2
+
+prefixGcd
+
+gcd(3,3)=3
+
+gcd(6,6)=6
+
+gcd(2,6)=2
+
+gcd(8,8)=8
+
+prefix=[3,6,2,8]
+
+-------------------
+
+Step 3
+
+Sort
+
+[2,3,6,8]
+
+-------------------
+
+Step 4
+
+Pair
+
+2 ↔ 8
+
+gcd=2
+
+sum=2
+
+---------------
+
+3 ↔ 6
+
+gcd=3
+
+sum=5
+
+Answer=5
+📝 Interview Notes 💖
+✅ Build the prefixGcd array using the running maximum.
+✅ prefixGcd[i] = gcd(nums[i], maxSoFar)
+✅ Sort the prefixGcd array.
+✅ Pair the smallest element with the largest element.
+✅ Continue pairing inward.
+✅ Ignore the middle element if n is odd.
+✅ Use Euclid's Algorithm for efficient GCD calculation.
+✅ Time Complexity:
+Building prefixGcd → O(n log(max(nums)))
+Sorting → O(n log n)
+Pairing → O(n)
+Overall: O(n log n + n log(max(nums)))
+✅ Space Complexity → O(n)
