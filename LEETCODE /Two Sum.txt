@@ -1,0 +1,215 @@
+1. Two Sum
+❓ What is the question asking?
+
+You are given:
+
+An integer array nums
+An integer target
+
+Find two different indices such that:
+
+nums[i] + nums[j] = target
+
+Return their indices.
+
+Conditions
+Exactly one solution exists.
+You cannot use the same element twice.
+Return the indices in any order.
+Example 1
+
+Input:
+
+nums = [2,7,11,15]
+
+target = 9
+
+Output:
+
+[0,1]
+
+Explanation:
+
+nums[0] + nums[1]
+
+2 + 7 = 9
+Example 2
+
+Input:
+
+nums = [3,2,4]
+
+target = 6
+
+Output:
+
+[1,2]
+Example 3
+
+Input:
+
+nums = [3,3]
+
+target = 6
+
+Output:
+
+[0,1]
+🪨 Brute Force Approach
+💡 Idea
+
+Check every possible pair.
+
+Use two loops.
+If the sum equals the target, return the indices.
+💻 Java Code
+class Main {
+
+    public static int[] twoSum(int[] nums, int target) {
+
+        for (int i = 0; i < nums.length; i++) {
+
+            for (int j = i + 1; j < nums.length; j++) {
+
+                if (nums[i] + nums[j] == target) {
+
+                    return new int[]{i, j};
+                }
+            }
+        }
+
+        return new int[]{};
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {2,7,11,15};
+
+        int target = 9;
+
+        int ans[] = twoSum(nums, target);
+
+        System.out.println(ans[0] + " " + ans[1]);
+    }
+}
+▶️ Output
+0 1
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach
+💡 Idea
+
+Use a HashMap.
+
+Store:
+
+Number → Index
+
+For every element:
+
+Find the required number:
+complement = target - nums[i]
+If the complement already exists in the HashMap:
+
+Return its index and the current index.
+
+Otherwise, store the current number and its index.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static int[] twoSum(int[] nums, int target) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+
+            int complement = target - nums[i];
+
+            if (map.containsKey(complement)) {
+
+                return new int[]{map.get(complement), i};
+            }
+
+            map.put(nums[i], i);
+        }
+
+        return new int[]{};
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {2,7,11,15};
+
+        int target = 9;
+
+        int ans[] = twoSum(nums, target);
+
+        System.out.println(ans[0] + " " + ans[1]);
+    }
+}
+▶️ Output
+0 1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+📝 Dry Run
+Example
+nums = [2,7,11,15]
+
+target = 9
+
+Map = {}
+
+-----------------
+
+i = 0
+
+num = 2
+
+complement = 9 - 2 = 7
+
+7 not found
+
+Store
+
+Map = {2=0}
+
+-----------------
+
+i = 1
+
+num = 7
+
+complement = 9 - 7 = 2
+
+2 found at index 0
+
+Return
+
+[0,1]
+📝 Interview Notes 💖
+✅ We need to return indices, not the values.
+✅ Exactly one valid pair exists.
+✅ Do not use the same element twice.
+✅ Brute Force: Check every pair using two loops.
+✅ Optimal: Use a HashMap.
+✅ Store:
+Number → Index
+✅ Find the complement:
+complement = target - nums[i];
+✅ If the complement is already in the HashMap, return the answer immediately.
+✅ Otherwise, store the current number and its index.
+✅ Time Complexity:
+Brute Force → O(n²)
+Optimal → O(n)
+✅ Space Complexity:
+Brute Force → O(1)
+Optimal → O(n)
+🎯 Interview One-Liner
+
+Use a HashMap to store each number and its index. For every element, calculate the complement (target - nums[i]). If the complement already exists in the map, return the two indices; otherwise, store the current number and continue. 💖🚀
