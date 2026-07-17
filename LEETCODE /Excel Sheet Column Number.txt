@@ -1,0 +1,212 @@
+171. Excel Sheet Column Number
+❓ What is the question asking?
+
+You are given an Excel column title as a string.
+
+Convert it into its corresponding column number.
+
+Excel Mapping
+A → 1
+B → 2
+...
+Z → 26
+AA → 27
+AB → 28
+...
+ZY → 701
+Example 1
+
+Input:
+
+columnTitle = "A"
+
+Output:
+
+1
+Example 2
+
+Input:
+
+columnTitle = "AB"
+
+Output:
+
+28
+
+Explanation:
+
+A = 1
+B = 2
+
+1 × 26 + 2 = 28
+Example 3
+
+Input:
+
+columnTitle = "ZY"
+
+Output:
+
+701
+
+Explanation:
+
+Z = 26
+Y = 25
+
+26 × 26 + 25 = 701
+⚡️ Optimal Approach
+💡 Idea
+
+This problem works exactly like converting a number from Base-26 to Decimal.
+
+For every character:
+
+Convert it to a number.
+value = ch - 'A' + 1
+Multiply the current answer by 26.
+Add the current character value.
+
+Formula:
+
+ans = ans * 26 + value;
+💻 Java Code
+class Main {
+
+    public static int titleToNumber(String columnTitle) {
+
+        int ans = 0;
+
+        for (int i = 0; i < columnTitle.length(); i++) {
+
+            char ch = columnTitle.charAt(i);
+
+            int value = ch - 'A' + 1;
+
+            ans = ans * 26 + value;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        String columnTitle = "AB";
+
+        System.out.println(titleToNumber(columnTitle));
+    }
+}
+▶️ Output
+28
+⏱️ Time Complexity
+O(n)
+Traverse the string once.
+📦 Space Complexity
+O(1)
+📝 Dry Run
+Example 1
+columnTitle = "A"
+
+ans = 0
+
+A = 1
+
+ans = 0 × 26 + 1
+
+ans = 1
+
+Answer = 1
+Example 2
+columnTitle = "AB"
+
+ans = 0
+
+A = 1
+
+ans = 0 × 26 + 1
+
+ans = 1
+
+----------------
+
+B = 2
+
+ans = 1 × 26 + 2
+
+ans = 28
+
+Answer = 28
+Example 3
+columnTitle = "ZY"
+
+ans = 0
+
+Z = 26
+
+ans = 0 × 26 + 26
+
+ans = 26
+
+----------------
+
+Y = 25
+
+ans = 26 × 26 + 25
+
+ans = 701
+
+Answer = 701
+📝 Why Multiply by 26? 🤔
+
+Think of Excel columns like place values.
+
+AB
+
+A is in the 26's place
+
+B is in the 1's place
+
+AB
+
+= (1 × 26) + 2
+
+= 28
+
+Another example:
+
+ZY
+
+= (26 × 26) + 25
+
+= 701
+
+It is exactly like decimal numbers:
+
+523
+
+= 5 × 100
+
++ 2 × 10
+
++ 3
+
+Similarly,
+
+AB
+
+= 1 × 26
+
++ 2
+📝 Interview Notes 💖
+✅ Treat the column title as a Base-26 number.
+✅ Convert each character using:
+value = ch - 'A' + 1;
+✅ Update the answer using:
+ans = ans * 26 + value;
+✅ 'A' represents 1, not 0.
+✅ Traverse the string from left to right.
+✅ Time Complexity → O(n)
+✅ Space Complexity → O(1)
+🎯 Interview One-Liner
+
+Treat the Excel column title as a Base-26 number. For each character, convert it to a value (A = 1 to Z = 26) and update the answer using ans = ans * 26 + value. 💖🚀
