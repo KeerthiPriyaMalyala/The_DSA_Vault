@@ -1,0 +1,303 @@
+383. Ransom Note
+❓ What is the question asking?
+
+You are given two strings:
+
+ransomNote
+magazine
+
+Return true if you can construct ransomNote using the characters from magazine.
+
+Rules:
+Each character in magazine can be used only once.
+If any required character is missing or insufficient, return false.
+🪨 Brute Force Approach
+💡 Idea
+
+For every character in ransomNote:
+
+Search for the same character in magazine.
+If found, mark it as used.
+If not found, return false.
+💻 Java Code
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+
+        char[] mag = magazine.toCharArray();
+
+        for (int i = 0; i < ransomNote.length(); i++) {
+
+            boolean found = false;
+
+            for (int j = 0; j < mag.length; j++) {
+
+                if (ransomNote.charAt(i) == mag[j]) {
+                    found = true;
+                    mag[j] = '#';     // mark as used
+                    break;
+                }
+            }
+
+            if (!found)
+                return false;
+        }
+
+        return true;
+    }
+}
+▶️ Dry Run
+ransomNote = "aa"
+
+magazine = "ab"
+
+Need first 'a'
+
+Found ✅
+
+Magazine becomes
+
+# b
+
+Need second 'a'
+
+No 'a' left ❌
+
+Return
+
+false
+⏱️ Time Complexity
+O(n × m)
+
+where
+
+n = ransomNote length
+m = magazine length
+📦 Space Complexity
+O(m)
+
+(for the copied character array)
+
+🟡 Better Approach (HashMap)
+💡 Idea
+
+Count the frequency of every character in magazine.
+
+Then for every character in ransomNote:
+
+If frequency is 0 → return false.
+Otherwise decrease its frequency.
+💻 Java Code
+import java.util.*;
+
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char c : magazine.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        for (char c : ransomNote.toCharArray()) {
+
+            if (!map.containsKey(c) || map.get(c) == 0)
+                return false;
+
+            map.put(c, map.get(c) - 1);
+        }
+
+        return true;
+    }
+}
+▶️ Dry Run
+ransomNote = "aa"
+
+magazine = "aab"
+
+Frequency Map
+
+a → 2
+
+b → 1
+
+Need first 'a'
+
+a → 1
+
+Need second 'a'
+
+a → 0
+
+All characters found ✅
+
+Return
+
+true
+⏱️ Time Complexity
+O(n + m)
+📦 Space Complexity
+O(1)
+
+Only lowercase English letters (a-z) are possible, so the extra storage is bounded by 26 characters.
+
+⚡ Optimal Approach (Frequency Array)
+💡 Idea
+
+Since there are only 26 lowercase English letters, use an integer array of size 26 instead of a HashMap.
+
+Count frequencies from magazine.
+Consume frequencies while reading ransomNote.
+
+This is faster than using a HashMap.
+
+💻 Java Code
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+
+        int[] freq = new int[26];
+
+        for (char c : magazine.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        for (char c : ransomNote.toCharArray()) {
+
+            if (freq[c - 'a'] == 0)
+                return false;
+
+            freq[c - 'a']--;
+        }
+
+        return true;
+    }
+}
+▶️ Dry Run
+ransomNote = "abc"
+
+magazine = "abcc"
+
+Frequency Array
+
+a = 1
+
+b = 1
+
+c = 2
+
+Need 'a'
+
+a = 0
+
+Need 'b'
+
+b = 0
+
+Need 'c'
+
+c = 1
+
+All characters available ✅
+
+Return
+
+true
+🧠 Why do we decrement the frequency?
+
+Suppose
+
+magazine = "aa"
+
+ransomNote = "aaa"
+
+Initial frequency
+
+a = 2
+
+Take first 'a'
+
+a = 1
+
+Take second 'a'
+
+a = 0
+
+Need third 'a'
+
+a = 0 ❌
+
+No letters left.
+
+Return
+
+false
+
+Decreasing the count ensures that each magazine letter is used only once.
+
+⏱️ Time Complexity
+
+Building frequency array
+
+O(m)
+
+Checking ransom note
+
+O(n)
+
+Overall
+
+O(n + m)
+📦 Space Complexity
+O(1)
+
+Array size is always 26.
+
+🎯 Interview Notes
+✅ Every magazine letter can be used only once.
+✅ Brute Force searches for each character one by one.
+✅ Better approach uses a HashMap for character frequencies.
+✅ Optimal approach uses a 26-size frequency array.
+✅ Decrease frequency whenever a character is used.
+✅ If any frequency becomes 0 before use, return false.
+📊 Comparison Table
+Approach	Time	Space
+Brute Force	O(n × m)	O(m)
+HashMap	O(n + m)	O(1)*
+Frequency Array	O(n + m)	O(1)
+
+*Effectively constant here because there are at most 26 lowercase letters.
+
+🧠 Memory Trick
+Magazine
+
+↓
+
+Count Frequencies
+
+↓
+
+Read Ransom Note
+
+↓
+
+Character Available?
+
+↓
+
+Yes → Frequency--
+
+↓
+
+No → Return false
+
+↓
+
+Finished?
+
+↓
+
+Return true
+
+💖 Golden Rule to Remember
+
+Count the letters in magazine, then "spend" one count for every letter needed by ransomNote.
+If you ever try to spend a letter that has a count of 0, the ransom note cannot be formed. 🌸✨
