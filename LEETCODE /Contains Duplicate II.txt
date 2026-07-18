@@ -1,0 +1,273 @@
+219. Contains Duplicate II
+❓ What is the question asking?
+
+Given:
+
+An integer array nums
+An integer k
+
+Return true if there exist two different indices i and j such that:
+
+nums[i] == nums[j]
+
+and
+
+|i - j| <= k
+
+Otherwise, return false.
+
+👉 Unlike 217. Contains Duplicate, here the distance between duplicate indices must also be at most k.
+
+🪨 Brute Force Approach
+💡 Idea
+
+Compare every pair of elements.
+
+If:
+
+Values are equal
+Distance between indices is ≤ k
+
+then return true.
+
+💻 Java Code
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        for (int i = 0; i < nums.length; i++) {
+
+            for (int j = i + 1; j < nums.length; j++) {
+
+                if (nums[i] == nums[j] && (j - i) <= k)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+}
+▶️ Dry Run
+nums = [1,2,3,1]
+k = 3
+
+Compare
+
+i = 0
+
+1 == 2 ❌
+
+1 == 3 ❌
+
+1 == 1 ✅
+
+Distance = 3
+
+3 <= 3 ✅
+
+Return
+
+true
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (HashMap)
+💡 Idea
+
+Store:
+
+Number → Last Index
+
+Whenever we see the same number again,
+
+calculate:
+
+Current Index - Previous Index
+
+If the distance is ≤ k, return true.
+
+Otherwise, update the latest index.
+
+💻 Java Code
+import java.util.*;
+
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+
+            if (map.containsKey(nums[i])) {
+
+                if (i - map.get(nums[i]) <= k)
+                    return true;
+            }
+
+            map.put(nums[i], i);
+        }
+
+        return false;
+    }
+}
+▶️ Dry Run
+nums = [1,2,3,1]
+k = 3
+
+Initially
+
+{}
+i = 0
+Number = 1
+
+Not present
+
+Store
+
+{1=0}
+i = 1
+Number = 2
+
+Store
+
+{1=0,2=1}
+i = 2
+Number = 3
+
+Store
+
+{1=0,2=1,3=2}
+i = 3
+Number = 1
+
+Already present
+
+Previous Index = 0
+
+Distance = 3 - 0 = 3
+
+3 <= 3 ✅
+
+Return
+
+true
+🧠 Why do we store the latest index?
+
+Example:
+
+nums = [1,0,1,1]
+
+k = 1
+
+Store indices:
+
+1 → 0
+
+0 → 1
+
+Next
+
+1 at index 2
+
+Distance = 2
+
+Not valid
+
+Update
+
+1 → 2
+
+Next
+
+1 at index 3
+
+Distance = 3 - 2 = 1 ✅
+
+If we had kept the old index (0), we'd miss this valid pair.
+
+That's why we always update to the latest index.
+
+⏱️ Time Complexity
+
+Each HashMap operation (containsKey, get, put) takes O(1) on average.
+
+For n elements:
+
+O(n)
+📦 Space Complexity
+O(n)
+
+HashMap may store all distinct elements.
+
+⚡ Optimal Approach
+
+There is no better approach than the HashMap solution.
+
+It already achieves:
+
+Time: O(n)
+Space: O(n)
+
+which is optimal because we may need to remember previously seen elements.
+
+🎯 Interview Notes
+✅ Two conditions must be true:
+Same value.
+Index difference ≤ k.
+✅ Brute Force checks every pair.
+✅ Best solution uses a HashMap.
+
+✅ Store:
+
+Number → Latest Index
+✅ Always update the index after processing the current element.
+📊 Comparison Table
+Approach	Time	Space
+Brute Force	O(n²)	O(1)
+HashMap (Optimal)	O(n)	O(n)
+🧠 Memory Trick
+Start
+
+↓
+
+HashMap
+
+(Number → Latest Index)
+
+↓
+
+Already Seen?
+
+↓
+
+Yes
+
+↓
+
+Current Index - Previous Index ≤ k ?
+
+↓
+
+Yes → Return true
+
+↓
+
+No
+
+↓
+
+Update Latest Index
+
+↓
+
+Finish Loop
+
+↓
+
+Return false
+
+💖 Golden Rule to Remember
+
+217 checks only for duplicates.
+219 checks for duplicates that are also "close enough" (within k indices).
+The HashMap stores the latest index so you always compare with the closest previous occurrence. 🌸✨
