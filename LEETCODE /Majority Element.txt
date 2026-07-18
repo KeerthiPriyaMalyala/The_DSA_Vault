@@ -1,0 +1,256 @@
+169. Majority Element
+❓ What is the question asking?
+
+Given an integer array nums, find the element that appears more than ⌊n/2⌋ times.
+
+👉 It is guaranteed that a majority element always exists.
+
+🪨 Brute Force Approach
+💡 Idea
+
+For every element:
+
+Count how many times it appears in the array.
+If its count becomes greater than n/2, return it.
+💻 Java Code
+class Solution {
+    public int majorityElement(int[] nums) {
+
+        int n = nums.length;
+
+        for (int i = 0; i < n; i++) {
+
+            int count = 0;
+
+            for (int j = 0; j < n; j++) {
+
+                if (nums[i] == nums[j])
+                    count++;
+            }
+
+            if (count > n / 2)
+                return nums[i];
+        }
+
+        return -1;
+    }
+}
+▶️ Dry Run
+nums = [2,2,1,1,1,2,2]
+
+i = 0
+
+Element = 2
+
+Count = 4
+
+4 > 7/2
+
+4 > 3 ✅
+
+Return
+
+2
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (HashMap)
+💡 Idea
+
+Use a HashMap to store:
+
+Element → Frequency
+
+As soon as any frequency becomes greater than n/2, return it.
+
+💻 Java Code
+import java.util.*;
+
+class Solution {
+    public int majorityElement(int[] nums) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int num : nums) {
+
+            map.put(num, map.getOrDefault(num, 0) + 1);
+
+            if (map.get(num) > nums.length / 2)
+                return num;
+        }
+
+        return -1;
+    }
+}
+▶️ Dry Run
+nums = [2,2,1,1,1,2,2]
+
+Initially
+
+{}
+
+Read 2
+
+{2=1}
+
+Read 2
+
+{2=2}
+
+Read 1
+
+{2=2,1=1}
+
+Read 1
+
+{2=2,1=2}
+
+Read 1
+
+{2=2,1=3}
+
+Read 2
+
+{2=3,1=3}
+
+Read 2
+
+{2=4,1=3}
+
+Since
+
+4 > 3
+
+Return
+
+2
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Boyer-Moore Voting Algorithm)
+💡 Idea
+
+The majority element appears more than half of the array.
+
+So whenever we find a different element, we cancel one occurrence of the current candidate.
+
+Since the majority element appears more than everyone else combined, it can never be completely canceled.
+
+💻 Java Code
+class Solution {
+    public int majorityElement(int[] nums) {
+
+        int candidate = 0;
+        int count = 0;
+
+        for (int num : nums) {
+
+            if (count == 0)
+                candidate = num;
+
+            if (num == candidate)
+                count++;
+            else
+                count--;
+        }
+
+        return candidate;
+    }
+}
+▶️ Dry Run
+nums = [2,2,1,1,1,2,2]
+Element	Candidate	Count
+2	2	1
+2	2	2
+1	2	1
+1	2	0
+1	1	1
+2	1	0
+2	2	1
+
+Return
+
+2
+🧠 Why does Boyer-Moore work?
+
+Imagine every time:
+
+Same element → +1
+Different element → -1
+
+It's like pairs of different elements cancel each other.
+
+Example:
+
+2 2 1 1 1 2 2
+
+Cancel one 2 with one 1
+
+2 1 1 2 2
+
+Cancel again
+
+1 2 2
+
+Cancel again
+
+2
+
+The majority element survives because it appears more than n/2 times.
+
+⏱️ Time Complexity
+
+Only one traversal.
+
+O(n)
+📦 Space Complexity
+O(1)
+
+No extra space is used.
+
+🎯 Interview Notes
+✅ Majority element appears more than ⌊n/2⌋ times.
+✅ Brute Force counts occurrences for every element.
+✅ Better approach uses a HashMap to store frequencies.
+✅ Optimal approach uses Boyer-Moore Voting Algorithm.
+✅ Boyer-Moore works because different elements cancel each other.
+✅ Since a majority element is guaranteed, the remaining candidate is always the answer.
+📊 Comparison Table
+Approach	Time	Space
+Brute Force	O(n²)	O(1)
+HashMap	O(n)	O(n)
+Boyer-Moore Voting	O(n)	O(1)
+🧠 Memory Trick
+Choose Candidate
+
+↓
+
+Same Number
+
+Count++
+
+↓
+
+Different Number
+
+Count--
+
+↓
+
+Count becomes 0
+
+Choose New Candidate
+
+↓
+
+End
+
+↓
+
+Candidate = Majority Element
+
+💖 Golden Rule to Remember
+
+Majority element can never be fully canceled because it appears more than half the time. That's the secret behind the Boyer-Moore Voting Algorithm. 🌸✨
