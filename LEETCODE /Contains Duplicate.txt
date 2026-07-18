@@ -1,0 +1,222 @@
+217. Contains Duplicate
+❓ What is the question asking?
+
+Given an integer array nums, determine whether any element appears more than once.
+
+Return true → if any duplicate exists.
+Return false → if all elements are unique.
+🪨 Brute Force Approach
+💡 Idea
+
+Compare every element with every other element.
+
+If any two elements are equal, return true.
+
+Otherwise, return false.
+
+💻 Java Code
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+
+        for (int i = 0; i < nums.length; i++) {
+
+            for (int j = i + 1; j < nums.length; j++) {
+
+                if (nums[i] == nums[j])
+                    return true;
+            }
+        }
+
+        return false;
+    }
+}
+▶️ Dry Run
+nums = [1,2,3,1]
+
+Compare
+
+1 with 2 ❌
+1 with 3 ❌
+1 with 1 ✅
+
+Duplicate found.
+
+Return
+
+true
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (Sorting)
+💡 Idea
+
+Sort the array.
+
+If two adjacent elements become equal, then a duplicate exists.
+
+💻 Java Code
+import java.util.Arrays;
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+
+        Arrays.sort(nums);
+
+        for (int i = 1; i < nums.length; i++) {
+
+            if (nums[i] == nums[i - 1])
+                return true;
+        }
+
+        return false;
+    }
+}
+▶️ Dry Run
+nums = [1,2,3,1]
+
+After sorting
+
+[1,1,2,3]
+
+Compare adjacent elements
+
+1 == 1 ✅
+
+Return
+
+true
+⏱️ Time Complexity
+
+Sorting
+
+O(n log n)
+
+Traversal
+
+O(n)
+
+Overall
+
+O(n log n)
+📦 Space Complexity
+O(1)
+
+(Ignoring the sorting algorithm's internal space.)
+
+⚡ Optimal Approach (HashSet)
+💡 Idea
+
+Use a HashSet.
+
+If the number is already in the set → duplicate found.
+Otherwise, add it to the set.
+💻 Java Code
+import java.util.*;
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int num : nums) {
+
+            if (set.contains(num))
+                return true;
+
+            set.add(num);
+        }
+
+        return false;
+    }
+}
+▶️ Dry Run
+nums = [1,2,3,1]
+
+Initially
+
+{}
+
+Read 1
+
+{1}
+
+Read 2
+
+{1,2}
+
+Read 3
+
+{1,2,3}
+
+Read 1
+
+Already present ✅
+
+Return
+
+true
+🧠 Why HashSet?
+
+A HashSet stores only unique elements.
+
+Whenever we try to insert an element that's already present, we immediately know a duplicate exists.
+
+⏱️ Time Complexity
+
+Each contains() and add() operation takes approximately O(1) on average.
+
+For n elements:
+
+O(n)
+📦 Space Complexity
+O(n)
+
+The HashSet may store all elements if there are no duplicates.
+
+🎯 Interview Notes
+✅ Return true if any duplicate exists.
+✅ Return false if all elements are unique.
+✅ Brute Force compares every pair.
+✅ Better approach sorts the array and checks adjacent elements.
+✅ Optimal approach uses a HashSet for fast lookup.
+✅ HashSet gives the best average performance for this problem.
+📊 Comparison Table
+Approach	Time	Space
+Brute Force	O(n²)	O(1)
+Sorting	O(n log n)	O(1)*
+HashSet	O(n)	O(n)
+
+*Ignoring the sorting algorithm's internal memory usage.
+
+🧠 Memory Trick
+Start
+
+↓
+
+Create HashSet
+
+↓
+
+Element already in Set?
+
+↓
+
+Yes → Return true
+
+↓
+
+No → Add to Set
+
+↓
+
+Finish Loop
+
+↓
+
+Return false
+
+💖 Golden Rule to Remember
+
+HashSet = Fast duplicate checker.
+If set.contains(num) is true, you've already seen that number, so a duplicate exists. 🌸✨
