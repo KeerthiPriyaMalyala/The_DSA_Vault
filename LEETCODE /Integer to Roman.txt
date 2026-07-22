@@ -1,0 +1,128 @@
+12. Integer to Roman
+❓ What is the question asking?
+
+Given an integer num (1 ≤ num ≤ 3999), convert it into its Roman numeral representation.
+
+Roman numerals use the following symbols:
+
+Symbol	Value
+I	1
+V	5
+X	10
+L	50
+C	100
+D	500
+M	1000
+
+Special cases:
+
+4   → IV
+9   → IX
+40  → XL
+90  → XC
+400 → CD
+900 → CM
+
+The goal is to return the Roman numeral string.
+
+⚡ Optimal Approach
+💡 Idea
+
+This problem can be solved using a Greedy Algorithm.
+
+Store all Roman values (including special values like 900, 400, 90, etc.) in descending order.
+Store their corresponding Roman symbols.
+Traverse both arrays from left to right.
+If the current value is less than or equal to num:
+Append its Roman symbol.
+Subtract its value from num.
+Repeat until num becomes 0.
+
+Since we always choose the largest possible Roman value, we get the correct Roman numeral.
+
+💻 Java Code
+class Solution {
+    public String intToRoman(int num) {
+
+        int[] values = {
+            1000, 900, 500, 400,
+            100, 90, 50, 40,
+            10, 9, 5, 4, 1
+        };
+
+        String[] symbols = {
+            "M", "CM", "D", "CD",
+            "C", "XC", "L", "XL",
+            "X", "IX", "V", "IV", "I"
+        };
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = 0; i < values.length; i++) {
+            while (num >= values[i]) {
+                ans.append(symbols[i]);
+                num -= values[i];
+            }
+        }
+
+        return ans.toString();
+    }
+}
+▶️ Output
+
+Example 1
+
+Input: num = 3749
+Output: MMMDCCXLIX
+
+Example 2
+
+Input: num = 58
+Output: LVIII
+
+Example 3
+
+Input: num = 1994
+Output: MCMXCIV
+⏱️ Time Complexity
+
+O(1)
+
+There are only 13 Roman values.
+Maximum number is 3999.
+So the number of iterations is constant.
+📦 Space Complexity
+
+O(1)
+
+Only constant extra space is used (excluding the output string).
+🧠 Easy Remember Trick
+Values  : 1000 900 500 400 100 90 50 40 10 9 5 4 1
+
+Symbols :  M   CM  D  CD  C  XC L  XL X IX V IV I
+
+👉 Algorithm
+
+1. Create values[] and symbols[] arrays.
+2. Start from the largest value.
+3. While num >= values[i]:
+      - Append symbols[i]
+      - num -= values[i]
+4. Continue until num becomes 0.
+5. Return the answer.
+🎯 Why Greedy Works?
+
+At every step, we choose the largest Roman value that can fit into the remaining number.
+
+Example (1994):
+
+1994
+↓
+1000 → M      Remaining = 994
+900  → CM     Remaining = 94
+90   → XC     Remaining = 4
+4    → IV     Remaining = 0
+
+Answer = MCMXCIV
+
+This always produces the correct Roman numeral because Roman numerals are built by repeatedly taking the largest valid symbol first. 💖📚
