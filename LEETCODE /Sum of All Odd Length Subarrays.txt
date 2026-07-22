@@ -1,0 +1,243 @@
+1588. Sum of All Odd Length Subarrays
+❓ What is the question asking?
+
+You are given an integer array arr.
+
+Your task is to find the sum of all possible odd-length subarrays.
+
+A subarray is a continuous part of the array.
+
+Only consider subarrays whose length is odd (1, 3, 5, ...).
+
+Return the total sum.
+
+🪨 Brute Force Approach
+💡 Idea
+Generate every possible subarray.
+Check if its length is odd.
+If it is odd, traverse the subarray and add all its elements to the answer.
+💻 Java Code
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+
+        int sum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            for (int j = i; j < arr.length; j++) {
+
+                if ((j - i + 1) % 2 != 0) {
+
+                    for (int k = i; k <= j; k++) {
+                        sum += arr[k];
+                    }
+                }
+            }
+        }
+
+        return sum;
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+arr = [1,4,2,5,3]
+
+Output:
+58
+⏱️ Time Complexity
+O(n³)
+First loop → O(n)
+Second loop → O(n)
+Third loop → O(n)
+
+Overall:
+
+O(n³)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (Prefix Sum)
+💡 Idea
+
+Instead of traversing every odd-length subarray again,
+
+Create a Prefix Sum Array.
+
+Then,
+
+Sum of any subarray can be found in O(1).
+
+For every odd-length subarray:
+
+Use the prefix array to calculate its sum.
+Add it to the answer.
+💻 Java Code
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+
+        int n = arr.length;
+
+        int[] prefix = new int[n];
+
+        prefix[0] = arr[0];
+
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i - 1] + arr[i];
+        }
+
+        int sum = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            for (int j = i; j < n; j++) {
+
+                if ((j - i + 1) % 2 != 0) {
+
+                    if (i == 0)
+                        sum += prefix[j];
+                    else
+                        sum += prefix[j] - prefix[i - 1];
+                }
+            }
+        }
+
+        return sum;
+    }
+}
+▶️ Output
+Input:
+arr = [1,4,2,5,3]
+
+Output:
+58
+⏱️ Time Complexity
+O(n²)
+Build Prefix Sum → O(n)
+Generate all subarrays → O(n²)
+Find each subarray sum → O(1)
+
+Overall:
+
+O(n²)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach
+💡 Idea
+
+Instead of finding every subarray,
+
+Think about each element separately.
+
+For every element:
+
+Count how many subarrays contain it.
+Out of them, count only the odd-length subarrays.
+Multiply:
+arr[i] × number of odd subarrays containing it
+
+Add this contribution for every element.
+
+Formula:
+
+left = i + 1
+
+right = n - i
+
+total = left × right
+
+oddCount = (total + 1) / 2
+
+answer += arr[i] × oddCount
+💻 Java Code
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+
+        int n = arr.length;
+        int sum = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            int left = i + 1;
+            int right = n - i;
+
+            int total = left * right;
+
+            int oddCount = (total + 1) / 2;
+
+            sum += arr[i] * oddCount;
+        }
+
+        return sum;
+    }
+}
+▶️ Output
+Input:
+arr = [1,4,2,5,3]
+
+Output:
+58
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Easy Remember Trick
+Generate all subarrays
+
+↓
+
+Keep only odd lengths
+
+↓
+
+Brute Force
+
+O(n³)
+
+↓
+
+Use Prefix Sum
+
+↓
+
+O(n²)
+
+↓
+
+Count contribution of each element
+
+↓
+
+O(n)
+🎯 Dry Run (Optimal)
+arr = [1,4,2]
+
+For arr[1] = 4
+
+left = 2
+
+right = 2
+
+total = 4
+
+oddCount = (4 + 1) / 2 = 2
+
+Contribution:
+
+4 × 2 = 8
+
+Similarly calculate for every element and add all contributions.
+
+Answer:
+
+66
+⭐ Interview Tip
+
+This problem teaches three important techniques:
+
+Brute Force → Generate all subarrays.
+Prefix Sum → Compute subarray sums in O(1).
+Contribution Technique → Count how many times each element contributes instead of generating every subarray.
+
+The O(n) contribution approach is the expected follow-up solution and is a common interview pattern for array contribution problems. 💖📚
