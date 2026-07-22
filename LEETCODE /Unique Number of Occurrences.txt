@@ -1,0 +1,189 @@
+1207. Unique Number of Occurrences
+❓ What is the question asking?
+
+You are given an integer array arr.
+
+Your task is to check whether the frequency (occurrence count) of every number is unique.
+
+If all frequencies are different → return true.
+If any two numbers have the same frequency → return false.
+🪨 Brute Force Approach
+💡 Idea
+Count the frequency of every element.
+Compare every frequency with every other frequency.
+If any two frequencies are equal, return false.
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach
+💡 Idea
+Use a HashMap to store the frequency of every element.
+Use a HashSet to store all frequencies.
+While traversing the frequencies:
+If the frequency already exists in the HashSet, return false.
+Otherwise, add it to the HashSet.
+If no duplicate frequency is found, return true.
+💻 Java Code
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Solution {
+    public boolean uniqueOccurrences(int[] arr) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int freq : map.values()) {
+            if (set.contains(freq)) {
+                return false;
+            }
+            set.add(freq);
+        }
+
+        return true;
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+arr = [1,2,2,1,1,3]
+
+Output:
+true
+
+Explanation:
+
+1 → 3 times
+2 → 2 times
+3 → 1 time
+
+Frequencies = {3,2,1}
+
+All are unique.
+
+Example 2
+
+Input:
+arr = [1,2]
+
+Output:
+false
+
+Explanation:
+
+1 → 1 time
+2 → 1 time
+
+Frequency 1 is repeated.
+
+Example 3
+
+Input:
+arr = [-3,0,1,-3,1,1,1,-3,10,0]
+
+Output:
+true
+
+Explanation:
+
+-3 → 3 times
+0  → 2 times
+1  → 4 times
+10 → 1 time
+
+Frequencies = {3,2,4,1}
+
+All are unique.
+⏱️ Time Complexity
+O(n)
+Building the HashMap → O(n)
+Traversing frequencies → O(n)
+
+Overall:
+
+O(n)
+📦 Space Complexity
+O(n)
+HashMap stores frequencies.
+HashSet stores frequencies.
+🧠 Easy Remember Trick
+Step 1:
+Count frequency
+
+↓
+
+HashMap
+
+1 → 3
+2 → 2
+3 → 1
+
+↓
+
+Step 2:
+Store frequencies
+
+HashSet
+
+3
+2
+1
+
+↓
+
+If frequency already exists
+
+↓
+
+return false
+
+Else
+
+↓
+
+return true
+🎯 Dry Run
+arr = [1,2,2,1,1,3]
+Step 1: Build HashMap
+1 → 3
+2 → 2
+3 → 1
+Step 2: Traverse frequencies
+3
+
+Set = {3}
+
+2
+
+Set = {3,2}
+
+1
+
+Set = {3,2,1}
+
+No duplicate frequency found.
+
+Answer:
+
+true
+⭐ Interview Tip
+
+This problem uses two data structures together:
+
+HashMap → Count the frequency of each element.
+HashSet → Check whether those frequencies are unique.
+
+Whenever you see:
+
+"Count occurrences" → Think HashMap.
+"Check uniqueness / duplicates" → Think HashSet.
+
+This HashMap + HashSet combination is a very common interview pattern. 💖📚
