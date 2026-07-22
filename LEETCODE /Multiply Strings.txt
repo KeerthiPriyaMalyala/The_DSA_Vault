@@ -1,0 +1,158 @@
+43. Multiply Strings
+❓ What is the question asking?
+
+You are given two non-negative integers as strings.
+
+Return their product as a string.
+
+Note:
+
+Do not convert the whole string into an integer.
+The numbers can be very large, so int and long may overflow.
+⚡ Optimal Approach (School Multiplication)
+💡 Idea
+
+Simulate the multiplication exactly like we do on paper.
+
+Start from the last digit of num2.
+Multiply it with every digit of num1.
+Keep track of the carry.
+Build one partial product.
+Reverse it.
+Append required trailing zeros according to its position.
+Add the partial product to the previous answer.
+Repeat until all digits are processed.
+💻 Java Code
+class Solution {
+    public String multiply(String num1, String num2) {
+
+        if (num1.equals("0") || num2.equals("0"))
+            return "0";
+
+        String result = "0";
+        int zeros = 0;
+
+        for (int i = num2.length() - 1; i >= 0; i--) {
+
+            int carry = 0;
+            StringBuilder part = new StringBuilder();
+
+            for (int j = num1.length() - 1; j >= 0; j--) {
+
+                int val = (num1.charAt(j) - '0') * (num2.charAt(i) - '0') + carry;
+
+                part.append(val % 10);
+
+                carry = val / 10;
+            }
+
+            if (carry > 0)
+                part.append(carry);
+
+            part.reverse();
+
+            for (int k = 0; k < zeros; k++)
+                part.append('0');
+
+            result = addStrings(result, part.toString());
+
+            zeros++;
+        }
+
+        return result;
+    }
+
+    private String addStrings(String a, String b) {
+
+        StringBuilder ans = new StringBuilder();
+
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        int carry = 0;
+
+        while (i >= 0 || j >= 0 || carry > 0) {
+
+            int sum = carry;
+
+            if (i >= 0)
+                sum += a.charAt(i--) - '0';
+
+            if (j >= 0)
+                sum += b.charAt(j--) - '0';
+
+            ans.append(sum % 10);
+            carry = sum / 10;
+        }
+
+        return ans.reverse().toString();
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+num1 = "2"
+num2 = "3"
+
+Output:
+"6"
+
+Example 2
+
+Input:
+num1 = "123"
+num2 = "45"
+
+Output:
+"5535"
+
+Example 3
+
+Input:
+num1 = "999"
+num2 = "999"
+
+Output:
+"998001"
+⏱️ Time Complexity
+Multiplication  : O(n × m)
+
+String Addition : O(m × (n + m))
+
+Total           : O(n × m + m × (n + m))
+
+If n ≈ m
+
+O(n²)
+📦 Space Complexity
+O(n + m)
+🧠 Easy Remember Trick
+
+Think exactly like paper multiplication.
+
+        123
+      ×  45
+----------------
+        615
++      4920
+----------------
+       5535
+
+Algorithm:
+
+1. Pick one digit from num2.
+2. Multiply it with every digit of num1.
+3. Store carry.
+4. Build one partial product.
+5. Reverse it.
+6. Append zeros.
+7. Add it to previous answer.
+8. Repeat for all digits.
+🎯 Interview Tip
+
+This is the school multiplication approach.
+
+It is easy to understand and works correctly for very large numbers because it uses strings instead of int or long.
+
+The official optimal solution uses an array (int[]) to avoid repeated string additions, reducing the time complexity to O(n × m), but the multiplication logic remains the same. 💖📚
