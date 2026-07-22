@@ -1,0 +1,249 @@
+290. Word Pattern
+❓ What is the question asking?
+
+You are given:
+
+A string pattern
+A string s
+
+Your task is to check whether s follows the same pattern.
+
+Each character in pattern should map to exactly one word, and each word should map to exactly one character.
+
+This is called a one-to-one mapping.
+
+🪨 Brute Force Approach
+💡 Idea
+Split the sentence into words.
+For every character, compare it with every other character.
+Ensure that equal characters map to equal words and different characters map to different words.
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+Split the sentence into words.
+If the number of words and pattern length are different, return false.
+Use a HashMap to map each pattern character to a word.
+Use a HashSet to ensure one word is mapped only once.
+Traverse both together:
+If the character is not in the map:
+If the word already exists in the set, return false.
+Otherwise, store the mapping.
+If the character already exists:
+Check whether it maps to the same word.
+If not, return false.
+If all mappings are valid, return true.
+💻 Java Code
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+
+        String[] words = s.split(" ");
+
+        if (pattern.length() != words.length)
+            return false;
+
+        HashMap<Character, String> map = new HashMap<>();
+        HashSet<String> set = new HashSet<>();
+
+        for (int i = 0; i < words.length; i++) {
+
+            char ch = pattern.charAt(i);
+            String str = words[i];
+
+            if (!map.containsKey(ch)) {
+
+                if (set.contains(str))
+                    return false;
+
+                map.put(ch, str);
+                set.add(str);
+
+            } else {
+
+                if (!map.get(ch).equals(str))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+pattern = "abba"
+s = "dog cat cat dog"
+
+Output:
+true
+
+Example 2
+
+Input:
+pattern = "abba"
+s = "dog cat cat fish"
+
+Output:
+false
+
+Reason:
+
+'a' maps to dog
+
+Last word is fish
+
+Mapping changes
+
+Invalid
+
+Example 3
+
+Input:
+pattern = "aaaa"
+s = "dog cat cat dog"
+
+Output:
+false
+
+Reason:
+
+'a' should always map to dog
+
+But it also maps to cat
+
+Invalid
+
+Example 4
+
+Input:
+pattern = "ab"
+s = "dog dog"
+
+Output:
+false
+
+Reason:
+
+a → dog
+b → dog
+
+One word cannot map to two characters.
+⏱️ Time Complexity
+O(n)
+
+where
+
+n = pattern.length()
+📦 Space Complexity
+O(n)
+HashMap stores character → word mapping.
+HashSet stores used words.
+🧠 Easy Remember Trick
+pattern
+
+↓
+
+a b b a
+
+↓
+
+sentence
+
+↓
+
+dog cat cat dog
+
+↓
+
+HashMap
+
+a → dog
+b → cat
+
+↓
+
+HashSet
+
+dog
+cat
+
+↓
+
+Check every pair
+
+↓
+
+Wrong mapping?
+
+Return false
+
+↓
+
+Otherwise
+
+Return true
+🎯 Dry Run
+pattern = "abba"
+
+s = "dog cat cat dog"
+Step 1
+
+Split sentence
+
+["dog","cat","cat","dog"]
+Step 2
+a → dog
+
+Map:
+a → dog
+
+Set:
+dog
+Step 3
+b → cat
+
+Map:
+a → dog
+b → cat
+
+Set:
+dog
+cat
+Step 4
+b → cat
+
+Already mapped correctly
+
+Continue
+Step 5
+a → dog
+
+Already mapped correctly
+
+Continue
+
+Answer:
+
+true
+⭐ Interview Tip
+
+Whenever you hear:
+
+"Character maps to word"
+"One-to-one relationship"
+"No duplicate mapping"
+
+Think:
+
+HashMap + HashSet
+HashMap → Stores character → word.
+HashSet → Ensures each word is used only once.
+
+This one-to-one mapping pattern is very common in string and hash map interview questions. 💖📚
