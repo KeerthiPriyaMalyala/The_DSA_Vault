@@ -1,0 +1,183 @@
+628. Maximum Product of Three Numbers
+❓ What is the question asking?
+
+You are given an integer array nums.
+
+Your task is to find the maximum possible product of any three numbers from the array.
+
+The numbers can be positive, negative, or zero.
+
+Return the maximum product.
+
+🪨 Brute Force Approach
+💡 Idea
+Generate every possible combination of 3 numbers.
+Calculate their product.
+Keep track of the maximum product.
+💻 Java Code
+class Solution {
+    public int maximumProduct(int[] nums) {
+
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            for (int j = i + 1; j < nums.length - 1; j++) {
+                for (int k = j + 1; k < nums.length; k++) {
+                    max = Math.max(max, nums[i] * nums[j] * nums[k]);
+                }
+            }
+        }
+
+        return max;
+    }
+}
+▶️ Output
+Input: [1,2,3]
+Output: 6
+⏱️ Time Complexity
+O(n³)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+Sort the array.
+There are only 2 possible answers:
+Product of the largest 3 numbers
+Product of the 2 smallest (most negative) numbers and the largest number
+Return the maximum of these two.
+💻 Java Code
+import java.util.Arrays;
+
+class Solution {
+    public int maximumProduct(int[] nums) {
+
+        Arrays.sort(nums);
+
+        int n = nums.length;
+
+        int product1 = nums[n - 1] * nums[n - 2] * nums[n - 3];
+
+        int product2 = nums[0] * nums[1] * nums[n - 1];
+
+        return Math.max(product1, product2);
+    }
+}
+▶️ Output
+Input: [-10,-10,5,2]
+Output: 500
+⏱️ Time Complexity
+O(n log n)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Instead of sorting,
+
+keep track of:
+
+Largest number (max1)
+Second largest (max2)
+Third largest (max3)
+Smallest number (min1)
+Second smallest (min2)
+
+Finally compare
+
+max1 × max2 × max3
+
+and
+
+min1 × min2 × max1
+
+Return the larger one.
+
+💻 Java Code
+class Solution {
+    public int maximumProduct(int[] nums) {
+
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+        int max3 = Integer.MIN_VALUE;
+
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+
+        for (int num : nums) {
+
+            if (num > max1) {
+                max3 = max2;
+                max2 = max1;
+                max1 = num;
+            } else if (num > max2) {
+                max3 = max2;
+                max2 = num;
+            } else if (num > max3) {
+                max3 = num;
+            }
+
+            if (num < min1) {
+                min2 = min1;
+                min1 = num;
+            } else if (num < min2) {
+                min2 = num;
+            }
+        }
+
+        return Math.max(max1 * max2 * max3,
+                        min1 * min2 * max1);
+    }
+}
+▶️ Output
+Input: [-10,-10,5,2]
+Output: 500
+Input: [1,2,3,4]
+Output: 24
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Easy Remember Trick
+
+There are only 2 possible maximum products:
+
+Case 1:
+Largest × Second Largest × Third Largest
+Case 2:
+Smallest × Second Smallest × Largest
+
+Finally,
+
+Answer = max(Case1, Case2)
+🎯 Why do we consider the two smallest numbers?
+
+Because two negative numbers make a positive number.
+
+Example:
+
+Input:
+[-10,-10,5,2]
+
+Case 1:
+
+5 × 2 × (-10) = -100
+
+Case 2:
+
+(-10) × (-10) × 5 = 500
+
+Answer:
+
+500
+⭐ Interview Tip
+
+Whenever a problem asks for the maximum product and the array can contain negative numbers, always think:
+
+"Can multiplying two negative numbers produce a larger positive answer?"
+
+If yes, check both:
+
+Largest 3 numbers
+Two smallest numbers + largest number
+
+This pattern appears in many interview problems. 💖📚
