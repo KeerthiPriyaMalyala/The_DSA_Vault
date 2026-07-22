@@ -1,0 +1,258 @@
+890. Find and Replace Pattern
+❓ What is the question asking?
+
+You are given:
+
+An array of words words
+A pattern string pattern
+
+Your task is to return all words that follow the same pattern.
+
+A word matches the pattern if there is a one-to-one mapping between the characters of the pattern and the characters of the word.
+
+Each pattern character should map to exactly one character, and each character should map to exactly one pattern character.
+
+🪨 Brute Force Approach
+💡 Idea
+
+For every word:
+
+Compare every character with every other character.
+Check whether equal pattern characters map to equal word characters.
+Check whether different pattern characters map to different word characters.
+⏱️ Time Complexity
+O(n × m²)
+
+where
+
+n = number of words
+m = length of each word
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+For every word:
+
+If the word length is different from the pattern length, return false.
+Use a HashMap to map:
+Pattern character → Word character
+Use a HashSet to ensure:
+One word character is mapped only once.
+Traverse both strings together.
+If every mapping is valid, add the word to the answer list.
+💻 Java Code
+import java.util.*;
+
+class Solution {
+
+    public List<String> findAndReplacePattern(String[] words, String pattern) {
+
+        List<String> ans = new ArrayList<>();
+
+        for (String word : words) {
+            if (same(word, pattern)) {
+                ans.add(word);
+            }
+        }
+
+        return ans;
+    }
+
+    public boolean same(String word, String pattern) {
+
+        if (word.length() != pattern.length()) {
+            return false;
+        }
+
+        HashMap<Character, Character> map = new HashMap<>();
+        HashSet<Character> set = new HashSet<>();
+
+        for (int i = 0; i < word.length(); i++) {
+
+            char p = pattern.charAt(i);
+            char w = word.charAt(i);
+
+            if (!map.containsKey(p)) {
+
+                if (set.contains(w)) {
+                    return false;
+                }
+
+                map.put(p, w);
+                set.add(w);
+
+            } else {
+
+                if (map.get(p) != w) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+words = ["abc","deq","mee","aqq","dkd","ccc"]
+pattern = "abb"
+
+Output:
+["mee","aqq"]
+
+Explanation:
+
+Pattern
+
+a b b
+
+↓
+
+mee
+
+a → m
+b → e
+
+Valid
+
+↓
+
+aqq
+
+a → a
+b → q
+
+Valid
+
+Example 2
+
+Input:
+words = ["a","b","c"]
+pattern = "a"
+
+Output:
+["a","b","c"]
+⏱️ Time Complexity
+O(n × m)
+
+where
+
+n = words.length
+m = length of each word
+📦 Space Complexity
+O(m)
+HashMap stores mappings.
+HashSet stores used characters.
+🧠 Easy Remember Trick
+Pattern
+
+↓
+
+a b b
+
+↓
+
+Word
+
+↓
+
+m e e
+
+↓
+
+HashMap
+
+a → m
+b → e
+
+↓
+
+HashSet
+
+m
+e
+
+↓
+
+Wrong mapping?
+
+Return false
+
+↓
+
+Otherwise
+
+Return true
+🎯 Dry Run
+words = ["mee","aqq","abc"]
+
+pattern = "abb"
+Check "mee"
+a → m
+
+Map:
+a → m
+
+Set:
+m
+b → e
+
+Map:
+a → m
+b → e
+
+Set:
+m
+e
+b → e
+
+Already mapped correctly
+
+Valid
+
+Add to answer.
+
+Check "aqq"
+a → a
+b → q
+b → q
+
+Valid
+
+Add to answer.
+
+Check "abc"
+a → a
+b → b
+b should map to c
+
+Mapping changed
+
+Invalid
+
+Do not add.
+
+Final Answer:
+
+["mee","aqq"]
+⭐ Interview Tip
+
+This problem is an extension of 290. Word Pattern.
+
+Whenever you see:
+
+"Pattern matching"
+"One-to-one mapping"
+"Bijective relationship"
+
+Think:
+
+HashMap + HashSet
+HashMap → Stores pattern character → word character.
+HashSet → Prevents two pattern characters from mapping to the same word character.
+
+This HashMap + HashSet technique is the standard interview solution with O(n × m) time complexity and is considered optimal. 💖📚
