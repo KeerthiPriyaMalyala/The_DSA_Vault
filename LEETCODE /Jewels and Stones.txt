@@ -1,0 +1,168 @@
+771. Jewels and Stones
+❓ What is the question asking?
+
+You are given two strings:
+
+jewels → Contains the characters that represent jewels.
+stones → Contains all the stones you have.
+
+Your task is to count how many stones are also jewels.
+
+Note: Characters are case-sensitive.
+
+'a' != 'A'
+🪨 Brute Force Approach
+💡 Idea
+For every character in stones,
+Check every character in jewels.
+If they match, increase the count.
+💻 Java Code
+class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+
+        int count = 0;
+
+        for (int i = 0; i < stones.length(); i++) {
+            for (int j = 0; j < jewels.length(); j++) {
+
+                if (stones.charAt(i) == jewels.charAt(j)) {
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+▶️ Output
+Input:
+jewels = "aA"
+stones = "aAAbbbb"
+
+Output:
+3
+⏱️ Time Complexity
+O(n × m)
+
+where
+
+n = stones.length()
+m = jewels.length()
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+Store every jewel character in a HashSet.
+Traverse the stones string.
+If the current stone exists in the HashSet, increment the count.
+
+HashSet lookup takes O(1) on average.
+
+💻 Java Code
+import java.util.HashSet;
+
+class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+
+        HashSet<Character> set = new HashSet<>();
+
+        for (char ch : jewels.toCharArray()) {
+            set.add(ch);
+        }
+
+        int count = 0;
+
+        for (char ch : stones.toCharArray()) {
+            if (set.contains(ch)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+▶️ Output
+
+Example 1
+
+Input:
+jewels = "aA"
+stones = "aAAbbbb"
+
+Output:
+3
+
+Example 2
+
+Input:
+jewels = "z"
+stones = "ZZ"
+
+Output:
+0
+⏱️ Time Complexity
+O(n + m)
+
+where
+
+n = stones.length()
+m = jewels.length()
+📦 Space Complexity
+O(m)
+
+(HashSet stores all jewel characters.)
+
+🧠 Easy Remember Trick
+Jewels = "aA"
+
+↓
+
+Store in HashSet
+
+{a, A}
+
+↓
+
+Check every character in stones
+
+↓
+
+If present in HashSet
+
+↓
+
+count++
+🎯 Dry Run
+jewels = "aA"
+stones = "aAAbbbb"
+
+HashSet:
+
+{a, A}
+
+Traverse stones:
+
+a  ✅ count = 1
+A  ✅ count = 2
+A  ✅ count = 3
+b  ❌
+b  ❌
+b  ❌
+b  ❌
+
+Answer:
+
+3
+⭐ Interview Tip
+
+Whenever you need to check whether an element exists repeatedly, think:
+
+HashSet
+
+Because:
+
+contains() → O(1) average time.
+Much faster than checking each character one by one.
+
+This is a classic HashSet membership problem and is one of the easiest applications of a set. 💖📚
