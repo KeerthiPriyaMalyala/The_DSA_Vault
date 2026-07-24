@@ -1,0 +1,287 @@
+273. Integer to English Words
+❓ What is the question asking?
+
+Given a non-negative integer, convert it into its English words representation.
+
+Examples
+123
+→ "One Hundred Twenty Three"
+
+12345
+→ "Twelve Thousand Three Hundred Forty Five"
+
+1234567
+→ "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+
+0
+→ "Zero"
+⚡️ Optimal Approach (Recursion)
+💡 Idea
+
+Break the number into groups.
+
+Billions
+Millions
+Thousands
+Hundreds
+Tens
+Ones
+
+Example
+
+1,234,567
+
+↓
+
+1 Million
+
+234 Thousand
+
+567
+
+Convert each group separately and combine them.
+
+📝 Algorithm
+Step 1
+
+If number is
+
+0
+
+Return
+
+"Zero"
+Step 2
+
+Create arrays.
+
+below20[]
+
+Stores
+
+One
+Two
+Three
+...
+Nineteen
+tens[]
+
+Stores
+
+Twenty
+Thirty
+Forty
+...
+Ninety
+Step 3
+
+Create recursive function
+
+helper(num)
+Step 4
+
+Cases inside helper
+
+Case 1
+num < 20
+
+Return directly from
+
+below20[]
+Case 2
+num < 100
+Twenty One
+
+↓
+
+Twenty
++
+One
+Case 3
+num < 1000
+345
+
+↓
+
+Three Hundred
+
++
+
+Forty Five
+Case 4
+num < 1,000,000
+
+Split
+
+12345
+
+↓
+
+12 Thousand
+
+345
+Case 5
+num < 1,000,000,000
+
+Split
+
+1234567
+
+↓
+
+1 Million
+
+234567
+Case 6
+
+Otherwise
+
+Split into
+
+Billions
+💻 Java Code
+class Solution {
+
+    String[] below20 = {
+        "", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+        "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    };
+
+    String[] tens = {
+        "", "", "Twenty", "Thirty", "Forty",
+        "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+    };
+
+    public String numberToWords(int num) {
+
+        if (num == 0)
+            return "Zero";
+
+        return helper(num).trim();
+    }
+
+    public String helper(int num) {
+
+        if (num < 20)
+            return below20[num] + " ";
+
+        else if (num < 100)
+            return tens[num / 10] + " " + helper(num % 10);
+
+        else if (num < 1000)
+            return helper(num / 100) + "Hundred " + helper(num % 100);
+
+        else if (num < 1000000)
+            return helper(num / 1000) + "Thousand " + helper(num % 1000);
+
+        else if (num < 1000000000)
+            return helper(num / 1000000) + "Million " + helper(num % 1000000);
+
+        else
+            return helper(num / 1000000000) + "Billion " + helper(num % 1000000000);
+    }
+}
+▶️ Dry Run
+Example
+1234567
+
+helper()
+
+1234567
+
+↓
+
+1 Million
+
+↓
+
+234567
+
+↓
+
+234 Thousand
+
+↓
+
+567
+
+↓
+
+5 Hundred
+
+↓
+
+67
+
+↓
+
+Sixty Seven
+
+Final
+
+One Million
+Two Hundred Thirty Four Thousand
+Five Hundred Sixty Seven
+▶️ Example
+
+Input
+
+123
+
+Output
+
+One Hundred Twenty Three
+
+Input
+
+12345
+
+Output
+
+Twelve Thousand Three Hundred Forty Five
+
+Input
+
+1000010
+
+Output
+
+One Million Ten
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(log n)
+
+(Recursion stack)
+
+🎯 Key Points
+✅ Divide the number into Billions → Millions → Thousands → Hundreds.
+✅ Use recursion to solve each smaller part.
+✅ Numbers below 20 are stored directly.
+✅ Tens (20–90) are stored in a separate array.
+✅ Use .trim() to remove the extra space at the end.
+✅ Base case is num < 20.
+🌟 Pattern
+Recursion
++
+Divide & Conquer
++
+Strings
+🧠 Interview Trick
+
+Remember the hierarchy:
+
+Billion
+    ↓
+Million
+    ↓
+Thousand
+    ↓
+Hundred
+    ↓
+Tens
+    ↓
+Ones
+
+Each recursive call converts one block, then combines the results. Once you understand that every block is handled the same way, the solution becomes much easier. 💖
