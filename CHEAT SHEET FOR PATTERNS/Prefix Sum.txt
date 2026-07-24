@@ -1,0 +1,331 @@
+🌸 What is Prefix Sum?
+
+Imagine you have an array:
+
+2 4 6 8 10
+
+Someone asks:
+
+👉 Sum from index 1 to 3
+
+Without Prefix Sum
+
+4+6+8 = 18
+
+Every query you calculate again.
+
+If there are 1000 queries?
+
+😭 Very slow.
+
+With Prefix Sum...
+
+First create
+
+Original
+
+2 4 6 8 10
+
+Prefix
+
+2 6 12 20 30
+
+Meaning
+
+Prefix[i]
+
+=
+
+Sum from index 0 to i
+
+Example
+
+Prefix[3]
+
+=
+
+2+4+6+8
+
+=
+
+20
+🌸 Biggest Formula ❤️
+
+Remember ONLY THIS.
+
+If
+
+prefix[i]
+
+=
+
+Sum(0...i)
+
+Then
+
+Sum from L to R
+Sum = prefix[R] - prefix[L-1]
+
+Except
+
+If
+
+L==0
+
+Then
+
+Sum = prefix[R]
+
+🔥🔥 THIS IS THE HEART OF PREFIX SUM.
+
+🌸 How to Build Prefix Array
+
+Original
+
+5 2 7 3 4
+
+Step 1
+
+prefix[0]=5
+
+Step 2
+
+prefix[1]
+
+=
+
+5+2
+
+=
+
+7
+
+Step 3
+
+prefix[2]
+
+=
+
+7+7
+
+=
+
+14
+
+Continue...
+
+Final
+
+5 7 14 17 21
+
+Java Template
+
+int[] prefix = new int[n];
+
+prefix[0] = nums[0];
+
+for(int i=1;i<n;i++){
+    prefix[i] = prefix[i-1] + nums[i];
+}
+
+❤️ Learn this by heart.
+
+🌸 Pattern Recognition
+
+Whenever question says
+
+✅ Sum
+
+✅ Range Sum
+
+✅ Running Sum
+
+✅ Continuous Sum
+
+✅ Multiple Queries
+
+✅ Prefix
+
+Immediately think
+
+🧠
+
+Prefix Sum
+
+🌸 Pattern 1
+Running Sum
+
+Question
+
+Running Sum of 1D Array
+
+Need
+
+1
+
+1+2
+
+1+2+3
+
+1+2+3+4
+
+Just keep adding.
+
+🌸 Pattern 2
+Range Sum Query
+
+Question
+
+Range Sum Query Immutable
+
+Need
+
+L
+
+R
+
+Answer in O(1)
+
+Use
+
+Prefix Sum
+
+Formula
+
+prefix[R]-prefix[L-1]
+🌸 Pattern 3
+Pivot Index
+
+Need
+
+Left Sum
+
+=
+
+Right Sum
+
+Instead of calculating both every time
+
+Use Prefix Sum.
+
+🌸 Pattern 4
+Odd Length Subarray Sum
+
+Question
+
+Sum of All Odd Length Subarrays
+
+Can be solved using Prefix Sum to get any subarray sum quickly.
+
+🌸 Time Complexity
+
+Without Prefix
+
+Every Query
+
+O(n)
+
+With Prefix
+
+Build
+
+O(n)
+
+Each Query
+
+O(1)
+
+Huge improvement 😎
+
+🌸 Common Mistakes
+
+❌ Forgetting
+
+L==0
+
+Case.
+
+Wrong
+
+prefix[r]-prefix[l-1]
+
+If
+
+l=0
+
+Boom 💥
+
+Index Out Of Bounds.
+
+Always check
+
+if(l==0)
+    return prefix[r];
+
+❌ Forgetting
+
+prefix[0]=nums[0];
+
+❌ Starting loop from
+
+0
+
+Instead of
+
+1
+🌸 Easy Trick ❤️
+
+Imagine
+
+2 4 6 8
+
+Prefix
+
+2 6 12 20
+
+Want
+
+6+8
+
+Do
+
+20-6
+
+=
+
+14
+
+Means
+
+Whole
+
+-
+
+Left Part
+
+That's all Prefix Sum does!
+
+🌸 Cheat Sheet
+Question Says	Use
+Running Sum	Prefix Sum
+Range Sum	Prefix Sum
+Multiple Sum Queries	Prefix Sum
+Left Sum = Right Sum	Prefix Sum
+Continuous Sum	Prefix Sum
+🌸 Your 4 Questions
+✅ Running Sum of 1D Array
+
+Pattern: Build prefix while traversing.
+
+✅ Find Pivot Index
+
+Pattern: Left Sum vs Right Sum using total sum (optimized) or prefix sum.
+
+✅ Range Sum Query – Immutable
+
+Pattern: Store Prefix Array once, answer every query in O(1).
+
+✅ Sum of All Odd Length Subarrays
+
+Pattern: Prefix Sum to calculate subarray sums quickly (there's also a clever mathematical optimal solution, but learn Prefix Sum first).
+
