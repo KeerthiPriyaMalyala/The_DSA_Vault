@@ -1,0 +1,341 @@
+🧠 What is Hashing?
+
+Hashing is simply storing information so that we can find it instantly.
+
+Instead of searching every element (O(n)),
+
+we store it in a HashMap/HashSet and get it in almost O(1) time.
+
+Think of it like:
+
+👧 "Where is 5?"
+
+Without HashMap:
+
+1 3 7 5 9
+        ↑
+Search one by one 😭
+
+With HashMap:
+
+5 → Found immediately 😎
+❤️ HashMap vs HashSet
+HashMap
+
+Stores
+
+Key → Value
+
+Example
+
+"Aishu" → 100
+
+Apple → 5
+
+2 → Index
+
+Use when you need
+
+✅ Frequency
+
+✅ Index
+
+✅ Mapping
+
+HashSet
+
+Stores only
+
+Values
+
+Example
+
+2
+
+5
+
+9
+
+11
+
+Use when
+
+✅ Need uniqueness
+
+✅ Fast lookup
+
+🌸 Biggest Hint
+
+Whenever you see
+
+Frequency
+
+Count
+
+Duplicate
+
+Unique
+
+Exists
+
+Already Seen
+
+Pair
+
+Mapping
+
+Occurrence
+
+Immediately think
+
+🧠 HashMap / HashSet
+
+🌸 Pattern 1
+Frequency Count
+
+Questions
+
+✅ Majority Element
+
+✅ Ransom Note
+
+✅ Unique Number of Occurrences
+
+Template
+
+HashMap<Integer,Integer> map = new HashMap<>();
+
+for(int num : nums){
+    map.put(num,map.getOrDefault(num,0)+1);
+}
+
+Remember this forever ❤️
+
+🌸 Pattern 2
+Already Seen?
+
+Questions
+
+Contains Duplicate
+
+Contains Duplicate II
+
+Good Pairs
+
+Use
+
+HashSet
+
+Template
+
+HashSet<Integer> set = new HashSet<>();
+
+for(int num : nums){
+
+    if(set.contains(num))
+        return true;
+
+    set.add(num);
+
+}
+🌸 Pattern 3
+Need Previous Index?
+
+Question
+
+Two Sum
+
+Contains Duplicate II
+
+Need
+
+HashMap
+
+Value → Index
+
+Template
+
+HashMap<Integer,Integer> map = new HashMap<>();
+
+for(int i=0;i<n;i++){
+
+    int need = target-nums[i];
+
+    if(map.containsKey(need))
+        return ...
+
+    map.put(nums[i],i);
+
+}
+🌸 Pattern 4
+
+Need Character Frequency?
+
+Question
+
+Ransom Note
+
+Template
+
+HashMap<Character,Integer> map = new HashMap<>();
+
+for(char c : s.toCharArray()){
+
+    map.put(c,map.getOrDefault(c,0)+1);
+
+}
+🌸 Pattern 5
+
+Need Character Mapping?
+
+Question
+
+Word Pattern
+
+Find and Replace Pattern
+
+Need
+
+a → dog
+
+b → cat
+
+HashMap
+
+🌸 HashMap Functions
+put()
+
+get()
+
+getOrDefault()
+
+containsKey()
+
+remove()
+
+size()
+
+clear()
+
+Know these by heart ❤️
+
+🌸 HashSet Functions
+add()
+
+contains()
+
+remove()
+
+size()
+
+clear()
+🌸 Time Complexity
+
+Operation
+
+Insert
+
+Search
+
+Delete
+
+Average
+
+O(1)
+
+Worst
+
+O(n)
+
+(Interviewers usually expect the average-case answer.)
+
+🌸 Common Mistakes
+
+❌ Forgetting
+
+getOrDefault()
+
+Instead writing
+
+map.get()+1
+
+which causes NullPointerException.
+
+❌ Adding before checking duplicate
+
+Wrong
+
+set.add(num);
+
+if(set.contains(num))
+
+Always
+
+Check
+
+↓
+
+Add
+
+❌ Updating HashMap at the wrong time in Two Sum.
+
+Always check first, then insert the current value.
+
+🌸 Question Recognition
+
+If question says...
+
+Frequency
+
+↓
+
+HashMap
+
+Duplicate
+
+↓
+
+HashSet
+
+Pair
+
+↓
+
+HashMap
+
+Index
+
+↓
+
+HashMap
+
+Already Seen
+
+↓
+
+HashSet
+
+Character Count
+
+↓
+
+HashMap<Character,Integer>
+
+Word Mapping
+
+↓
+
+HashMap<String,String>
+
+🌸 Your First Topic Revision
+Question	Main Idea
+Two Sum	Store value → index in HashMap
+Majority Element	Count frequency (or Boyer-Moore in optimal version)
+Contains Duplicate	HashSet
+Contains Duplicate II	HashMap value → last index
+Number of Good Pairs	Count frequencies while traversing
+Ransom Note	Character frequency
+Jewels and Stones	HashSet of jewels
+Unique Number of Occurrences	Frequency map + HashSet of frequencies
+Word Pattern	Two-way mapping between pattern and words
+Find and Replace Pattern	Two-way character mapping
