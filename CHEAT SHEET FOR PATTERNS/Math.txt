@@ -1,0 +1,422 @@
+🌸 MATH MASTER CHEAT SHEET
+🧠 First Rule
+
+When you see a Math problem, ask these questions in order:
+
+1️⃣ Can I solve it using digits?
+2️⃣ Can I solve it using modulo (%)?
+3️⃣ Can I solve it using division (/)?
+4️⃣ Is there a mathematical formula?
+5️⃣ Is there a number property?
+6️⃣ Is there a simulation?
+7️⃣ Will the number overflow?
+
+These 7 questions solve almost every Math problem. ❤️
+
+🌸 PATTERN 1 — Digit Extraction
+
+Questions
+
+✅ Reverse Integer
+
+✅ Palindrome Number
+
+✅ Add Digits
+
+✅ Happy Number
+
+✅ Integer to English Words
+
+✅ Nth Digit
+
+Trick ❤️
+lastDigit = n % 10;
+n = n / 10;
+
+This is the most important math trick.
+
+Example
+
+1234
+
+last = 4
+
+remaining = 123
+🌸 PATTERN 2 — Build a Number
+
+Questions
+
+✅ Reverse Integer
+
+✅ Roman to Integer
+
+✅ Integer to Roman
+
+Trick
+answer = answer * 10 + digit;
+
+Example
+
+1
+
+↓
+
+12
+
+↓
+
+123
+
+↓
+
+1234
+🌸 PATTERN 3 — Modulo Trick
+
+Questions
+
+✅ Happy Number
+
+✅ Add Digits
+
+✅ Reverse Integer
+
+Use
+
+digit = n % 10;
+
+Remember
+
+%
+
+=
+
+Last Digit
+🌸 PATTERN 4 — Division Trick
+
+Questions
+
+Palindrome
+
+Reverse
+
+Happy Number
+
+Nth Digit
+
+Use
+
+n = n / 10;
+
+Remember
+
+/
+
+=
+
+Remove Last Digit
+🌸 PATTERN 5 — Number Properties
+
+Questions
+
+Power of Two
+
+Count Primes
+
+Count Odds
+
+Example
+
+Power of Two
+
+(n & (n-1)) == 0
+
+Very famous interview trick.
+
+🌸 PATTERN 6 — Simulation
+
+Questions
+
+Fizz Buzz
+
+Clock Angle
+
+Roman
+
+Multiply Strings
+
+Fraction to Decimal
+
+Integer to English Words
+
+Idea
+
+Just follow the process step by step.
+
+No advanced algorithm.
+
+🌸 PATTERN 7 — Overflow
+
+Questions
+
+Reverse Integer
+
+Multiply Strings
+
+Sqrt
+
+Nth Digit
+
+Always think
+
+Will int overflow?
+
+Use
+
+long
+
+when needed.
+
+🌸 PATTERN 8 — Base Conversion
+
+Questions
+
+Roman ↔ Integer
+
+Excel Column
+
+English Words
+
+Idea
+
+Convert from one representation to another.
+
+🌸 PATTERN 9 — Binary Math
+
+Questions
+
+Power of Two
+
+Idea
+
+Binary operations.
+
+🌸 PATTERN 10 — Mathematical Formula
+
+Questions
+
+Add Digits
+
+Rectangle Overlap
+
+Clock Angle
+
+Count Odds
+
+Instead of loops
+
+Use formulas.
+
+🌸 Recognition Table
+Question Says	Think
+Digits	% and /
+Reverse	Build answer
+Overflow	long
+Prime	Math
+Binary	Bit Manipulation
+Roman	Mapping
+English Words	Recursion + Mapping
+Fraction	HashMap
+Decimal	Remainder
+Clock	Formula
+Count	Formula
+🌸 Now Let's Classify ALL Your Questions ❤️
+🟢 Easy Digit Problems
+Fizz Buzz
+
+Pattern
+
+Simulation
+
+Palindrome Number
+
+Pattern
+
+Reverse Digits
+
+Happy Number
+
+Pattern
+
+HashSet + Digits
+
+Add Digits
+
+Pattern
+
+Modulo
+
+Reverse Integer
+
+Pattern
+
+Digit Extraction
+
+Plus One
+
+Pattern
+
+Carry
+
+🟡 Mapping Problems
+
+Roman to Integer
+
+↓
+
+HashMap
+
+Integer to Roman
+
+↓
+
+Greedy + Arrays
+
+Excel Column Number
+
+↓
+
+Base-26 Conversion
+
+Integer to English Words
+
+↓
+
+Recursion + Mapping
+
+🟠 Formula Problems
+
+Count Odds
+
+Rectangle Overlap
+
+Clock Angle
+
+Count Primes
+
+Sqrt
+
+Need formulas or optimized math.
+
+🔴 Simulation Problems
+
+Multiply Strings
+
+Fraction to Decimal
+
+Nth Digit
+
+These require careful implementation rather than a single trick.
+
+🌸 MUST-KNOW TRICKS 🚀
+Trick 1
+
+Get Last Digit
+
+digit = n % 10;
+Trick 2
+
+Remove Last Digit
+
+n = n / 10;
+Trick 3
+
+Build Reverse Number
+
+reverse = reverse * 10 + digit;
+Trick 4
+
+Overflow Check
+
+if(reverse > Integer.MAX_VALUE/10)
+Trick 5
+
+Power of Two
+
+(n & (n-1)) == 0
+Trick 6
+
+Prime Check
+
+for(int i=2;i*i<=n;i++)
+
+Never go till n-1.
+
+Trick 7
+
+Square Root
+
+Binary Search.
+
+Trick 8
+
+Recurring Decimal
+
+Store
+
+Remainder → Position
+
+using a HashMap.
+
+Trick 9
+
+Roman Numbers
+
+Always check
+
+IV
+
+IX
+
+XL
+
+XC
+
+CD
+
+CM
+
+before
+
+I
+
+V
+
+X
+Trick 10
+
+Multiply Strings
+
+Exactly like school multiplication.
+
+🌸 Time Complexity Summary
+Question	Pattern	TC
+Fizz Buzz	Simulation	O(n)
+Palindrome Number	Digits	O(log n)
+Roman to Integer	Mapping	O(n)
+Integer to Roman	Greedy	O(1)
+Happy Number	HashSet	O(log n)
+Power of Two	Bit	O(1)
+Sqrt	Binary Search	O(log n)
+Plus One	Carry	O(n)
+Add Digits	Math Formula	O(1)
+Count Odds	Formula	O(1)
+Rectangle Overlap	Geometry	O(1)
+Maximum Product of Three Numbers	Sort / Greedy	O(n log n) or O(n)
+Excel Sheet Column Number	Base-26	O(n)
+Reverse Integer	Digits	O(log n)
+Multiply Strings	Simulation	O(m × n)
+Count Primes	Sieve	O(n log log n)
+Angle Between Hands	Formula	O(1)
+Fraction to Recurring Decimal	HashMap	O(n)
+Nth Digit	Digit Counting	O(log n)
+Integer to English Words	Recursion	O(log n)
