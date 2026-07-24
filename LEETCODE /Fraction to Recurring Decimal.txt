@@ -1,0 +1,380 @@
+166. Fraction to Recurring Decimal
+❓ What is the question asking?
+
+Given two integers:
+
+numerator
+denominator
+
+Return the result of the division as a string.
+
+Rules:
+
+If the decimal terminates, return the decimal normally.
+If the decimal repeats forever, enclose the repeating part inside parentheses ().
+Examples
+1 / 2 = "0.5"
+
+2 / 1 = "2"
+
+2 / 3 = "0.(6)"
+
+4 / 333 = "0.(012)"
+
+1 / 6 = "0.1(6)"
+🪨 Brute Force Approach
+💡 Idea
+Perform normal long division.
+Keep generating decimal digits.
+Stop after some fixed number of digits.
+❌ Problem
+
+We never know:
+
+When the decimal starts repeating.
+Where to place the parentheses.
+
+Example:
+
+1/3 = 0.333333333...
+
+Brute force cannot correctly detect recurring decimals.
+
+⏱️ Time Complexity
+Very Large / Not Practical
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach (HashMap + Long Division)
+💡 Idea
+
+Simulate the long division process.
+
+The important observation is:
+
+If the same remainder appears again, the digits after it will repeat forever.
+
+So store:
+
+Remainder → Position in StringBuilder
+
+Whenever a remainder repeats:
+
+Insert "(" at its first occurrence.
+Append ")" at the end.
+📝 Algorithm
+Step 1
+
+If numerator is 0
+
+Return
+
+"0"
+Step 2
+
+Handle the sign.
+
+If exactly one number is negative,
+
+append
+
+-
+Step 3
+
+Convert numerator and denominator into long.
+
+long num = Math.abs((long) numerator);
+long den = Math.abs((long) denominator);
+
+This avoids integer overflow.
+
+Step 4
+
+Append the integer part.
+
+num / den
+Step 5
+
+Find remainder.
+
+rem = num % den
+
+If remainder becomes 0,
+
+return the answer.
+
+Step 6
+
+Append decimal point.
+
+.
+Step 7
+
+Create
+
+HashMap<Long,Integer>
+
+Store
+
+Remainder → Position
+Step 8
+
+Repeat until remainder becomes 0.
+
+If remainder already exists
+Insert "("
+Append ")"
+Break
+
+Else
+
+Store remainder
+Multiply remainder by 10
+Append quotient digit
+Update remainder
+💻 Java Code
+class Solution {
+
+    public String fractionToDecimal(int numerator, int denominator) {
+
+        if (numerator == 0)
+            return "0";
+
+        StringBuilder ans = new StringBuilder();
+
+        // Handle negative sign
+        if ((numerator < 0) ^ (denominator < 0))
+            ans.append("-");
+
+        long num = Math.abs((long) numerator);
+        long den = Math.abs((long) denominator);
+
+        // Integer part
+        ans.append(num / den);
+
+        long rem = num % den;
+
+        if (rem == 0)
+            return ans.toString();
+
+        ans.append(".");
+
+        HashMap<Long, Integer> map = new HashMap<>();
+
+        while (rem != 0) {
+
+            if (map.containsKey(rem)) {
+
+                ans.insert(map.get(rem), "(");
+                ans.append(")");
+
+                break;
+            }
+
+            map.put(rem, ans.length());
+
+            rem *= 10;
+
+            ans.append(rem / den);
+
+            rem %= den;
+        }
+
+        return ans.toString();
+    }
+}
+🔍 Line-by-Line Explanation
+Why XOR?
+if ((numerator < 0) ^ (denominator < 0))
+
+Exactly one negative number means the answer is negative.
+
+Examples
+
+-1/2 ✅ Negative
+
+1/-2 ✅ Negative
+
+-1/-2 ✅ Positive
+
+1/2 ✅ Positive
+Why convert to long?
+Integer.MIN_VALUE
+
+Its absolute value cannot fit inside an int.
+
+So convert first.
+
+(long) numerator
+
+then
+
+Math.abs()
+Why StringBuilder?
+
+Because
+
+append()
+
+insert()
+
+are efficient.
+
+Why HashMap?
+
+Store
+
+Remainder → Position
+
+Example
+
+4 → index 5
+
+If remainder becomes 4 again,
+
+we know repeating digits start from index 5.
+
+Why rem *= 10 ?
+
+Exactly like school long division.
+
+Example
+
+1 / 6
+
+remainder = 1
+
+10 / 6 = 1
+
+remainder = 4
+
+40 / 6 = 6
+Why rem %= den ?
+
+Find the next remainder for the next division step.
+
+▶️ Dry Run
+Example
+1 / 6
+
+Integer Part
+
+0
+
+Answer
+
+0.
+
+Store
+
+1 → index 2
+
+Multiply
+
+10
+
+Digit
+
+10/6 = 1
+
+Answer
+
+0.1
+
+Remainder
+
+4
+
+Store
+
+4 → index 3
+
+Multiply
+
+40
+
+Digit
+
+40/6 = 6
+
+Answer
+
+0.16
+
+Remainder
+
+4
+
+Already exists.
+
+Insert
+
+(
+
+before digit 6.
+
+Append
+
+)
+
+Final Answer
+
+0.1(6)
+▶️ Example 2
+
+Input
+
+2 / 3
+
+Output
+
+0.(6)
+▶️ Example 3
+
+Input
+
+1 / 2
+
+Output
+
+0.5
+⏱️ Time Complexity
+O(n)
+
+where n is the number of generated digits before the remainder repeats or becomes zero.
+
+📦 Space Complexity
+O(n)
+
+HashMap stores remainders.
+
+🎯 Key Points
+✅ Simulate long division.
+✅ Store Remainder → Position.
+✅ Repeated remainder means recurring decimal.
+✅ Use StringBuilder.
+✅ Use HashMap.
+✅ Convert to long before Math.abs().
+✅ Handle sign using XOR (^).
+✅ If remainder becomes 0, decimal terminates.
+✅ Insert "(" at the stored index and append ")" when a remainder repeats.
+🌟 Pattern
+Math
++
+HashMap
++
+Simulation
++
+Long Division
+🧠 Interview Trick
+
+Golden Rule:
+
+Same Remainder
+        ↓
+Same Future Digits
+        ↓
+Recurring Decimal
+
+Never store the digits.
+
+Always store the remainder, because the remainder completely determines the next digits in long division.
