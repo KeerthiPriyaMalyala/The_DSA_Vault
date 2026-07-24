@@ -1,0 +1,174 @@
+400. Nth Digit
+❓ What is the question asking?
+
+Imagine an infinite sequence formed by writing all positive integers together:
+
+12345678910111213141516...
+
+Given an integer n, return the nth digit in this sequence.
+
+🪨 Brute Force Approach
+💡 Idea
+Start from 1.
+Convert each number to a string.
+Traverse every digit one by one.
+Keep counting digits.
+When the count becomes n, return that digit.
+💻 Java Code
+class Solution {
+
+    public int findNthDigit(int n) {
+
+        int count = 0;
+
+        for (int i = 1; ; i++) {
+
+            String num = Integer.toString(i);
+
+            for (int j = 0; j < num.length(); j++) {
+
+                count++;
+
+                if (count == n)
+                    return num.charAt(j) - '0';
+            }
+        }
+    }
+}
+▶️ Output
+Input: n = 11
+
+Sequence:
+123456789101112...
+
+Output:
+0
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+⚡️ Optimal Approach (Math)
+💡 Idea
+
+Instead of generating the sequence, divide it into groups.
+
+Numbers	Digits per Number	Total Digits
+1 - 9	1	9
+10 - 99	2	180
+100 - 999	3	2700
+1000 - 9999	4	36000
+Find which group contains the nth digit.
+Find the exact number.
+Find the exact digit inside that number.
+📝 Algorithm
+Step 1 : Find the digit group
+digit = 1;
+start = 1;
+count = 9;
+
+While
+
+n > digit * count
+
+subtract the whole group.
+
+Example:
+
+n = 250
+
+250 > 9 × 1
+Yes
+
+n = 241
+
+241 > 90 × 2
+Yes
+
+n = 61
+
+61 > 900 × 3
+No
+
+So the answer is in the 3-digit numbers.
+
+Step 2 : Find the actual number
+number = start + (n - 1) / digit;
+Step 3 : Find the digit index
+index = (n - 1) % digit;
+Step 4 : Return the digit
+
+Convert the number to a string.
+
+Return
+
+str.charAt(index) - '0'
+💻 Java Code
+class Solution {
+
+    public int findNthDigit(int n) {
+
+        long digit = 1;
+        long start = 1;
+        long count = 9;
+
+        while (n > digit * count) {
+
+            n -= digit * count;
+            digit++;
+            count *= 10;
+            start *= 10;
+        }
+
+        long number = start + (n - 1) / digit;
+
+        String str = Long.toString(number);
+
+        return str.charAt((n - 1) % (int) digit) - '0';
+    }
+}
+▶️ Example
+Input
+n = 11
+
+Sequence
+
+123456789101112...
+
+Positions
+
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+5 → 5
+6 → 6
+7 → 7
+8 → 8
+9 → 9
+10 → 1
+11 → 0
+
+Output
+
+0
+⏱️ Time Complexity
+O(log n)
+📦 Space Complexity
+O(1)
+🎯 Key Points
+✅ Do not generate the entire sequence for large n.
+✅ Numbers are divided into groups based on digit length.
+✅ Use long to avoid integer overflow.
+✅ number = start + (n - 1) / digit finds the exact number.
+✅ (n - 1) % digit finds the index of the required digit.
+✅ Convert the number to a string and return the character as an integer.
+🌟 Pattern
+Math
++
+Number System
++
+Digit Counting
++
+Observation
+
+💖 Interview Tip: This is a tricky Math + Observation problem. The interviewer expects you to recognize the digit-group pattern (1-digit, 2-digit, 3-digit...) rather than simulate the entire sequence. It's one of those questions where the insight matters more than the code. 🌸
