@@ -1,0 +1,128 @@
+1344. Angle Between Hands of a Clock
+❓ What is the question asking?
+
+Given:
+
+hour
+minutes
+
+Return the smaller angle (in degrees) between the hour hand and the minute hand of a clock.
+
+⚡️ Optimal Approach
+💡 Idea
+
+We calculate the angle of both hands separately.
+
+📍 Minute Hand
+A clock has 360°.
+60 minutes complete one full rotation.
+
+So,
+
+Minute Angle = minutes × 6°
+
+Because,
+
+360 / 60 = 6°
+📍 Hour Hand
+12 hours complete one full rotation.
+
+So,
+
+360 / 12 = 30°
+
+But...
+
+The hour hand moves continuously as minutes pass.
+
+For every minute, it moves
+
+30 / 60 = 0.5°
+
+Therefore,
+
+Hour Angle = (hour % 12) × 30 + minutes × 0.5
+📍 Find the Smaller Angle
+angle = |Hour Angle - Minute Angle|
+
+If angle is greater than 180°
+
+Take the other side of the clock.
+
+angle = 360 - angle
+
+Return the answer.
+
+💻 Java Code
+class Solution {
+    public double angleClock(int hour, int minutes) {
+
+        double minuteAngle = minutes * 6;
+
+        double hourAngle = (hour % 12) * 30 + minutes * 0.5;
+
+        double angle = Math.abs(hourAngle - minuteAngle);
+
+        return Math.min(angle, 360 - angle);
+    }
+}
+▶️ Example 1
+
+Input
+
+hour = 3
+minutes = 30
+
+Minute Angle
+
+30 × 6 = 180°
+
+Hour Angle
+
+3 × 30 + 30 × 0.5
+= 90 + 15
+= 105°
+
+Difference
+
+|180 - 105| = 75°
+
+Output
+
+75
+▶️ Example 2
+
+Input
+
+hour = 12
+minutes = 30
+
+Minute Angle
+
+180°
+
+Hour Angle
+
+0 + 15 = 15°
+
+Difference
+
+165°
+
+Output
+
+165
+⏱️ Time Complexity
+O(1)
+📦 Space Complexity
+O(1)
+🎯 Key Points
+✅ Minute hand moves 6° per minute.
+✅ Hour hand moves 30° per hour.
+✅ Hour hand also moves 0.5° per minute.
+✅ Use hour % 12 to handle 12 correctly.
+✅ Use Math.abs() to find the difference.
+✅ Return the smaller angle using:
+Math.min(angle, 360 - angle);
+
+🌸 Pattern: Math → Geometry → Formula-Based Calculation 💖
