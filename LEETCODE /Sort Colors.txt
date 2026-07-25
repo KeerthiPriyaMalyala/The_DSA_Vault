@@ -1,0 +1,264 @@
+75. Sort Colors
+❓ What is the question asking?
+
+You are given an array containing only:
+
+0 → Red
+1 → White
+2 → Blue
+
+Your task is to sort the array in-place so that:
+
+All 0s come first.
+Then all 1s.
+Then all 2s.
+
+You cannot use the library sort function.
+
+Example
+Input : [2,0,2,1,1,0]
+
+Output: [0,0,1,1,2,2]
+🪨 Brute Force Approach
+💡 Idea
+
+Simply sort the array using a sorting algorithm.
+
+💻 Java Code
+import java.util.Arrays;
+
+class Solution {
+    public void sortColors(int[] nums) {
+        Arrays.sort(nums);
+    }
+}
+▶️ Output
+[0,0,1,1,2,2]
+⏱️ Time Complexity
+
+O(n log n)
+
+📦 Space Complexity
+
+O(1)
+
+🟡 Better Approach
+💡 Idea (Counting)
+
+Since there are only three values (0, 1, 2):
+
+Count the number of 0s, 1s, and 2s.
+Rewrite the array.
+💻 Java Code
+class Solution {
+
+    public void sortColors(int[] nums) {
+
+        int zero = 0;
+        int one = 0;
+        int two = 0;
+
+        for (int num : nums) {
+            if (num == 0)
+                zero++;
+            else if (num == 1)
+                one++;
+            else
+                two++;
+        }
+
+        int index = 0;
+
+        while (zero-- > 0)
+            nums[index++] = 0;
+
+        while (one-- > 0)
+            nums[index++] = 1;
+
+        while (two-- > 0)
+            nums[index++] = 2;
+    }
+}
+▶️ Output
+[0,0,1,1,2,2]
+⏱️ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(1)
+
+⚡ Optimal Approach (Dutch National Flag Algorithm)
+💡 Idea
+
+Maintain three regions:
+
+0 to low-1      → All 0s
+
+low to mid-1    → All 1s
+
+mid to high     → Unknown
+
+high+1 to end   → All 2s
+
+Use three pointers:
+
+low
+mid
+high
+
+Initially:
+
+low = 0
+mid = 0
+high = n-1
+Rules
+✅ Case 1
+nums[mid] == 0
+
+Swap nums[low] and nums[mid]
+
+Move
+
+low++
+mid++
+✅ Case 2
+nums[mid] == 1
+
+Already in the correct region.
+
+Only
+
+mid++
+✅ Case 3
+nums[mid] == 2
+
+Swap nums[mid] and nums[high]
+
+Move
+
+high--
+
+❌ Do NOT increment mid here.
+
+Reason:
+The element swapped from the end is unknown, so we must check it again.
+
+🧠 Dry Run
+Input
+nums = [2,0,2,1,1,0]
+
+Initial:
+
+low = 0
+mid = 0
+high = 5
+Step	nums[mid]	Action	Array	low	mid	high
+1	2	Swap mid & high	[0,0,2,1,1,2]	0	0	4
+2	0	Swap low & mid	[0,0,2,1,1,2]	1	1	4
+3	0	Swap low & mid	[0,0,2,1,1,2]	2	2	4
+4	2	Swap mid & high	[0,0,1,1,2,2]	2	2	3
+5	1	mid++	[0,0,1,1,2,2]	2	3	3
+6	1	mid++	[0,0,1,1,2,2]	2	4	3
+
+Now:
+
+mid > high
+
+Stop.
+
+Answer:
+
+[0,0,1,1,2,2]
+💻 Java Code
+class Solution {
+
+    public void sortColors(int[] nums) {
+
+        int low = 0;
+        int mid = 0;
+        int high = nums.length - 1;
+
+        while (mid <= high) {
+
+            if (nums[mid] == 0) {
+
+                int temp = nums[low];
+                nums[low] = nums[mid];
+                nums[mid] = temp;
+
+                low++;
+                mid++;
+            }
+
+            else if (nums[mid] == 1) {
+                mid++;
+            }
+
+            else {
+
+                int temp = nums[mid];
+                nums[mid] = nums[high];
+                nums[high] = temp;
+
+                high--;
+            }
+        }
+    }
+}
+▶️ Output
+[0,0,1,1,2,2]
+⏱️ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(1)
+
+📝 Key Interview Insight
+This is the famous Dutch National Flag Algorithm.
+It partitions the array into three regions:
+Left → 0s
+Middle → 1s
+Right → 2s
+When nums[mid] == 2, don't increment mid because the element swapped from the end hasn't been processed yet.
+Sorts the array in one pass, in-place.
+🎯 Pattern
+✅ Three Pointers
+✅ Partitioning
+✅ Dutch National Flag Algorithm
+✅ In-place Sorting
+🔑 Quick Revision
+low → Next position for 0
+mid → Current element being processed
+high → Next position for 2
+Rules
+nums[mid] == 0
+→ swap(low, mid)
+→ low++
+→ mid++
+
+nums[mid] == 1
+→ mid++
+
+nums[mid] == 2
+→ swap(mid, high)
+→ high--
+→ DON'T move mid
+Final Complexity
+⏱️ Time: O(n)
+📦 Space: O(1)
+🧠 Memory Trick
+
+Imagine you're dividing balls into three baskets:
+
+| 0s | 1s | Unknown | 2s |
+      ↑      ↑        ↑
+     low    mid     high
+🔴 0 → Send to the left (low++, mid++)
+⚪ 1 → Leave in the middle (mid++)
+🔵 2 → Send to the right (high--, don't move mid)
+
+If you remember "0 → Left, 1 → Stay, 2 → Right", you'll easily recall the Dutch National Flag algorithm in interviews. 💖
