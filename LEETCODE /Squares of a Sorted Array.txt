@@ -1,0 +1,167 @@
+977. Squares of a Sorted Array
+❓ What is the question asking?
+
+You are given a sorted array (it may contain negative numbers).
+
+You need to:
+
+Square every element.
+Return the squared numbers also in sorted order.
+Example
+Input : [-4, -1, 0, 3, 10]
+
+Square each number:
+[16, 1, 0, 9, 100]
+
+Output (sorted):
+[0, 1, 9, 16, 100]
+🪨 Brute Force Approach
+💡 Idea
+Square every element.
+Sort the array.
+Return it.
+💻 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    public static int[] sortedSquares(int[] nums) {
+
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = nums[i] * nums[i];
+        }
+
+        Arrays.sort(nums);
+
+        return nums;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {-4, -1, 0, 3, 10};
+
+        int[] ans = sortedSquares(nums);
+
+        System.out.println(Arrays.toString(ans));
+    }
+}
+▶️ Output
+[0, 1, 9, 16, 100]
+⏱️ Time Complexity
+Squaring → O(n)
+Sorting → O(n log n)
+
+Overall:
+
+O(n log n)
+
+📦 Space Complexity
+
+O(1) (ignoring Java's internal sorting stack)
+
+⚡ Optimal Approach
+💡 Idea (Two Pointers)
+
+The array is already sorted.
+
+The largest square will always come from either:
+
+the leftmost negative number
+or the rightmost positive number
+
+Example:
+
+[-7, -3, 2, 3, 11]
+
+Squares
+
+49 9 4 9 121
+
+Notice the biggest square is either 49 or 121.
+
+So:
+
+Keep one pointer at the beginning.
+Keep another at the end.
+Compare their absolute values.
+Put the larger square at the end of the answer array.
+Move that pointer inward.
+
+Repeat until all elements are processed.
+
+🧠 Dry Run
+nums = [-4, -1, 0, 3, 10]
+
+left = 0
+right = 4
+
+ans = [_, _, _, _, _]
+abs(left)	abs(right)	Larger	Put At	ans
+4	10	10²	4	[,,,,100]
+4	3	4²	3	[,,_,16,100]
+1	3	3²	2	[,,9,16,100]
+1	0	1²	1	[_,1,9,16,100]
+0	0	0²	0	[0,1,9,16,100]
+
+Done ✅
+
+💻 Java Code
+import java.util.Arrays;
+
+public class Main {
+
+    public static int[] sortedSquares(int[] nums) {
+
+        int n = nums.length;
+        int[] ans = new int[n];
+
+        int left = 0;
+        int right = n - 1;
+        int index = n - 1;
+
+        while (left <= right) {
+
+            if (Math.abs(nums[left]) > Math.abs(nums[right])) {
+                ans[index] = nums[left] * nums[left];
+                left++;
+            } else {
+                ans[index] = nums[right] * nums[right];
+                right--;
+            }
+
+            index--;
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {-4, -1, 0, 3, 10};
+
+        int[] ans = sortedSquares(nums);
+
+        System.out.println(Arrays.toString(ans));
+    }
+}
+▶️ Output
+[0, 1, 9, 16, 100]
+⏱️ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(n) (for the output array)
+
+📝 Key Interview Insight
+
+👉 The trick is not to square first and sort.
+
+Instead, realize that:
+
+Negative numbers become positive after squaring.
+The largest square is always at one of the two ends.
+Use Two Pointers and fill the answer array from the back.
+
+This is why the optimal solution runs in O(n) instead of O(n log n). 💖
