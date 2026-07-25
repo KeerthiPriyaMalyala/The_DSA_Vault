@@ -1,0 +1,138 @@
+3536. Maximum Product of Two Digits
+❓ What is the question asking?
+
+You are given a positive integer n.
+
+Your task is to:
+
+Find any two digits in the number.
+Return the maximum product of those two digits.
+
+Note: You can use the same digit twice only if it appears at least twice in the number.
+
+Example 1
+Input: n = 31
+
+Digits: 3, 1
+
+Possible products:
+3 × 1 = 3
+
+Output: 3
+Example 2
+Input: n = 827
+
+Digits: 8, 2, 7
+
+Possible products:
+8 × 2 = 16
+8 × 7 = 56
+2 × 7 = 14
+
+Output: 56
+Example 3
+Input: n = 522
+
+Digits: 5, 2, 2
+
+Possible products:
+5 × 2 = 10
+2 × 2 = 4
+
+Output: 10
+
+Notice that 2 × 2 is allowed because the digit 2 appears twice.
+
+🪨 Brute Force Approach
+💡 Idea
+Extract all digits from the number.
+Store them in an array/list.
+Check every pair of digits.
+Keep track of the maximum product.
+⏱️ Time Complexity
+
+O(d²)
+
+(where d = number of digits)
+
+📦 Space Complexity
+
+O(d)
+
+⚡ Optimal Approach
+💡 Idea
+
+We only need the largest and second largest digits.
+
+Steps:
+
+Extract digits one by one using % 10.
+Keep updating:
+largest digit
+second largest digit
+Return their product.
+
+Since a number has at most 10 digits (for a 32-bit integer), this is very efficient.
+
+🧠 Dry Run
+Input
+n = 827
+Digit	Largest	Second Largest
+7	7	-1
+2	7	2
+8	8	7
+
+Answer:
+
+8 × 7 = 56
+💻 Java Code
+public class Main {
+
+    public static int maxProduct(int n) {
+
+        int largest = -1;
+        int secondLargest = -1;
+
+        while (n > 0) {
+
+            int digit = n % 10;
+
+            if (digit > largest) {
+                secondLargest = largest;
+                largest = digit;
+            } else if (digit > secondLargest) {
+                secondLargest = digit;
+            }
+
+            n /= 10;
+        }
+
+        return largest * secondLargest;
+    }
+
+    public static void main(String[] args) {
+
+        int n = 827;
+
+        System.out.println(maxProduct(n));
+    }
+}
+▶️ Output
+56
+⏱️ Time Complexity
+
+O(d)
+
+(where d is the number of digits)
+
+📦 Space Complexity
+
+O(1)
+
+📝 Key Interview Insight
+Use % 10 to extract the last digit.
+Use / 10 to remove the last digit.
+Track the largest and second largest digits while traversing the number.
+No sorting or extra array is needed.
+
+This is the most efficient solution with O(d) time and O(1) space. 💖
