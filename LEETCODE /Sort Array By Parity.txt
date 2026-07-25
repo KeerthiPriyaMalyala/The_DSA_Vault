@@ -1,0 +1,137 @@
+905. Sort Array By Parity
+❓ What is the question asking?
+
+Given an integer array nums, rearrange the array so that:
+
+✅ All even numbers come first.
+✅ All odd numbers come after them.
+
+The relative order does not matter.
+
+Example
+Input : [3, 1, 2, 4]
+
+Output: [4, 2, 1, 3]
+
+or
+
+[2, 4, 3, 1]
+
+Both are correct because the problem only requires all even numbers to appear before all odd numbers.
+
+💡 Key Observation
+
+We only care about separating:
+
+Even numbers → Left side
+Odd numbers → Right side
+
+We do not need to sort the numbers.
+
+⚡ Optimal Approach (Two Pointers)
+💡 Idea
+
+Use two pointers:
+
+left → Starts from the beginning.
+right → Starts from the end.
+Cases
+Case 1
+left = Odd
+right = Even
+
+Swap them.
+
+Move both pointers.
+
+Case 2
+left = Even
+
+Already in the correct position.
+
+Move left++.
+
+Case 3
+right = Odd
+
+Already in the correct position.
+
+Move right--.
+
+Continue until left >= right.
+
+🧠 Dry Run
+nums = [3, 1, 2, 4]
+
+left = 0
+right = 3
+Left	Right	Action	Array
+3 (Odd)	4 (Even)	Swap	[4,1,2,3]
+1 (Odd)	2 (Even)	Swap	[4,2,1,3]
+left > right	Stop	Done	[4,2,1,3]
+💻 Java Code
+class Solution {
+    public int[] sortArrayByParity(int[] nums) {
+
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left < right) {
+
+            if (nums[left] % 2 != 0 && nums[right] % 2 == 0) {
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+
+                left++;
+                right--;
+            }
+            else if (nums[left] % 2 == 0) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+
+        return nums;
+    }
+}
+⏱️ Time Complexity
+
+O(n)
+
+Each pointer moves at most n times.
+
+📦 Space Complexity
+
+O(1)
+
+No extra array is used.
+
+🎯 Why Two Pointers?
+
+The answer only depends on whether a number is even or odd.
+
+Left pointer searches for an odd number that should move right.
+Right pointer searches for an even number that should move left.
+When both are found, swap them.
+
+This partitions the array in a single traversal.
+
+📝 Interview Notes
+✅ Pattern: Two Pointers / Partitioning
+✅ No sorting required.
+✅ Relative order is not preserved.
+✅ In-place algorithm.
+✅ Similar idea to the Dutch National Flag partitioning technique.
+🔑 Quick Revision
+left starts from the beginning.
+right starts from the end.
+Odd on left + Even on right → Swap
+Even on left → left++
+Odd on right → right--
+Stop when left >= right.
+Final Complexity
+⏱️ Time: O(n)
+📦 Space: O(1)
