@@ -1,0 +1,251 @@
+179. Largest Number
+❓ What is the question asking?
+
+You are given an array of non-negative integers.
+
+Arrange the numbers such that they form the largest possible number.
+
+Return the answer as a string, because the resulting number can be very large.
+
+Example 1
+Input : [10,2]
+
+Possible numbers:
+102
+210
+
+Output:
+"210"
+Example 2
+Input : [3,30,34,5,9]
+
+Output:
+"9534330"
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all possible permutations of the array.
+
+For each permutation:
+
+Form the number.
+Keep the maximum.
+⏱️ Time Complexity
+
+O(n! × n)
+
+📦 Space Complexity
+
+O(n)
+
+❌ Not feasible.
+
+⚡ Optimal Approach (Custom Comparator)
+💡 Key Observation
+
+Normal sorting does not work.
+
+Example:
+
+3
+30
+
+Normal descending order:
+
+30 3
+→ 303
+
+But
+
+3 30
+→ 330
+
+330 > 303
+
+So 3 should come before 30.
+
+💡 Comparator Rule
+
+For two numbers:
+
+a
+b
+
+Compare
+
+ab
+
+with
+
+ba
+
+If
+
+ab > ba
+
+then
+
+a comes first
+
+Else
+
+b comes first
+Example
+a = "9"
+b = "34"
+
+ab = "934"
+ba = "349"
+
+934 > 349
+
+Therefore
+
+9 comes before 34
+Another Example
+a = "30"
+b = "3"
+
+ab = "303"
+ba = "330"
+
+330 > 303
+
+Therefore
+
+3 comes before 30
+🧠 Dry Run
+
+Input
+
+nums = [3,30,34,5,9]
+
+Convert to strings
+
+["3","30","34","5","9"]
+
+Sorting using comparator
+
+Compare 3 and 30
+
+330 > 303
+
+3 comes first
+Compare 34 and 3
+
+343 < 334
+
+34 comes first
+Compare 9 and 5
+
+95 > 59
+
+9 comes first
+
+Final sorted order
+
+9
+5
+34
+3
+30
+
+Join them
+
+9534330
+💻 Java Code
+import java.util.Arrays;
+
+class Solution {
+
+    public String largestNumber(int[] nums) {
+
+        String[] arr = new String[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = String.valueOf(nums[i]);
+        }
+
+        Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b));
+
+        if (arr[0].equals("0")) {
+            return "0";
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        for (String s : arr) {
+            ans.append(s);
+        }
+
+        return ans.toString();
+    }
+}
+▶️ Output
+9534330
+⏱️ Time Complexity
+
+Sorting takes
+
+O(n log n)
+
+Each comparison concatenates strings of limited length, so the overall complexity is effectively:
+
+O(n log n)
+
+📦 Space Complexity
+
+O(n)
+
+(for the string array and result)
+
+📝 Key Interview Insight
+❌ Do not sort numerically.
+✅ Sort using a custom comparator.
+Compare:
+a + b
+b + a
+Whichever combination is larger determines the order.
+If the first element after sorting is "0", all numbers are 0, so return "0" instead of "000".
+🎯 Pattern
+✅ Custom Comparator
+✅ Greedy
+✅ String Manipulation
+✅ Sorting
+🔑 Quick Revision
+Comparator Rule
+Compare:
+
+a + b
+b + a
+
+If (a + b) > (b + a)
+→ a comes first
+
+Else
+→ b comes first
+Special Case
+if (arr[0].equals("0"))
+    return "0";
+Final Complexity
+⏱️ Time: O(n log n)
+📦 Space: O(n)
+🧠 Memory Trick
+
+Imagine you're deciding which number should stand first.
+
+For every pair:
+
+a = 54
+b = 546
+
+Try:
+
+54546
+54654
+
+Choose the arrangement that gives the larger combined number.
+
+👉 Never compare a and b directly. Always compare ab vs ba.
+
+That's the entire trick behind this famous interview problem. 💖
