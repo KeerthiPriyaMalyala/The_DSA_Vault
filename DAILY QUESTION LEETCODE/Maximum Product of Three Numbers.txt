@@ -1,0 +1,262 @@
+628. Maximum Product of Three Numbers
+❓ What is the question asking?
+
+You are given an integer array nums.
+
+Return the maximum product that can be obtained by multiplying any three numbers.
+
+Example 1
+Input : [1,2,3]
+
+Output: 6
+
+Explanation:
+1 × 2 × 3 = 6
+Example 2
+Input : [1,2,3,4]
+
+Output: 24
+
+Explanation:
+2 × 3 × 4 = 24
+Example 3
+Input : [-10,-10,5,2]
+
+Output: 500
+
+Explanation:
+(-10) × (-10) × 5 = 500
+🪨 Brute Force Approach
+💡 Idea
+
+Try every possible combination of three numbers.
+
+Keep the maximum product.
+
+⏱️ Time Complexity
+
+O(n³)
+
+📦 Space Complexity
+
+O(1)
+
+🟡 Better Approach
+💡 Idea
+
+Sort the array.
+
+After sorting, there are only two possible answers:
+
+Product of the three largest numbers.
+Product of the two smallest (most negative) numbers and the largest number.
+
+Return the maximum of these two.
+
+💻 Java Code
+import java.util.Arrays;
+
+class Solution {
+
+    public int maximumProduct(int[] nums) {
+
+        Arrays.sort(nums);
+
+        int n = nums.length;
+
+        int product1 = nums[n - 1] * nums[n - 2] * nums[n - 3];
+
+        int product2 = nums[0] * nums[1] * nums[n - 1];
+
+        return Math.max(product1, product2);
+    }
+}
+▶️ Output
+500
+⏱️ Time Complexity
+
+O(n log n)
+
+📦 Space Complexity
+
+O(1)
+
+⚡ Optimal Approach
+💡 Idea
+
+No need to sort.
+
+Traverse the array once and keep track of:
+
+Largest (max1)
+Second Largest (max2)
+Third Largest (max3)
+
+and
+
+Smallest (min1)
+Second Smallest (min2)
+
+Finally compare:
+
+max1 × max2 × max3
+
+vs
+
+min1 × min2 × max1
+
+Return the larger one.
+
+🧠 Why do we consider two negative numbers?
+
+Two negative numbers become positive.
+
+Example:
+
+[-10,-10,5,2]
+
+Largest three:
+5 × 2 × (-10) = -100
+
+Two smallest + largest:
+(-10) × (-10) × 5 = 500 ✅
+
+That's why we must check both possibilities.
+
+🧠 Dry Run
+
+Input
+
+nums = [-10,-10,5,2]
+
+After one traversal
+
+Largest values
+
+max1 = 5
+max2 = 2
+max3 = -10
+
+Smallest values
+
+min1 = -10
+min2 = -10
+
+Compute
+
+Product1 = 5 × 2 × (-10)
+         = -100
+
+Product2 = (-10) × (-10) × 5
+         = 500
+
+Answer
+
+500
+💻 Java Code
+class Solution {
+
+    public int maximumProduct(int[] nums) {
+
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+        int max3 = Integer.MIN_VALUE;
+
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+
+        for (int num : nums) {
+
+            // Largest three
+            if (num > max1) {
+                max3 = max2;
+                max2 = max1;
+                max1 = num;
+            }
+            else if (num > max2) {
+                max3 = max2;
+                max2 = num;
+            }
+            else if (num > max3) {
+                max3 = num;
+            }
+
+            // Smallest two
+            if (num < min1) {
+                min2 = min1;
+                min1 = num;
+            }
+            else if (num < min2) {
+                min2 = num;
+            }
+        }
+
+        return Math.max(max1 * max2 * max3,
+                        min1 * min2 * max1);
+    }
+}
+▶️ Output
+500
+⏱️ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(1)
+
+📝 Key Interview Insight
+
+There are only two possible maximum products:
+
+Three largest numbers
+max1 × max2 × max3
+Two smallest (most negative) numbers and the largest positive number
+min1 × min2 × max1
+
+The answer is the maximum of these two values.
+
+🎯 Pattern
+✅ Array Traversal
+✅ Tracking Maximum & Minimum Values
+✅ Greedy
+🔑 Quick Revision
+
+Track:
+
+Largest:
+max1
+max2
+max3
+
+Smallest:
+min1
+min2
+
+Finally compute:
+
+product1 = max1 × max2 × max3
+
+product2 = min1 × min2 × max1
+
+Answer = max(product1, product2)
+Final Complexity
+⏱️ Time: O(n)
+📦 Space: O(1)
+🧠 Memory Trick
+
+Always remember these 2 cases:
+
+Case 1:
+Largest × Largest × Largest
+
+Case 2:
+Most Negative × Most Negative × Largest
+
+👉 Why?
+
+Because:
+
+Negative × Negative = Positive
+
+Sometimes two very small negative numbers produce a much larger positive product than using the third-largest positive number. That's the key trick interviewers expect you to recognize. 💖
