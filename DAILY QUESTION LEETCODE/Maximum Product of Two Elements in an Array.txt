@@ -1,0 +1,196 @@
+1464. Maximum Product of Two Elements in an Array
+❓ What is the question asking?
+
+You are given an array nums.
+
+Choose two different elements such that:
+
+(nums[i] - 1) * (nums[j] - 1)
+
+is maximum.
+
+Return that maximum product.
+
+📝 Example
+nums = [3,4,5,2]
+
+Choose
+
+5 and 4
+
+Product
+
+(5-1) × (4-1)
+
+= 4 × 3
+
+= 12
+
+Answer:
+
+12
+🪨 Brute Force Approach
+💡 Idea
+
+Try every possible pair.
+
+For every pair
+
+(nums[i]-1)*(nums[j]-1)
+
+Keep updating the maximum.
+
+⏱ Time Complexity
+O(N²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+To get the maximum product,
+
+we only need the largest and second largest numbers.
+
+Why?
+
+Because
+
+(a-1)(b-1)
+
+is largest when both numbers are largest.
+
+So,
+
+Find largest number.
+Find second largest number.
+Return
+(max1-1)*(max2-1)
+
+Only one traversal is needed.
+
+🧠 Algorithm
+largest = 0
+secondLargest = 0
+
+Traverse array
+
+If current > largest
+    secondLargest = largest
+    largest = current
+
+Else if current > secondLargest
+    secondLargest = current
+
+Return
+
+(largest-1)*(secondLargest-1)
+💻 Java Code
+public class Main {
+
+    public static int maxProduct(int[] nums) {
+
+        int largest = 0;
+        int secondLargest = 0;
+
+        for (int num : nums) {
+
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest) {
+                secondLargest = num;
+            }
+        }
+
+        return (largest - 1) * (secondLargest - 1);
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {3, 4, 5, 2};
+
+        System.out.println(maxProduct(nums));
+    }
+}
+▶️ Output
+12
+⏱ Time Complexity
+O(N)
+
+One traversal.
+
+📦 Space Complexity
+O(1)
+🎯 Dry Run
+nums = [3,4,5,2]
+
+Initially
+
+largest = 0
+secondLargest = 0
+Number = 3
+3 > 0
+
+secondLargest = 0
+largest = 3
+largest = 3
+secondLargest = 0
+Number = 4
+4 > 3
+
+secondLargest = 3
+largest = 4
+largest = 4
+secondLargest = 3
+Number = 5
+5 > 4
+
+secondLargest = 4
+largest = 5
+largest = 5
+secondLargest = 4
+Number = 2
+2 > 4 ?
+
+No
+
+No changes.
+
+largest = 5
+secondLargest = 4
+
+Finally
+
+(5-1)*(4-1)
+
+=4*3
+
+=12
+
+✅ Answer = 12
+
+🧠 Interview Tip ⭐
+
+Whenever a problem asks for:
+
+Largest pair
+Maximum product
+Biggest sum of two numbers
+
+👉 First think:
+
+"Can I solve it by finding the largest and second largest elements instead of sorting?"
+
+This reduces:
+
+Sorting → O(N log N) ❌
+One pass → O(N) ✅
+📌 Pattern
+
+✅ Find Largest Element
+
+✅ Find Second Largest Element
+
+➡️ Pattern Name: Largest & Second Largest Tracking (One Pass)
+
+This is a very common interview pattern and appears in many array problems. 💖
