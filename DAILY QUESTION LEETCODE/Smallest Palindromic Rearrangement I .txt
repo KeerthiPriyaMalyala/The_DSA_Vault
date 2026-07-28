@@ -1,0 +1,245 @@
+3517. Smallest Palindromic Rearrangement I (Medium)
+❓ What is the question asking?
+
+You are given a palindrome string s.
+
+You can rearrange its characters.
+
+Return the lexicographically smallest palindrome possible.
+
+Example
+Input:
+s = "cbbc"
+
+Possible palindromes:
+bccb
+cbbc
+
+Answer:
+bccb
+
+Because "bccb" is lexicographically smaller.
+
+🪨 Brute Force Approach
+💡 Idea
+Generate all permutations.
+Check which ones are palindromes.
+Return the smallest.
+❌ Not practical
+
+For length n
+
+n! permutations
+
+Impossible for large strings.
+
+⚡ Optimal Approach
+💡 Idea
+
+A palindrome is completely determined by its first half.
+
+Example
+
+aabbcc
+
+Character counts
+
+a -> 2
+b -> 2
+c -> 2
+
+Half becomes
+
+abc
+
+Middle
+
+(none)
+
+Reverse of half
+
+cba
+
+Final
+
+abc + "" + cba
+
+abccba
+If a character occurs odd times
+
+Example
+
+aaabb
+
+Counts
+
+a -> 3
+b -> 2
+
+Half
+
+ab
+
+Middle
+
+a
+
+Reverse
+
+ba
+
+Answer
+
+ababa
+Step-by-Step Algorithm
+Step 1
+
+Count frequency of every character.
+
+Map<Character,Integer>
+Step 2
+
+Traverse characters in sorted order.
+
+For each character
+
+frequency / 2
+
+times add to first half.
+
+Step 3
+
+If frequency is odd
+
+that character becomes the middle.
+
+Step 4
+
+Reverse first half.
+
+Step 5
+
+Answer
+
+firstHalf
++
+middle
++
+reverse(firstHalf)
+Dry Run
+Input
+s = "cbbc"
+
+Frequency
+
+b -> 2
+c -> 2
+
+Sorted order
+
+b
+c
+
+Half
+
+bc
+
+Middle
+
+""
+
+Reverse
+
+cb
+
+Answer
+
+bccb
+Input
+s = "racecar"
+
+Frequency
+
+a -> 2
+c -> 2
+e -> 1
+r -> 2
+
+Half
+
+acr
+
+Middle
+
+e
+
+Reverse
+
+rca
+
+Answer
+
+acrerca
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static String smallestPalindrome(String s) {
+
+        int[] freq = new int[26];
+
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
+        }
+
+        StringBuilder firstHalf = new StringBuilder();
+        String middle = "";
+
+        for (int i = 0; i < 26; i++) {
+
+            for (int j = 0; j < freq[i] / 2; j++) {
+                firstHalf.append((char) ('a' + i));
+            }
+
+            if (freq[i] % 2 == 1) {
+                middle = String.valueOf((char) ('a' + i));
+            }
+        }
+
+        String secondHalf = new StringBuilder(firstHalf).reverse().toString();
+
+        return firstHalf.toString() + middle + secondHalf;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "cbbc";
+
+        System.out.println(smallestPalindrome(s));
+    }
+}
+▶️ Output
+bccb
+⏱️ Time Complexity
+O(n)
+Counting characters → O(n)
+Building the palindrome → O(n)
+📦 Space Complexity
+O(n)
+
+For storing the first half and final answer.
+
+🎯 Interview Explanation (30 Seconds)
+
+"Since the given string is already a palindrome, every character appears an even number of times except possibly one. I count the frequency of each character, build the first half using half of each frequency in sorted order to ensure lexicographical minimum, place the odd-frequency character in the middle if it exists, and append the reverse of the first half. This constructs the smallest possible palindrome in linear time."
+
+🌟 Key Observation (Most Important)
+
+👉 To get the lexicographically smallest palindrome:
+
+Build the left half in alphabetical order.
+Put the odd-frequency character (if any) in the middle.
+Mirror the left half to form the right half.
+
+That's the entire trick behind this problem. 💖
