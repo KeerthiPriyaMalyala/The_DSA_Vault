@@ -1,0 +1,219 @@
+274. H-Index
+❓ What is the question asking?
+
+You are given an array where:
+
+citations[i] = number of citations received by the ith paper
+
+Find the maximum value h such that:
+
+The researcher has at least h papers.
+Each of those papers has at least h citations.
+🪨 Brute Force Approach
+💡 Idea
+
+Try every possible value of h from 0 to n.
+
+For every h:
+
+Count how many papers have citations ≥ h.
+If count ≥ h, then this h is possible.
+Store the maximum possible h.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static int hIndex(int[] citations) {
+
+        int n = citations.length;
+        int ans = 0;
+
+        for (int h = 0; h <= n; h++) {
+
+            int count = 0;
+
+            for (int c : citations) {
+                if (c >= h) {
+                    count++;
+                }
+            }
+
+            if (count >= h) {
+                ans = h;
+            }
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int[] citations = {3, 0, 6, 1, 5};
+
+        System.out.println(hIndex(citations));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+Sort the array.
+For every paper:
+Remaining papers = n - i
+Current citation = citations[i]
+If
+citations[i] >= n - i
+
+then
+
+answer = n - i
+
+Why?
+
+Because there are exactly n-i papers remaining, and all of them have citations at least citations[i].
+
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static int hIndex(int[] citations) {
+
+        Arrays.sort(citations);
+
+        int n = citations.length;
+
+        for (int i = 0; i < n; i++) {
+
+            if (citations[i] >= n - i) {
+                return n - i;
+            }
+
+        }
+
+        return 0;
+    }
+
+    public static void main(String[] args) {
+
+        int[] citations = {3, 0, 6, 1, 5};
+
+        System.out.println(hIndex(citations));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n log n)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+
+💖 In this problem, the sorting approach above is already considered the standard optimal interview solution.
+
+There is another O(n) Bucket Counting solution because:
+
+0 <= citations[i] <= 1000
+
+or more generally, values larger than n can be grouped together.
+
+💡 Idea
+
+Create a bucket of size n + 1.
+
+If citations ≥ n → store in bucket[n]
+Otherwise → store in bucket[citations]
+
+Now start from the largest bucket and keep adding papers.
+
+The moment
+
+papers >= h
+
+return h.
+
+💻 Java Code
+public class Main {
+
+    public static int hIndex(int[] citations) {
+
+        int n = citations.length;
+
+        int[] bucket = new int[n + 1];
+
+        for (int c : citations) {
+
+            if (c >= n)
+                bucket[n]++;
+            else
+                bucket[c]++;
+
+        }
+
+        int papers = 0;
+
+        for (int h = n; h >= 0; h--) {
+
+            papers += bucket[h];
+
+            if (papers >= h)
+                return h;
+
+        }
+
+        return 0;
+    }
+
+    public static void main(String[] args) {
+
+        int[] citations = {3, 0, 6, 1, 5};
+
+        System.out.println(hIndex(citations));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+🎯 Dry Run (Better Approach)
+
+Input:
+
+[3,0,6,1,5]
+Step 1: Sort
+[0,1,3,5,6]
+
+n = 5
+
+i	Citation	n-i	citation ≥ n-i?
+0	0	5	❌
+1	1	4	❌
+2	3	3	✅
+
+Return
+
+3
+📝 Notes
+Remember
+
+After sorting:
+
+Remaining papers = n - i
+
+If
+
+citations[i] >= n - i
+
+then
+
+Answer = n - i
+🎯 Interview Tip
+
+If the interviewer asks for a better time complexity than sorting, mention the Bucket Counting solution (O(n) time, O(n) space). Otherwise, the sorting solution is the most common and easiest to explain in interviews.
