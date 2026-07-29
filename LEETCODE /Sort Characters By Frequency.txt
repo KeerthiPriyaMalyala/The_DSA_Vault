@@ -1,0 +1,254 @@
+451. Sort Characters By Frequency
+❓ What is the question asking?
+
+You are given a string.
+
+Your task is to:
+
+Count how many times each character appears.
+Rearrange the string so that characters with higher frequency come first.
+
+If two characters have the same frequency, any order is acceptable.
+
+📝 Example
+Input:
+tree
+
+Frequency:
+
+Character	Frequency
+t	1
+r	1
+e	2
+
+Now sort by frequency (highest → lowest)
+
+e = 2
+t = 1
+r = 1
+
+Possible answers
+
+eert
+eetr
+
+Both are correct.
+
+📖 Example 2
+Input:
+cccaaa
+
+Frequency
+
+Character	Frequency
+c	3
+a	3
+
+Output can be
+
+cccaaa
+
+or
+
+aaaccc
+
+Both are correct.
+
+📖 Example 3
+Input:
+Aabb
+
+Frequency
+
+Character	Frequency
+b	2
+A	1
+a	1
+
+Output
+
+bbAa
+
+or
+
+bbaA
+
+Both are valid.
+
+🪨 Brute Force Approach
+💡 Idea
+Count frequency using HashMap.
+Repeatedly find the character with the highest frequency.
+Add it to the answer.
+Remove it from the map.
+Repeat until the map becomes empty.
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(n)
+🟡 Better Approach
+💡 Idea
+Count frequency using HashMap.
+Store all characters in a List.
+Sort the list using a Comparator based on frequency (highest first).
+Append each character frequency number of times.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static String frequencySort(String s) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        List<Character> list = new ArrayList<>(map.keySet());
+
+        Collections.sort(list, (a, b) -> map.get(b) - map.get(a));
+
+        StringBuilder ans = new StringBuilder();
+
+        for (char ch : list) {
+
+            for (int i = 0; i < map.get(ch); i++) {
+                ans.append(ch);
+            }
+
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "tree";
+
+        System.out.println(frequencySort(s));
+
+    }
+}
+▶️ Output
+eert
+⏱️ Time Complexity
+O(n log n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach
+💡 Idea (Bucket Sort)
+
+Maximum possible frequency of a character is n.
+
+Create buckets where:
+
+bucket[i]
+
+stores all characters appearing exactly i times.
+
+Then traverse buckets from highest frequency to lowest, adding each character frequency times.
+
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static String frequencySort(String s) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        List<Character>[] bucket = new ArrayList[s.length() + 1];
+
+        for (char ch : map.keySet()) {
+
+            int freq = map.get(ch);
+
+            if (bucket[freq] == null)
+                bucket[freq] = new ArrayList<>();
+
+            bucket[freq].add(ch);
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = bucket.length - 1; i >= 1; i--) {
+
+            if (bucket[i] != null) {
+
+                for (char ch : bucket[i]) {
+
+                    for (int j = 0; j < i; j++)
+                        ans.append(ch);
+
+                }
+
+            }
+
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "tree";
+
+        System.out.println(frequencySort(s));
+    }
+}
+▶️ Output
+eert
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+🎯 Dry Run
+
+Input
+
+tree
+Step 1: Count Frequency
+Character	Frequency
+t	1
+r	1
+e	2
+Step 2: Sort by Frequency
+e → 2
+t → 1
+r → 1
+Step 3: Build Answer
+ee
+
+↓
+
+eet
+
+↓
+
+eert
+📝 Notes
+Remember
+Count frequency using HashMap.
+Sort characters based on frequency.
+Append each character frequency times.
+Same frequency characters can appear in any order.
+🎯 Interview Tip
+If asked for the simplest solution, use HashMap + Sorting (Comparator).
+If the interviewer asks for a faster approach, use Bucket Sort, which achieves O(n) time because frequencies range only from 1 to n.
+
+💖 Memory Trick
+
+String
+   ↓
+HashMap (Character → Frequency)
+   ↓
+Sort by Frequency
+   ↓
+Append Character Frequency Times
+   ↓
+Answer
