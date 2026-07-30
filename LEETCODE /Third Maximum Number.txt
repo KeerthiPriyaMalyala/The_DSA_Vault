@@ -1,0 +1,286 @@
+414. Third Maximum Number
+❓ What is the question asking?
+
+Given an array nums.
+
+Return:
+
+✅ The 3rd distinct maximum number.
+If there are less than 3 distinct numbers, return the maximum number.
+⚠️ Distinct means Unique
+
+Example:
+
+[5,5,4,3]
+
+Distinct numbers are:
+
+5,4,3
+
+The third maximum is:
+
+3
+Example 1
+nums = [3,2,1]
+
+Distinct numbers:
+
+3,2,1
+
+Third maximum:
+
+1
+Example 2
+nums = [1,2]
+
+Only two distinct numbers.
+
+Return:
+
+2
+
+(the maximum)
+
+Example 3
+nums = [2,2,3,1]
+
+Distinct numbers:
+
+3,2,1
+
+Third maximum:
+
+1
+🪨 Brute Force Approach
+💡 Idea
+Sort the array.
+Traverse from the end.
+Count only distinct numbers.
+When count becomes 3, return that number.
+If count never reaches 3, return the maximum element.
+💻 Java Code
+import java.util.Arrays;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static int thirdMax(int[] nums) {
+
+        Arrays.sort(nums);
+
+        int count = 1;
+        int max = nums[nums.length - 1];
+
+        for (int i = nums.length - 2; i >= 0; i--) {
+
+            if (nums[i] != nums[i + 1]) {
+                count++;
+
+                if (count == 3)
+                    return nums[i];
+            }
+        }
+
+        return max;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,2,3,1};
+
+        System.out.println(thirdMax(nums));
+    }
+}
+▶️ Output
+1
+⏱️ Time Complexity
+O(n log n)
+📦 Space Complexity
+O(1)
+
+(Ignoring the space used internally by sorting.)
+
+⚡ Optimal Approach
+💡 Idea
+
+We don't need sorting.
+
+Maintain three distinct maximum values:
+
+first
+second
+third
+
+For every number:
+
+Step 1
+
+Ignore duplicates.
+
+Step 2
+
+Update:
+
+If greater than first
+Shift:
+third = second
+second = first
+first = num
+
+Else if greater than second
+
+Shift:
+third = second
+second = num
+
+Else if greater than third
+
+third = num
+
+At the end:
+
+If third doesn't exist
+Return first
+Otherwise
+Return third
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static int thirdMax(int[] nums) {
+
+        Long first = null;
+        Long second = null;
+        Long third = null;
+
+        for (int num : nums) {
+
+            if ((first != null && num == first) ||
+                (second != null && num == second) ||
+                (third != null && num == third)) {
+                continue;
+            }
+
+            if (first == null || num > first) {
+
+                third = second;
+                second = first;
+                first = (long) num;
+
+            } else if (second == null || num > second) {
+
+                third = second;
+                second = (long) num;
+
+            } else if (third == null || num > third) {
+
+                third = (long) num;
+            }
+        }
+
+        if (third == null)
+            return first.intValue();
+
+        return third.intValue();
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {2,2,3,1};
+
+        System.out.println(thirdMax(nums));
+    }
+}
+▶️ Output
+1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Dry Run
+
+Input
+
+nums = [2,2,3,1]
+
+Initially
+
+first = null
+second = null
+third = null
+Number	first	second	third
+2	2	null	null
+2	Duplicate → Skip	null	null
+3	3	2	null
+1	3	2	1
+
+Return
+
+1
+Another Dry Run
+nums = [1,2]
+Number	first	second	third
+1	1	null	null
+2	2	1	null
+
+Only two distinct numbers.
+
+Return
+
+2
+🎯 What you learn from this problem
+✅ Tracking multiple maximum values
+✅ Ignoring duplicate values
+✅ Updating variables in the correct order
+✅ Handling edge cases with fewer than 3 distinct elements
+🧠 Why do we use Long instead of int?
+
+Suppose the array contains:
+
+[-2147483648]
+
+This is Integer.MIN_VALUE.
+
+If we initialized:
+
+int first = Integer.MIN_VALUE;
+
+we couldn't tell whether first is:
+
+the actual maximum value from the array, or
+just the initial placeholder.
+
+Using:
+
+Long first = null;
+
+lets us clearly know whether we've assigned a value yet, avoiding this ambiguity.
+
+🧠 Pattern Learned
+
+This problem teaches the Top-K Tracking Pattern.
+
+Instead of sorting the entire array, maintain only the few largest values you care about while scanning once.
+
+This pattern is useful in problems like:
+
+✅ Second Largest Element
+✅ Third Maximum Number
+✅ K Largest Elements
+✅ Running Maximum problems
