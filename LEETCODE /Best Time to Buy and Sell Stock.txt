@@ -1,0 +1,239 @@
+121. Best Time to Buy and Sell Stock
+❓ What is the question asking?
+
+You are given an array prices, where:
+
+prices[i] = stock price on day i
+
+You can:
+
+✅ Buy only once
+✅ Sell only once
+✅ You must buy before you sell
+
+Return the maximum profit.
+
+If no profit is possible, return 0.
+
+Example 1
+prices = [7,1,5,3,6,4]
+
+Buy on Day 2:
+
+Price = 1
+
+Sell on Day 5:
+
+Price = 6
+
+Profit:
+
+6 - 1 = 5
+
+Answer
+
+5
+Example 2
+prices = [7,6,4,3,1]
+
+Prices keep decreasing.
+
+No profit can be made.
+
+Answer
+
+0
+🪨 Brute Force Approach
+💡 Idea
+
+Try every possible buying day.
+
+For each buying day:
+
+Check every future selling day.
+Calculate the profit.
+Keep the maximum profit.
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static int maxProfit(int[] prices) {
+
+        int maxProfit = 0;
+
+        for (int i = 0; i < prices.length; i++) {
+
+            for (int j = i + 1; j < prices.length; j++) {
+
+                int profit = prices[j] - prices[i];
+
+                if (profit > maxProfit) {
+                    maxProfit = profit;
+                }
+            }
+        }
+
+        return maxProfit;
+    }
+
+    public static void main(String[] args) {
+
+        int[] prices = {7,1,5,3,6,4};
+
+        System.out.println("Maximum Profit = " + maxProfit(prices));
+    }
+}
+▶️ Output
+Maximum Profit = 5
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Instead of checking every pair:
+
+Keep track of:
+
+minPrice → Lowest price seen so far
+maxProfit → Best profit till now
+
+For every day:
+
+Step 1
+
+If today's price is smaller,
+
+update
+
+minPrice = prices[i];
+Step 2
+
+Otherwise,
+
+calculate
+
+profit = prices[i] - minPrice;
+
+Update maximum profit.
+
+That's it!
+
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static int maxProfit(int[] prices) {
+
+        int minPrice = prices[0];
+        int maxProfit = 0;
+
+        for (int i = 1; i < prices.length; i++) {
+
+            if (prices[i] < minPrice) {
+                minPrice = prices[i];
+            } else {
+
+                int profit = prices[i] - minPrice;
+
+                if (profit > maxProfit) {
+                    maxProfit = profit;
+                }
+            }
+        }
+
+        return maxProfit;
+    }
+
+    public static void main(String[] args) {
+
+        int[] prices = {7,1,5,3,6,4};
+
+        System.out.println("Maximum Profit = " + maxProfit(prices));
+    }
+}
+▶️ Output
+Maximum Profit = 5
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Dry Run
+
+Input
+
+prices = [7,1,5,3,6,4]
+
+Initially
+
+minPrice = 7
+maxProfit = 0
+Day	Price	minPrice	Profit	maxProfit
+0	7	7	-	0
+1	1	1	-	0
+2	5	1	5−1 = 4	4
+3	3	1	3−1 = 2	4
+4	6	1	6−1 = 5	5
+5	4	1	4−1 = 3	5
+
+Final Answer
+
+5
+🎯 Visualization
+Prices
+
+Day →    0   1   2   3   4   5
+
+Price →  7   1   5   3   6   4
+          ↑           ↑
+        Buy          Sell
+
+Profit = 6 - 1 = 5
+🎯 What you learn from this problem
+✅ Tracking the minimum value while traversing
+✅ Calculating the best answer on the fly
+✅ Greedy thinking
+✅ Single-pass array traversal
+🧠 Interview Tip
+
+Many beginners think:
+
+"I'll check every buy and sell combination."
+
+That works, but it's O(n²).
+
+The interviewer expects you to realize:
+
+"I only need to remember the cheapest stock price seen so far."
+
+That's the key insight that reduces the solution to O(n).
+
+🧠 Pattern Learned
+
+This problem introduces the Running Minimum (Greedy) pattern.
+
+Instead of comparing every pair, maintain the best value seen so far and update the answer as you scan the array once.
+
+This pattern is also useful in problems involving:
+
+Minimum/maximum seen so far
+Maximum difference
+Prefix minimum/maximum
+Greedy optimization
