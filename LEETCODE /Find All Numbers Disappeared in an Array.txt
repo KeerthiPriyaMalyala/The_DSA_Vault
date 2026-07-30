@@ -1,0 +1,337 @@
+448. Find All Numbers Disappeared in an Array
+❓ What is the question asking?
+
+You are given an array nums of size n.
+
+Every number is in the range 1 to n.
+Some numbers appear twice.
+Some numbers are missing.
+
+Return all the missing numbers.
+
+Example 1
+nums = [4,3,2,7,8,2,3,1]
+
+Numbers from 1 to 8 should be present.
+
+Present:
+
+1 2 3 4 7 8
+
+Missing:
+
+5 6
+
+Output
+
+[5,6]
+Example 2
+nums = [1,1]
+
+Numbers should be:
+
+1 2
+
+Missing:
+
+2
+
+Output
+
+[2]
+🪨 Brute Force Approach
+💡 Idea
+
+For every number from 1 to n:
+
+Search the entire array.
+If not found, add it to the answer.
+💻 Java Code
+import java.util.ArrayList;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static ArrayList<Integer> findDisappearedNumbers(int[] nums) {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        int n = nums.length;
+
+        for (int num = 1; num <= n; num++) {
+
+            boolean found = false;
+
+            for (int x : nums) {
+
+                if (x == num) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                ans.add(num);
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {4,3,2,7,8,2,3,1};
+
+        System.out.println(findDisappearedNumbers(nums));
+    }
+}
+▶️ Output
+[5, 6]
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+
+(Ignoring the output list.)
+
+🟡 Better Approach (HashSet)
+💡 Idea
+
+Store every element in a HashSet.
+
+Then check numbers from 1 to n.
+
+If a number is not in the set,
+
+it is missing.
+
+💻 Java Code
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static ArrayList<Integer> findDisappearedNumbers(int[] nums) {
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int x : nums)
+            set.add(x);
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 1; i <= nums.length; i++) {
+
+            if (!set.contains(i))
+                ans.add(i);
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {4,3,2,7,8,2,3,1};
+
+        System.out.println(findDisappearedNumbers(nums));
+    }
+}
+▶️ Output
+[5, 6]
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Index Marking)
+💡 Idea
+
+This is the trick.
+
+Since every number is between 1 and n,
+
+every number has its own index.
+
+Number	Index
+1	0
+2	1
+3	2
+4	3
+...	...
+
+For every number:
+
+index = Math.abs(nums[i]) - 1;
+
+Mark that index as visited by making it negative.
+
+nums[index] = -Math.abs(nums[index]);
+
+After marking:
+
+Negative → Number exists.
+Positive → Number is missing.
+💻 Java Code
+import java.util.ArrayList;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+    }
+}
+
+public class Main {
+
+    public static ArrayList<Integer> findDisappearedNumbers(int[] nums) {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 0; i < nums.length; i++) {
+
+            int index = Math.abs(nums[i]) - 1;
+
+            nums[index] = -Math.abs(nums[index]);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+
+            if (nums[i] > 0)
+                ans.add(i + 1);
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {4,3,2,7,8,2,3,1};
+
+        System.out.println(findDisappearedNumbers(nums));
+    }
+}
+▶️ Output
+[5, 6]
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+
+(Ignoring the output list.)
+
+🧠 Dry Run
+
+Input
+
+nums = [4,3,2,7,8,2,3,1]
+Step 1: Mark Visited
+Number	Index	Array after marking
+4	3	[4,3,2,-7,8,2,3,1]
+3	2	[4,3,-2,-7,8,2,3,1]
+2	1	[4,-3,-2,-7,8,2,3,1]
+7	6	[4,-3,-2,-7,8,2,-3,1]
+8	7	[4,-3,-2,-7,8,2,-3,-1]
+2	1	Already negative
+3	2	Already negative
+1	0	[-4,-3,-2,-7,8,2,-3,-1]
+
+Final array
+
+[-4,-3,-2,-7,8,2,-3,-1]
+Step 2: Find Positive Numbers
+Index	Value	Missing Number
+0	-4	No
+1	-3	No
+2	-2	No
+3	-7	No
+4	8	✅ 5
+5	2	✅ 6
+6	-3	No
+7	-1	No
+
+Answer
+
+[5,6]
+🎯 Visualization
+Original
+
+Index : 0 1 2 3 4 5 6 7
+
+Nums  : 4 3 2 7 8 2 3 1
+
+After marking
+
+- - - - + + - -
+
+Positive positions are:
+
+4 5
+
+So missing numbers are
+
+5 6
+
+(Add 1 because indices start from 0.)
+
+🎯 What you learn from this problem
+✅ Using array indices as a hash table
+✅ In-place marking
+✅ Using Math.abs()
+✅ Converting a value into an index
+✅ Constant-space optimization
+🧠 Why do we use Math.abs()?
+
+Suppose the array becomes:
+
+[-4,-3,-2,-7,8,2,-3,-1]
+
+If we directly write:
+
+int index = nums[i] - 1;
+
+then for nums[0] = -4:
+
+index = -5 ❌
+
+Invalid!
+
+Instead:
+
+int index = Math.abs(nums[i]) - 1;
+Math.abs(-4) = 4
+
+index = 3 ✅
+
+This lets us keep using the original value even after we've made elements negative.
+
+🧠 Pattern Learned
+
+This problem introduces the Index Marking Pattern.
+
+The key observation is:
+
+Values are guaranteed to be in the range 1 to n.
+Therefore, every value maps directly to an array index.
+
+This pattern appears in several important problems, such as:
+
+✅ Find All Numbers Disappeared in an Array
+✅ Find the Duplicate Number
+✅ Find All Duplicates in an Array
+✅ First Missing Positive (related idea)
