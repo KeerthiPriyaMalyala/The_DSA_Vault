@@ -1,0 +1,241 @@
+26. Remove Duplicates from Sorted Array
+❓ What is the question asking?
+
+You are given a sorted array.
+
+Your task is to:
+
+Remove duplicate elements in-place.
+Keep only one occurrence of each element.
+Return the number of unique elements (k).
+
+👉 The first k elements should contain all unique elements.
+
+The remaining elements are not important.
+
+Example 1
+nums = [1,1,2]
+
+Unique elements are:
+
+[1,2]
+
+Return
+
+k = 2
+
+Modified array:
+
+[1,2,_]
+Example 2
+nums = [0,0,1,1,1,2,2,3,3,4]
+
+Unique elements:
+
+[0,1,2,3,4]
+
+Return
+
+k = 5
+🪨 Brute Force Approach
+💡 Idea
+
+Use another array.
+
+Copy the first element.
+Traverse the array.
+Whenever the current element is different from the previous one, copy it.
+Copy the unique elements back into the original array.
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static int removeDuplicates(int[] nums) {
+
+        if (nums.length == 0)
+            return 0;
+
+        int[] temp = new int[nums.length];
+
+        int k = 1;
+        temp[0] = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+
+            if (nums[i] != nums[i - 1]) {
+                temp[k++] = nums[i];
+            }
+        }
+
+        for (int i = 0; i < k; i++) {
+            nums[i] = temp[i];
+        }
+
+        return k;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {0,0,1,1,1,2,2,3,3,4};
+
+        int k = removeDuplicates(nums);
+
+        System.out.println("k = " + k);
+
+        System.out.print("Array: ");
+
+        for (int i = 0; i < k; i++) {
+            System.out.print(nums[i] + " ");
+        }
+    }
+}
+▶️ Output
+k = 5
+Array:
+0 1 2 3 4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Two Pointers)
+💡 Idea
+
+Since the array is already sorted, duplicates are always next to each other.
+
+Maintain:
+
+i → points to the last unique element.
+j → scans the array.
+
+Whenever nums[j] != nums[i]:
+
+Move i one step forward.
+Copy nums[j] to nums[i].
+
+Finally, the number of unique elements is i + 1.
+
+💻 Java Code
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    public static int removeDuplicates(int[] nums) {
+
+        if (nums.length == 0)
+            return 0;
+
+        int i = 0;
+
+        for (int j = 1; j < nums.length; j++) {
+
+            if (nums[j] != nums[i]) {
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {0,0,1,1,1,2,2,3,3,4};
+
+        int k = removeDuplicates(nums);
+
+        System.out.println("k = " + k);
+
+        System.out.print("Modified Array: ");
+
+        for (int x = 0; x < k; x++) {
+            System.out.print(nums[x] + " ");
+        }
+    }
+}
+▶️ Output
+k = 5
+Modified Array:
+0 1 2 3 4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🧠 Dry Run
+
+Input:
+
+nums = [0,0,1,1,1,2,2,3,3,4]
+
+Initially:
+
+i = 0
+j	nums[j]	Compare with nums[i]	Action	i	Array (important part)
+1	0	0 == 0	Skip	0	[0]
+2	1	1 != 0	i++, copy	1	[0,1]
+3	1	1 == 1	Skip	1	[0,1]
+4	1	1 == 1	Skip	1	[0,1]
+5	2	2 != 1	i++, copy	2	[0,1,2]
+6	2	2 == 2	Skip	2	[0,1,2]
+7	3	3 != 2	i++, copy	3	[0,1,2,3]
+8	3	3 == 3	Skip	3	[0,1,2,3]
+9	4	4 != 3	i++, copy	4	[0,1,2,3,4]
+
+Return:
+
+k = i + 1 = 5
+
+Final array:
+
+[0,1,2,3,4]
+🧠 Why do we return i + 1?
+
+Initially:
+
+i = 0
+
+i stores the index of the last unique element.
+
+For example:
+
+[0,1,2,3,4]
+
+Indexes are:
+
+0 1 2 3 4
+
+The last unique element is at index 4.
+
+But the number of unique elements is:
+
+4 + 1 = 5
+
+That's why we return:
+
+return i + 1;
+🎯 What you learn from this problem
+✅ Two Pointer technique (i and j)
+✅ In-place array modification
+✅ Using the sorted property to skip duplicates
+✅ Understanding the difference between an index (i) and a count (i + 1)
+🧠 Pattern Comparison
+Problem	Condition	Write Pointer Stores
+Remove Element	Ignore a specific value	All valid elements
+Move Zeroes	Ignore 0	All non-zero elements
+Remove Duplicates from Sorted Array	Ignore duplicate values	Only unique elements
