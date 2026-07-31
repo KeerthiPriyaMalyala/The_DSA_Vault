@@ -1,0 +1,228 @@
+Longest Subarray with Given Sum K (Positive Numbers)
+❓ What is the question asking?
+
+Given an array of positive numbers and an integer K, find the length of the longest subarray whose sum is exactly K.
+
+Example
+Input:
+arr = [1,2,3,1,1,1,1,4,2,3]
+K = 3
+
+Output:
+3
+
+Explanation:
+
+Subarrays with sum 3:
+
+[1,2] → length = 2
+[3] → length = 1
+[1,1,1] → length = 3
+
+Answer = 3
+🪨 Brute Force Approach
+💡 Idea
+
+Generate all subarrays.
+
+For each subarray:
+
+Calculate the sum.
+If sum = K, update the maximum length.
+💻 Java Code
+class Main {
+
+    static int longestSubarray(int arr[], int k) {
+
+        int maxLen = 0;
+
+        for(int i = 0; i < arr.length; i++) {
+
+            int sum = 0;
+
+            for(int j = i; j < arr.length; j++) {
+
+                sum += arr[j];
+
+                if(sum == k) {
+                    maxLen = Math.max(maxLen, j - i + 1);
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,1,1,1,1,4,2,3};
+
+        System.out.println(longestSubarray(arr, 3));
+    }
+}
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Sliding Window) ⭐
+
+⚠️ Important: This works only for POSITIVE numbers.
+
+💡 Idea
+
+Maintain a window:
+
+[left .... right]
+
+Keep adding elements to the window.
+
+If sum > K → shrink from the left.
+If sum == K → update answer.
+Move right forward.
+🧠 Dry Run
+arr = [1,2,3,1,1,1,1]
+K = 3
+
+Start:
+
+left = 0
+right = 0
+sum = 0
+maxLen = 0
+right = 0
+sum = 1
+right = 1
+sum = 1 + 2 = 3
+
+sum == K
+
+maxLen = 2
+
+Window:
+
+[1,2]
+right = 2
+sum = 6
+
+Too big!
+
+Remove arr[left]
+
+sum = 5
+
+Still big
+
+Remove again
+
+sum = 3
+
+Window:
+
+[3]
+
+Length = 1
+
+right = 5
+
+Window:
+
+[1,1,1]
+
+Sum = 3
+
+Length = 3
+
+🎉 Answer = 3
+
+💻 Java Code
+class Main {
+
+    static int longestSubarray(int arr[], int k) {
+
+        int left = 0;
+        int sum = 0;
+        int maxLen = 0;
+
+        for(int right = 0; right < arr.length; right++) {
+
+            sum += arr[right];
+
+            while(sum > k) {
+
+                sum -= arr[left];
+                left++;
+            }
+
+            if(sum == k) {
+
+                maxLen = Math.max(maxLen,
+                                  right - left + 1);
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,1,1,1,1};
+
+        System.out.println(longestSubarray(arr, 3));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+❗ Why Only Positive Numbers?
+
+Suppose:
+
+[2, -1, 2]
+
+When negative numbers exist:
+
+Sum may decrease automatically.
+Sliding window logic breaks.
+
+That is why this approach works only when all numbers are positive.
+
+For arrays with negatives:
+
+👉 Use Prefix Sum + HashMap.
+
+That is our next problem! 😄
+
+🎯 Edge Cases
+Case 1
+arr = [3]
+K = 3
+
+Output:
+1
+Case 2
+arr = [1,1,1,1]
+K = 2
+
+Output:
+2
+📝 Interview Tip
+
+Remember:
+
+Positive Numbers
+Sliding Window
+Negative Numbers
+Prefix Sum + HashMap
+
+This is a very important rule.
+
+💖 Today's Revision
+✅ This problem works only for positive numbers.
+✅ Use Sliding Window.
+✅ Expand window using right.
+✅ Shrink window using left.
+✅ Time: O(n).
+✅ Space: O(1).
