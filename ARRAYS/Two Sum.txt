@@ -1,0 +1,220 @@
+Two Sum
+❓ What is the question asking?
+
+Given an array and a target value, find two indices such that:
+
+arr[i] + arr[j] = target
+
+Return the indices of those two numbers.
+
+You can assume exactly one solution exists, and you cannot use the same element twice.
+
+Example
+Input:
+arr = [2,7,11,15]
+target = 9
+
+Output:
+[0,1]
+
+Explanation:
+
+2 + 7 = 9
+🪨 Brute Force Approach
+💡 Idea
+
+Check every possible pair.
+
+Pick one element.
+Check all remaining elements.
+If their sum equals the target, return their indices.
+💻 Java Code
+class Main {
+
+    static int[] twoSum(int arr[], int target) {
+
+        for(int i = 0; i < arr.length; i++) {
+
+            for(int j = i + 1; j < arr.length; j++) {
+
+                if(arr[i] + arr[j] == target) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+
+        return new int[]{-1, -1};
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {2,7,11,15};
+
+        int ans[] = twoSum(arr, 9);
+
+        System.out.println(ans[0] + " " + ans[1]);
+    }
+}
+▶️ Output
+0 1
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (HashMap)
+💡 Idea
+
+While traversing the array:
+
+For every element:
+
+complement = target - currentElement
+
+Check whether the complement already exists in the HashMap.
+
+If yes → Found the answer.
+If no → Store the current element and its index.
+🧠 Dry Run
+arr = [2,7,11,15]
+target = 9
+
+Initially
+
+map = {}
+i	arr[i]	Complement	Found?	Map
+0	2	7	❌	{2=0}
+1	7	2	✅	Answer = [0,1]
+
+🎉 Done!
+
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    static int[] twoSum(int arr[], int target) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for(int i = 0; i < arr.length; i++) {
+
+            int complement = target - arr[i];
+
+            if(map.containsKey(complement)) {
+                return new int[]{map.get(complement), i};
+            }
+
+            map.put(arr[i], i);
+        }
+
+        return new int[]{-1, -1};
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {2,7,11,15};
+
+        int ans[] = twoSum(arr, 9);
+
+        System.out.println(ans[0] + " " + ans[1]);
+    }
+}
+▶️ Output
+0 1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Two Pointers)
+
+⚠️ Note: This approach works only if you're allowed to sort the array or if the array is already sorted. If the question asks for the original indices (like LeetCode Two Sum), the HashMap approach is the correct optimal solution.
+
+💡 Idea
+Sort the array.
+Place:
+left at the beginning.
+right at the end.
+Calculate:
+sum = arr[left] + arr[right]
+If sum == target → Found.
+If sum < target → Move left++.
+If sum > target → Move right--.
+🧠 Dry Run
+arr = [2,7,11,15]
+target = 9
+Left	Right	Sum	Action
+2	15	17	right--
+2	11	13	right--
+2	7	9	Found
+💻 Java Code
+import java.util.Arrays;
+
+class Main {
+
+    static boolean twoSum(int arr[], int target) {
+
+        Arrays.sort(arr);
+
+        int left = 0;
+        int right = arr.length - 1;
+
+        while(left < right) {
+
+            int sum = arr[left] + arr[right];
+
+            if(sum == target) {
+                return true;
+            }
+            else if(sum < target) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {2,7,11,15};
+
+        System.out.println(twoSum(arr, 9));
+    }
+}
+▶️ Output
+true
+⏱️ Time Complexity
+O(n log n)
+
+(Sorting dominates.)
+
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+arr = [3,3]
+target = 6
+
+Output:
+[0,1]
+Case 2
+Input:
+arr = [1,2,3]
+
+target = 7
+
+Output:
+[-1,-1]
+📝 Interview Tip
+
+The interviewer may ask two different versions:
+
+Version 1: Return Indices
+Use HashMap ✅
+Version 2: Just Return True/False
+Sort + Two Pointers ✅
+
+Always read the question carefully before choosing the approach.
