@@ -1,0 +1,240 @@
+📌 Problem 10: Find Missing Number
+❓ What is the question asking?
+
+You are given an array of size N-1 containing numbers from 1 to N.
+
+Exactly one number is missing.
+
+Find that missing number.
+
+Example
+Input:
+N = 5
+arr = [1,2,4,5]
+
+Output:
+3
+🪨 Brute Force Approach
+💡 Idea
+
+For every number from 1 to N, search if it exists in the array.
+
+If it doesn't exist, that's the missing number.
+
+💻 Java Code
+class Main {
+
+    static int missingNumber(int arr[], int n) {
+
+        for(int i = 1; i <= n; i++) {
+
+            boolean found = false;
+
+            for(int j = 0; j < arr.length; j++) {
+
+                if(arr[j] == i) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,5};
+
+        System.out.println(missingNumber(arr, 5));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+
+Create a frequency array.
+
+Mark every number present.
+The number whose frequency is 0 is the missing number.
+💻 Java Code
+class Main {
+
+    static int missingNumber(int arr[], int n) {
+
+        int freq[] = new int[n + 1];
+
+        for(int num : arr) {
+            freq[num]++;
+        }
+
+        for(int i = 1; i <= n; i++) {
+            if(freq[i] == 0)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,5};
+
+        System.out.println(missingNumber(arr, 5));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach 1 (Math Formula)
+💡 Idea
+
+Sum of first N natural numbers:
+
+N × (N + 1) / 2
+
+Missing Number = Expected Sum - Actual Sum
+
+🧠 Dry Run
+N = 5
+
+Expected Sum
+= 5 × 6 / 2
+= 15
+
+Actual Sum
+
+1 + 2 + 4 + 5
+= 12
+
+Missing = 15 - 12 = 3
+💻 Java Code
+class Main {
+
+    static int missingNumber(int arr[], int n) {
+
+        int expectedSum = n * (n + 1) / 2;
+
+        int actualSum = 0;
+
+        for(int num : arr) {
+            actualSum += num;
+        }
+
+        return expectedSum - actualSum;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,5};
+
+        System.out.println(missingNumber(arr, 5));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach 2 (XOR) ⭐ Interview Favourite
+💡 Idea
+
+Properties of XOR:
+
+a ^ a = 0
+
+a ^ 0 = a
+
+If we XOR:
+
+All numbers from 1 to N
+All elements of the array
+
+Every matching number cancels out.
+
+Only the missing number remains.
+
+🧠 Dry Run
+N = 5
+
+1 ^ 2 ^ 3 ^ 4 ^ 5
+
+^
+
+1 ^ 2 ^ 4 ^ 5
+
+----------------
+
+(1^1) ^ (2^2) ^ 3 ^ (4^4) ^ (5^5)
+
+0 ^ 0 ^ 3 ^ 0 ^ 0
+
+= 3
+
+🎉 Missing Number = 3
+
+💻 Java Code
+class Main {
+
+    static int missingNumber(int arr[], int n) {
+
+        int xor1 = 0;
+        int xor2 = 0;
+
+        for(int i = 1; i <= n; i++) {
+            xor1 ^= i;
+        }
+
+        for(int num : arr) {
+            xor2 ^= num;
+        }
+
+        return xor1 ^ xor2;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,5};
+
+        System.out.println(missingNumber(arr, 5));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+N = 5
+arr = [2,3,4,5]
+
+Output:
+1
+Case 2
+Input:
+N = 5
+arr = [1,2,3,4]
+
+Output:
+5
+📝 Interview Tip
+
+There are two optimal solutions:
+
+✅ Math Formula → Easy to understand, but be careful of integer overflow for very large N.
+✅ XOR → No overflow, often preferred in interviews.
