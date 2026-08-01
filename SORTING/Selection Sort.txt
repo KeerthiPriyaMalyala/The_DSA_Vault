@@ -1,0 +1,122 @@
+1. Selection Sort
+❓ What is the question asking?
+
+Given an unsorted array, sort it in ascending order using the Selection Sort algorithm.
+
+⚡ Optimal Approach
+
+Note: There is no separate Brute Force or Better approach. Selection Sort itself is the standard algorithm.
+
+💡 Idea
+
+Imagine you have a line of students.
+
+👉 Find the smallest student from the unsorted part.
+👉 Put them at the beginning.
+👉 Repeat for the remaining students.
+
+Example
+
+Array:
+
+64 25 12 22 11
+Pass 1
+
+Smallest = 11
+
+Swap with first element
+
+11 25 12 22 64
+Pass 2
+
+Smallest in remaining = 12
+
+11 12 25 22 64
+Pass 3
+
+Smallest = 22
+
+11 12 22 25 64
+Pass 4
+
+Smallest = 25
+
+11 12 22 25 64
+
+Sorted 🎉
+
+💻 Java Code
+public class Main {
+
+    static void selectionSort(int arr[]) {
+
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+
+            int minIndex = i;
+
+            for (int j = i + 1; j < n; j++) {
+
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int arr[] = {64, 25, 12, 22, 11};
+
+        selectionSort(arr);
+
+        for (int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+11 12 22 25 64
+⏱️ Time Complexity
+Best Case
+
+O(n²)
+
+Average Case
+
+O(n²)
+
+Worst Case
+
+O(n²)
+
+👉 Selection Sort always searches the remaining array for the minimum, even if the array is already sorted.
+
+📦 Space Complexity
+
+O(1)
+
+Only a few extra variables (minIndex, temp) are used.
+
+🧠 Key Points
+✅ Finds the minimum element in every pass.
+✅ Performs n − 1 passes.
+✅ Swaps only once per pass.
+✅ In-place sorting algorithm.
+❌ Not stable.
+❌ Not adaptive (doesn't become faster for sorted arrays).
+🎯 Dry Run
+
+Array:
+
+5 4 1 3 2
+Pass	Array
+Initial	5 4 1 3 2
+1	1 4 5 3 2
+2	1 2 5 3 4
+3	1 2 3 5 4
+4	1 2 3 4 5
