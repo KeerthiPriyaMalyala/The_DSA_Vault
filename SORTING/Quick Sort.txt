@@ -1,0 +1,214 @@
+7. Quick Sort
+❓ What is the question asking?
+
+Given an unsorted array, sort it in ascending order using the Quick Sort algorithm.
+
+⚡ Optimal Approach
+
+Note: There is no Brute Force or Better approach. Quick Sort itself is the standard Divide & Conquer algorithm.
+
+💡 Idea
+
+Quick Sort works in 3 steps:
+
+Step 1️⃣ Choose a Pivot
+
+Pick one element as the pivot.
+
+In this implementation, we choose the first element.
+
+Example:
+
+4 6 2 5 7 9 1 3
+
+Pivot = 4
+Step 2️⃣ Partition
+
+Rearrange the array so that:
+
+All elements smaller than pivot go to the left.
+All elements greater than pivot go to the right.
+Pivot reaches its correct sorted position.
+
+Example:
+
+4 6 2 5 7 9 1 3
+
+↓
+
+3 2 1 4 7 9 5 6
+
+Now 4 is in its correct position.
+
+Step 3️⃣ Recursively Sort
+
+Sort:
+
+Left half
+Right half
+
+Repeat until every subarray has 0 or 1 element.
+
+Sorted 🎉
+
+🧠 Visualization
+            4 6 2 5 7 9 1 3
+
+                 Pivot = 4
+
+        3 2 1      4      7 9 5 6
+
+          /                  \
+
+      Sort Left          Sort Right
+
+            ↓                  ↓
+
+        1 2 3            5 6 7 9
+
+                 ↓
+
+        1 2 3 4 5 6 7 9
+💻 Java Code
+public class Main {
+
+    static int partition(int arr[], int low, int high) {
+
+        int pivot = arr[low];
+        int i = low;
+        int j = high;
+
+        while (i < j) {
+
+            while (arr[i] <= pivot && i < high)
+                i++;
+
+            while (arr[j] > pivot && j > low)
+                j--;
+
+            if (i < j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        int temp = arr[low];
+        arr[low] = arr[j];
+        arr[j] = temp;
+
+        return j;
+    }
+
+    static void quickSort(int arr[], int low, int high) {
+
+        if (low < high) {
+
+            int pIndex = partition(arr, low, high);
+
+            quickSort(arr, low, pIndex - 1);
+
+            quickSort(arr, pIndex + 1, high);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int arr[] = {4, 6, 2, 5, 7, 9, 1, 3};
+
+        quickSort(arr, 0, arr.length - 1);
+
+        for (int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+1 2 3 4 5 6 7 9
+⏱️ Time Complexity
+Best Case
+
+O(n log n)
+
+Average Case
+
+O(n log n)
+
+Worst Case
+
+O(n²)
+
+👉 Worst case happens when the pivot is always the smallest or largest element (for example, an already sorted array with the first element chosen as pivot).
+
+📦 Space Complexity
+Average Case
+
+O(log n) (Recursion stack)
+
+Worst Case
+
+O(n)
+
+🧠 Key Points
+
+✅ Divide & Conquer Algorithm.
+
+✅ In-place sorting algorithm.
+
+❌ Not Stable.
+
+✅ Very fast in practice.
+
+❌ Worst case is O(n²).
+
+🎯 Dry Run
+
+Array:
+
+5 3 8 4 2
+
+Pivot = 5
+
+After partition:
+
+2 3 4 5 8
+
+Now sort:
+
+Left:
+
+2 3 4
+
+Right:
+
+8
+
+Final:
+
+2 3 4 5 8
+🌟 Interview Tips
+Why do we need Partition?
+
+Partition places the pivot in its correct sorted position.
+
+After partition:
+
+Left side → Smaller elements
+Right side → Greater elements
+Why do we recursively sort?
+
+Because after fixing the pivot, the left and right parts are still unsorted.
+
+Why is Quick Sort usually faster than Merge Sort?
+✅ No extra temporary array is needed.
+✅ Better cache performance.
+✅ Smaller constant factors.
+
+Although both are O(n log n) on average, Quick Sort is generally faster in practice.
+
+🧠 Super Easy Memory Trick
+
+Quick Sort = PPR
+
+P → Pick a Pivot
+P → Partition the array
+R → Recursively sort left and right
