@@ -1,0 +1,211 @@
+📌 Problem 7: Move Zeroes to End
+❓ What is the question asking?
+
+Given an array, move all 0's to the end while maintaining the relative order of the non-zero elements.
+
+Example
+Input:
+[1,0,2,3,0,4,0,1]
+
+Output:
+[1,2,3,4,1,0,0,0]
+
+👉 Notice:
+
+Non-zero elements remain in the same order.
+Only the zeroes move to the end.
+🪨 Brute Force Approach
+💡 Idea
+Store all non-zero elements in a temporary array.
+Copy them back to the original array.
+Fill the remaining positions with 0.
+💻 Java Code
+class Main {
+
+    static void moveZeroes(int arr[]) {
+
+        int n = arr.length;
+        int temp[] = new int[n];
+
+        int index = 0;
+
+        for(int i = 0; i < n; i++) {
+            if(arr[i] != 0) {
+                temp[index++] = arr[i];
+            }
+        }
+
+        for(int i = 0; i < n; i++) {
+            arr[i] = temp[i];
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,0,2,3,0,4,0,1};
+
+        moveZeroes(arr);
+
+        for(int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+1 2 3 4 1 0 0 0
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Two Pointers)
+💡 Idea
+
+Use two pointers:
+
+j → Points to the first zero.
+i → Searches for the next non-zero.
+
+Whenever we find a non-zero after a zero:
+
+👉 Swap them.
+
+This automatically pushes zeroes towards the end.
+
+🧠 Dry Run
+arr = [1,0,2,3,0,4,0,1]
+Step 1
+
+Find first zero
+
+j = 1
+Step 2
+
+i = 2
+
+arr[2] = 2
+
+Swap
+
+[1,2,0,3,0,4,0,1]
+
+j = 2
+Step 3
+
+i = 3
+
+Swap
+
+[1,2,3,0,0,4,0,1]
+
+j = 3
+Step 4
+
+i = 4
+
+0
+
+Skip
+Step 5
+
+i = 5
+
+Swap
+
+[1,2,3,4,0,0,0,1]
+
+j = 4
+Step 6
+
+i = 6
+
+0
+
+Skip
+Step 7
+
+i = 7
+
+Swap
+
+[1,2,3,4,1,0,0,0]
+
+🎉 Final Answer!
+
+💻 Java Code
+class Main {
+
+    static void moveZeroes(int arr[]) {
+
+        int n = arr.length;
+
+        int j = -1;
+
+        // Find first zero
+        for(int i = 0; i < n; i++) {
+
+            if(arr[i] == 0) {
+                j = i;
+                break;
+            }
+        }
+
+        if(j == -1)
+            return;
+
+        for(int i = j + 1; i < n; i++) {
+
+            if(arr[i] != 0) {
+
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+
+                j++;
+            }
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,0,2,3,0,4,0,1};
+
+        moveZeroes(arr);
+
+        for(int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+1 2 3 4 1 0 0 0
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[0,0,0]
+
+Output:
+[0,0,0]
+Case 2
+Input:
+[1,2,3]
+
+Output:
+[1,2,3]
+Case 3
+Input:
+[0,1]
+
+Output:
+[1,0]
+📝 Interview Tip
+
+This is another Two Pointer problem.
+
+Remember the roles:
+
+j → Position where the next non-zero should go (starts at the first zero).
+i → Scans the array looking for non-zero elements.
+
+When arr[i] != 0, swap arr[i] and arr[j], then increment j.
