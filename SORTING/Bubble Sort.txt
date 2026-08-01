@@ -1,0 +1,134 @@
+2. Bubble Sort
+❓ What is the question asking?
+
+Given an unsorted array, sort it in ascending order using the Bubble Sort algorithm.
+
+⚡ Optimal Approach
+
+Note: There is no separate Brute Force or Better approach. Bubble Sort itself is the standard algorithm.
+
+💡 Idea
+
+Bubble Sort repeatedly compares adjacent elements.
+
+If the left element is greater than the right element, swap them.
+After each pass, the largest element "bubbles up" to its correct position at the end.
+If no swaps happen in a pass, the array is already sorted, so we stop early.
+🧠 Example
+
+Array:
+
+64 34 25 12 22
+Pass 1
+64 34 → Swap
+34 64 25 12 22
+
+64 25 → Swap
+34 25 64 12 22
+
+64 12 → Swap
+34 25 12 64 22
+
+64 22 → Swap
+34 25 12 22 64
+
+Largest element (64) reached the end.
+
+Pass 2
+34 25 → Swap
+25 34 12 22 64
+
+34 12 → Swap
+25 12 34 22 64
+
+34 22 → Swap
+25 12 22 34 64
+Pass 3
+25 12 → Swap
+12 25 22 34 64
+
+25 22 → Swap
+12 22 25 34 64
+Pass 4
+12 22
+22 25
+
+No swaps.
+
+Sorted 🎉
+
+💻 Java Code
+public class Main {
+
+    static void bubbleSort(int arr[]) {
+
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+
+                if (arr[j] > arr[j + 1]) {
+
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+
+                    swapped = true;
+                }
+            }
+
+            if (!swapped)
+                break;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int arr[] = {64, 34, 25, 12, 22};
+
+        bubbleSort(arr);
+
+        for (int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+12 22 25 34 64
+⏱️ Time Complexity
+Best Case
+
+O(n) ✅ (Already sorted, no swaps)
+
+Average Case
+
+O(n²)
+
+Worst Case
+
+O(n²)
+
+📦 Space Complexity
+
+O(1)
+
+Only a few extra variables (temp and swapped) are used.
+
+🧠 Key Points
+✅ Compares adjacent elements.
+✅ Largest element moves to the end after every pass.
+✅ Stable sorting algorithm.
+✅ In-place sorting algorithm.
+✅ Adaptive (optimized version stops early if already sorted).
+🎯 Dry Run
+
+Array:
+
+5 1 4 2 8
+Pass	Array
+Initial	5 1 4 2 8
+1	1 4 2 5 8
+2	1 2 4 5 8
+3	1 2 4 5 8 (No swaps → Stop)
