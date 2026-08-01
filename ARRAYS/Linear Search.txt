@@ -1,0 +1,91 @@
+📌 Problem 8: Linear Search
+❓ What is the question asking?
+
+Given an array and a target element, return its index if it exists. Otherwise, return -1.
+
+Example
+Input:
+arr = [5,4,3,2,1]
+target = 3
+
+Output:
+2
+⚡ Optimal Approach
+
+Note: There is no better or brute-force approach different from this one. Linear Search itself is the optimal solution for an unsorted array.
+
+💡 Idea
+Start from the first element.
+Compare each element with the target.
+If found, return its index.
+If the loop ends without finding it, return -1.
+🧠 Dry Run
+arr = [5,4,3,2,1]
+target = 3
+i	arr[i]	Match?
+0	5	❌
+1	4	❌
+2	3	✅ Return 2
+
+🎉 Answer = 2
+
+💻 Java Code
+class Main {
+
+    static int linearSearch(int arr[], int target) {
+
+        for(int i = 0; i < arr.length; i++) {
+
+            if(arr[i] == target) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {5,4,3,2,1};
+        int target = 3;
+
+        System.out.println(linearSearch(arr, target));
+    }
+}
+▶️ Output
+2
+⏱️ Time Complexity
+Best Case: O(1)
+Average Case: O(n)
+Worst Case: O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+arr = [10]
+target = 10
+
+Output:
+0
+Case 2
+Input:
+arr = [1,2,3]
+target = 5
+
+Output:
+-1
+Case 3
+Input:
+arr = []
+target = 7
+
+Output:
+-1
+📝 Interview Tip
+
+🤔 When should you use Linear Search?
+
+✅ Array is unsorted.
+
+If the array is sorted, prefer Binary Search, which works in O(log n) time.
