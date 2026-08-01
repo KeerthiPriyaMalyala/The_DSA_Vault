@@ -1,0 +1,206 @@
+📌 Problem 12: Find the Number That Appears Once (Single Number)
+❓ What is the question asking?
+
+Given an array where:
+
+Every element appears twice
+Except one element, which appears only once
+
+Find that unique element.
+
+Example
+Input:
+[2,2,1]
+
+Output:
+1
+
+Another Example
+
+Input:
+[4,1,2,1,2]
+
+Output:
+4
+🪨 Brute Force Approach
+💡 Idea
+
+For every element, count how many times it appears.
+
+If its frequency is 1, return it.
+
+💻 Java Code
+class Main {
+
+    static int singleNumber(int arr[]) {
+
+        for(int i = 0; i < arr.length; i++) {
+
+            int count = 0;
+
+            for(int j = 0; j < arr.length; j++) {
+
+                if(arr[i] == arr[j]) {
+                    count++;
+                }
+            }
+
+            if(count == 1)
+                return arr[i];
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {4,1,2,1,2};
+
+        System.out.println(singleNumber(arr));
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+
+Use a HashMap to store the frequency of each element.
+
+The element with frequency 1 is the answer.
+
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    static int singleNumber(int arr[]) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for(int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        for(int num : arr) {
+            if(map.get(num) == 1)
+                return num;
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {4,1,2,1,2};
+
+        System.out.println(singleNumber(arr));
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (XOR) ⭐
+💡 Idea
+
+Remember these XOR properties:
+
+a ^ a = 0
+
+a ^ 0 = a
+
+If we XOR all elements:
+
+Every duplicate pair becomes 0.
+Only the single element remains.
+🧠 Dry Run
+arr = [4,1,2,1,2]
+
+Start:
+
+xor = 0
+Element	XOR Value
+4	0 ^ 4 = 4
+1	4 ^ 1 = 5
+2	5 ^ 2 = 7
+1	7 ^ 1 = 6
+2	6 ^ 2 = 4
+
+🎉 Final Answer:
+
+4
+✨ Why Does It Work?
+4 ^ 1 ^ 2 ^ 1 ^ 2
+
+= 4 ^ (1 ^ 1) ^ (2 ^ 2)
+
+= 4 ^ 0 ^ 0
+
+= 4
+
+All duplicate numbers cancel each other.
+
+💻 Java Code
+class Main {
+
+    static int singleNumber(int arr[]) {
+
+        int xor = 0;
+
+        for(int num : arr) {
+            xor ^= num;
+        }
+
+        return xor;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {4,1,2,1,2};
+
+        System.out.println(singleNumber(arr));
+    }
+}
+▶️ Output
+4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[7]
+
+Output:
+7
+Case 2
+Input:
+[5,2,5]
+
+Output:
+2
+Case 3
+Input:
+[8,8,6,6,3]
+
+Output:
+3
+📝 Interview Tip
+
+🔥 Memorize these XOR rules:
+
+a ^ a = 0
+
+a ^ 0 = a
+
+XOR is commutative:
+a ^ b = b ^ a
+
+Because of these properties, duplicate numbers always cancel out, leaving only the unique number.
