@@ -1,0 +1,117 @@
+📌 Problem 11: Maximum Consecutive Ones
+❓ What is the question asking?
+
+Given a binary array (containing only 0s and 1s), find the maximum number of consecutive 1s.
+
+Example
+Input:
+[1,1,0,1,1,1]
+
+Output:
+3
+
+Explanation:
+
+The longest continuous sequence of 1s is:
+
+1 1 1
+
+So the answer is 3.
+
+⚡ Optimal Approach
+
+Note: There is no separate brute or better approach. A single traversal is already optimal.
+
+💡 Idea
+
+Maintain two variables:
+
+count → Current consecutive 1s.
+maxCount → Maximum consecutive 1s found so far.
+
+Traverse the array:
+
+If the element is 1, increment count.
+If the element is 0, reset count to 0.
+Update maxCount after every 1.
+🧠 Dry Run
+arr = [1,1,0,1,1,1]
+Index	Element	count	maxCount
+0	1	1	1
+1	1	2	2
+2	0	0	2
+3	1	1	2
+4	1	2	2
+5	1	3	3
+
+🎉 Final Answer:
+
+3
+💻 Java Code
+class Main {
+
+    static int maxConsecutiveOnes(int arr[]) {
+
+        int count = 0;
+        int maxCount = 0;
+
+        for(int num : arr) {
+
+            if(num == 1) {
+                count++;
+                maxCount = Math.max(maxCount, count);
+            }
+            else {
+                count = 0;
+            }
+        }
+
+        return maxCount;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,1,0,1,1,1};
+
+        System.out.println(maxConsecutiveOnes(arr));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[0,0,0]
+
+Output:
+0
+Case 2
+Input:
+[1,1,1,1]
+
+Output:
+4
+Case 3
+Input:
+[1]
+
+Output:
+1
+Case 4
+Input:
+[0]
+
+Output:
+0
+📝 Interview Tip
+
+Think of count as a running streak.
+
+1 ➜ Continue the streak (count++).
+0 ➜ Break the streak (count = 0).
+
+Always update maxCount whenever the streak grows.
