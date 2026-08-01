@@ -1,0 +1,197 @@
+📌 Problem 2: Second Largest Element in an Array
+❓ What is the question asking?
+
+Given an array, find the second largest distinct element.
+
+If there is no second largest element, return -1.
+
+Example
+Input:
+[1, 2, 4, 7, 7, 5]
+
+Output:
+5
+
+Explanation:
+
+Largest = 7
+Second Largest = 5
+🪨 Brute Force Approach
+💡 Idea
+Sort the array.
+The last element is the largest.
+Traverse backwards until you find an element different from the largest.
+💻 Java Code
+import java.util.Arrays;
+
+class Main {
+
+    static int secondLargest(int arr[]) {
+
+        Arrays.sort(arr);
+
+        int largest = arr[arr.length - 1];
+
+        for(int i = arr.length - 2; i >= 0; i--) {
+
+            if(arr[i] != largest) {
+                return arr[i];
+            }
+        }
+
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,7,7,5};
+
+        System.out.println(secondLargest(arr));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n log n)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Maintain two variables:
+
+largest
+secondLargest
+
+Initially,
+
+largest = arr[0]
+secondLargest = -1
+
+For every element:
+
+Case 1
+
+If current element is greater than largest
+
+secondLargest = largest
+largest = current element
+Case 2
+
+Else if
+
+current < largest
+AND
+current > secondLargest
+
+Update
+
+secondLargest = current
+
+That's it! Only one traversal.
+
+🧠 Dry Run
+Array:
+
+1 2 4 7 7 5
+
+largest = 1
+secondLargest = -1
+
+2
+
+largest = 2
+secondLargest = 1
+
+4
+
+largest = 4
+secondLargest = 2
+
+7
+
+largest = 7
+secondLargest = 4
+
+7
+
+Equal to largest
+Ignore
+
+5
+
+5 > secondLargest (4)
+
+secondLargest = 5
+
+Answer = 5
+💻 Java Code
+class Main {
+
+    static int secondLargest(int arr[]) {
+
+        int largest = arr[0];
+        int secondLargest = -1;
+
+        for(int i = 1; i < arr.length; i++) {
+
+            if(arr[i] > largest) {
+
+                secondLargest = largest;
+                largest = arr[i];
+
+            }
+            else if(arr[i] < largest && arr[i] > secondLargest) {
+
+                secondLargest = arr[i];
+            }
+        }
+
+        return secondLargest;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,4,7,7,5};
+
+        System.out.println(secondLargest(arr));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[5]
+
+Output:
+-1
+
+(No second largest element.)
+
+Case 2
+Input:
+[5,5,5]
+
+Output:
+-1
+
+(All elements are the same.)
+
+Case 3
+Input:
+[10,8]
+
+Output:
+8
+📝 Interview Tip
+
+The interviewer may ask:
+
+Can you find both the largest and second largest in one pass?
+
+This optimal approach does exactly that with one traversal, O(n) time, and O(1) extra space—it's the expected interview solution.
