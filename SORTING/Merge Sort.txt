@@ -1,0 +1,262 @@
+6. Merge Sort
+❓ What is the question asking?
+
+Given an unsorted array, sort it in ascending order using the Merge Sort algorithm.
+
+⚡ Optimal Approach
+
+Note: There is no Brute Force or Better approach. Merge Sort itself is the optimal Divide & Conquer algorithm.
+
+💡 Idea (Divide & Conquer)
+
+Merge Sort works in 3 steps:
+
+Step 1️⃣ Divide
+
+Keep dividing the array into 2 halves until each subarray has only 1 element.
+
+Example:
+
+8 3 4 12 5 6
+
+↓
+
+8 3 4 | 12 5 6
+
+↓
+
+8 | 3 4      12 | 5 6
+
+↓
+
+8 | 3 | 4      12 | 5 | 6
+
+Now every subarray has one element.
+
+Step 2️⃣ Conquer
+
+A single element is already sorted.
+
+So now start merging.
+
+Step 3️⃣ Merge
+
+Merge two sorted arrays into one sorted array.
+
+Example:
+
+8      3
+
+↓
+
+3 8
+
+Then
+
+3 8      4
+
+↓
+
+3 4 8
+
+Similarly,
+
+12      5
+
+↓
+
+5 12
+
+↓
+
+5 6 12
+
+Finally,
+
+3 4 8
+
+5 6 12
+
+↓
+
+3 4 5 6 8 12
+
+Sorted 🎉
+
+🧠 Visualization
+             8 3 4 12 5 6
+
+          /               \
+
+      8 3 4             12 5 6
+
+     /     \           /      \
+
+   8      3 4       12      5 6
+
+         /   \              /   \
+
+        3     4            5     6
+
+---------------- MERGE ----------------
+
+        3 4              5 6
+
+      3 4 8            5 6 12
+
+          3 4 5 6 8 12
+💻 Java Code
+public class Main {
+
+    static void merge(int arr[], int low, int mid, int high) {
+
+        int temp[] = new int[high - low + 1];
+
+        int left = low;
+        int right = mid + 1;
+        int k = 0;
+
+        while (left <= mid && right <= high) {
+
+            if (arr[left] <= arr[right])
+                temp[k++] = arr[left++];
+            else
+                temp[k++] = arr[right++];
+        }
+
+        while (left <= mid)
+            temp[k++] = arr[left++];
+
+        while (right <= high)
+            temp[k++] = arr[right++];
+
+        for (int i = low; i <= high; i++)
+            arr[i] = temp[i - low];
+    }
+
+    static void mergeSort(int arr[], int low, int high) {
+
+        if (low >= high)
+            return;
+
+        int mid = (low + high) / 2;
+
+        mergeSort(arr, low, mid);
+
+        mergeSort(arr, mid + 1, high);
+
+        merge(arr, low, mid, high);
+    }
+
+    public static void main(String[] args) {
+
+        int arr[] = {8, 3, 4, 12, 5, 6};
+
+        mergeSort(arr, 0, arr.length - 1);
+
+        for (int num : arr)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+3 4 5 6 8 12
+⏱️ Time Complexity
+Best Case
+
+O(n log n)
+
+Average Case
+
+O(n log n)
+
+Worst Case
+
+O(n log n)
+
+✅ Merge Sort always divides the array into halves, so its time complexity is always the same.
+
+📦 Space Complexity
+
+O(n)
+
+Reason:
+
+We use a temporary array (temp[]) while merging.
+🧠 Key Points
+
+✅ Divide & Conquer Algorithm.
+
+✅ Stable Sorting Algorithm.
+
+❌ Not In-place (uses extra array).
+
+✅ Guaranteed O(n log n).
+
+✅ Very good for Linked Lists.
+
+🎯 Dry Run
+
+Array
+
+5 2 4 1
+
+Split
+
+5 2 | 4 1
+
+↓
+
+5 | 2 | 4 | 1
+
+Merge
+
+5 + 2
+
+↓
+
+2 5
+
+4 + 1
+
+↓
+
+1 4
+
+↓
+
+2 5 + 1 4
+
+↓
+
+1 2 4 5
+🌟 Interview Tips
+Why low >= high?
+
+Because:
+
+low == high → Only one element (already sorted).
+low > high → Invalid range.
+
+So recursion stops.
+
+Why do we calculate mid?
+int mid = (low + high) / 2;
+
+To divide the array into two halves.
+
+Why do we merge?
+
+Because after recursion returns:
+
+Left half is sorted.
+Right half is sorted.
+
+We combine them into one sorted array.
+
+🧠 Super Easy Memory Trick
+
+Merge Sort = DDM
+
+D → Divide
+D → Divide again
+M → Merge everything back in sorted order
