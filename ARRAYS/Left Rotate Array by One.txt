@@ -1,0 +1,144 @@
+📌 Problem 5: Left Rotate Array by One
+❓ What is the question asking?
+
+Given an array, rotate it to the left by one position.
+
+The first element should move to the end, and every other element shifts one position to the left.
+
+Example
+Input:
+[1,2,3,4,5]
+
+Output:
+[2,3,4,5,1]
+🪨 Brute Force Approach
+💡 Idea
+Create a new array.
+Copy all elements except the first into the new array.
+Put the first element at the last position.
+Copy the new array back.
+💻 Java Code
+class Main {
+
+    static void leftRotate(int arr[]) {
+
+        int n = arr.length;
+        int temp[] = new int[n];
+
+        for(int i = 1; i < n; i++) {
+            temp[i - 1] = arr[i];
+        }
+
+        temp[n - 1] = arr[0];
+
+        for(int i = 0; i < n; i++) {
+            arr[i] = temp[i];
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,4,5};
+
+        leftRotate(arr);
+
+        for(int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+▶️ Output
+2 3 4 5 1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach
+💡 Idea
+Store the first element.
+Shift every element one position to the left.
+Put the stored element at the last index.
+
+No extra array is needed.
+
+🧠 Dry Run
+arr = [1,2,3,4,5]
+
+temp = 1
+
+Shift Left
+
+i = 1
+arr[0] = 2
+
+[2,2,3,4,5]
+
+i = 2
+arr[1] = 3
+
+[2,3,3,4,5]
+
+i = 3
+arr[2] = 4
+
+[2,3,4,4,5]
+
+i = 4
+arr[3] = 5
+
+[2,3,4,5,5]
+
+Finally
+
+arr[4] = temp
+
+[2,3,4,5,1]
+💻 Java Code
+class Main {
+
+    static void leftRotate(int arr[]) {
+
+        int n = arr.length;
+
+        int temp = arr[0];
+
+        for(int i = 1; i < n; i++) {
+            arr[i - 1] = arr[i];
+        }
+
+        arr[n - 1] = temp;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,4,5};
+
+        leftRotate(arr);
+
+        for(int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+▶️ Output
+2 3 4 5 1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[5]
+
+Output:
+[5]
+Case 2
+Input:
+[1,2]
+
+Output:
+[2,1]
+📝 Interview Tip
+
+The key idea is to save the first element before shifting. If you start shifting without saving it, you'll lose it forever.
