@@ -1,0 +1,190 @@
+📌 Problem 6: Left Rotate Array by K Places
+❓ What is the question asking?
+
+Given an array and an integer k, rotate the array to the left by k places.
+
+Example
+Input:
+arr = [1,2,3,4,5,6,7]
+k = 3
+
+Output:
+[4,5,6,7,1,2,3]
+🪨 Brute Force Approach
+💡 Idea
+
+Rotate the array one place to the left, k times.
+
+💻 Java Code
+class Main {
+
+    static void leftRotateByOne(int arr[]) {
+
+        int temp = arr[0];
+
+        for(int i = 1; i < arr.length; i++) {
+            arr[i - 1] = arr[i];
+        }
+
+        arr[arr.length - 1] = temp;
+    }
+
+    static void leftRotate(int arr[], int k) {
+
+        for(int i = 0; i < k; i++) {
+            leftRotateByOne(arr);
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,4,5,6,7};
+
+        leftRotate(arr, 3);
+
+        for(int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+▶️ Output
+4 5 6 7 1 2 3
+⏱️ Time Complexity
+O(n × k)
+📦 Space Complexity
+O(1)
+🟡 Better Approach
+💡 Idea
+Store the first k elements in a temporary array.
+Shift the remaining elements to the left.
+Copy the stored elements to the end.
+💻 Java Code
+class Main {
+
+    static void leftRotate(int arr[], int k) {
+
+        int n = arr.length;
+        k = k % n;
+
+        int temp[] = new int[k];
+
+        for(int i = 0; i < k; i++) {
+            temp[i] = arr[i];
+        }
+
+        for(int i = k; i < n; i++) {
+            arr[i - k] = arr[i];
+        }
+
+        for(int i = 0; i < k; i++) {
+            arr[n - k + i] = temp[i];
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,4,5,6,7};
+
+        leftRotate(arr, 3);
+
+        for(int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+▶️ Output
+4 5 6 7 1 2 3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(k)
+⚡ Optimal Approach (Reversal Algorithm)
+💡 Idea
+
+This is the interview-favourite solution.
+
+For left rotation by k:
+
+Reverse the first k elements.
+Reverse the remaining n-k elements.
+Reverse the entire array.
+🧠 Dry Run
+arr = [1,2,3,4,5,6,7]
+k = 3
+Step 1: Reverse first k
+[3,2,1,4,5,6,7]
+Step 2: Reverse remaining elements
+[3,2,1,7,6,5,4]
+Step 3: Reverse the whole array
+[4,5,6,7,1,2,3]
+
+🎉 Final Answer!
+
+💻 Java Code
+class Main {
+
+    static void reverse(int arr[], int start, int end) {
+
+        while(start < end) {
+
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+
+            start++;
+            end--;
+        }
+    }
+
+    static void leftRotate(int arr[], int k) {
+
+        int n = arr.length;
+        k = k % n;
+
+        reverse(arr, 0, k - 1);
+        reverse(arr, k, n - 1);
+        reverse(arr, 0, n - 1);
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,2,3,4,5,6,7};
+
+        leftRotate(arr, 3);
+
+        for(int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+▶️ Output
+4 5 6 7 1 2 3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[1,2,3,4,5]
+k = 0
+
+Output:
+[1,2,3,4,5]
+Case 2
+Input:
+[1,2,3,4,5]
+k = 7
+
+Since:
+7 % 5 = 2
+
+Output:
+[3,4,5,1,2]
+📝 Interview Tip
+
+Always do:
+
+k = k % n;
+
+Otherwise, if k > n, your code may fail or do unnecessary work.
