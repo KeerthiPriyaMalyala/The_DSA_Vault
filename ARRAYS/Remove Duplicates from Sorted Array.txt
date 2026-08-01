@@ -1,0 +1,174 @@
+📌 Problem 4: Remove Duplicates from Sorted Array
+❓ What is the question asking?
+
+Given a sorted array, remove the duplicate elements in-place and return the number of unique elements.
+
+The first k elements of the array should contain the unique elements.
+
+Example
+Input:
+[1,1,2,2,2,3,4,4]
+
+Output:
+k = 4
+
+Array:
+[1,2,3,4,...]
+🪨 Brute Force Approach
+💡 Idea
+Store unique elements in a HashSet.
+Copy them back into the array.
+Return the size of the set.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    static int removeDuplicates(int arr[]) {
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for(int num : arr) {
+            set.add(num);
+        }
+
+        int index = 0;
+
+        for(int num : set) {
+            arr[index++] = num;
+        }
+
+        return set.size();
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,1,2,2,2,3,4,4};
+
+        int k = removeDuplicates(arr);
+
+        System.out.println(k);
+
+        for(int i = 0; i < k; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}
+▶️ Output
+4
+1 2 3 4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach (Two Pointers)
+💡 Idea
+
+Since the array is already sorted, duplicates are adjacent.
+
+Use two pointers:
+
+i → points to the last unique element.
+j → scans the array.
+
+Whenever arr[j] != arr[i]:
+
+Increment i.
+Copy arr[j] to arr[i].
+
+Finally, return i + 1.
+
+🧠 Dry Run
+Array:
+1 1 2 2 2 3 4 4
+
+i = 0
+
+j = 1 → 1 == 1 ❌
+
+j = 2 → 2 != 1 ✅
+i = 1
+arr[1] = 2
+
+j = 3 → duplicate ❌
+
+j = 4 → duplicate ❌
+
+j = 5 → 3 != 2 ✅
+i = 2
+arr[2] = 3
+
+j = 6 → 4 != 3 ✅
+i = 3
+arr[3] = 4
+
+j = 7 → duplicate ❌
+
+Answer = i + 1 = 4
+💻 Java Code
+class Main {
+
+    static int removeDuplicates(int arr[]) {
+
+        int i = 0;
+
+        for(int j = 1; j < arr.length; j++) {
+
+            if(arr[j] != arr[i]) {
+
+                i++;
+                arr[i] = arr[j];
+            }
+        }
+
+        return i + 1;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {1,1,2,2,2,3,4,4};
+
+        int k = removeDuplicates(arr);
+
+        System.out.println(k);
+
+        for(int i = 0; i < k; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}
+▶️ Output
+4
+1 2 3 4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[1]
+
+Output:
+1
+Case 2
+Input:
+[5,5,5,5]
+
+Output:
+1
+Case 3
+Input:
+[1,2,3,4]
+
+Output:
+4
+📝 Interview Tip
+
+This problem is a classic application of the Two Pointer technique.
+
+✨ Remember:
+
+i = last unique element.
+j = explores the array.
+Since the array is sorted, duplicates always appear next to each other.
