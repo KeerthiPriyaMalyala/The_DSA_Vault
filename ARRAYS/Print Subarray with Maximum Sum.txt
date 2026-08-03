@@ -1,0 +1,165 @@
+📌 Problem 19: Print Subarray with Maximum Sum
+❓ What is the question asking?
+
+Given an array, print the contiguous subarray that has the maximum sum.
+
+Example
+Input:
+[-2,1,-3,4,-1,2,1,-5,4]
+
+Output:
+Maximum Sum = 6
+
+Subarray:
+[4,-1,2,1]
+🪨 Brute Force Approach
+💡 Idea
+Generate all subarrays.
+Calculate their sum.
+Store the start and end indices of the maximum sum.
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Modified Kadane's Algorithm)
+💡 Idea
+
+Along with:
+
+currentSum
+maxSum
+
+Maintain:
+
+start → Starting index of the answer.
+end → Ending index of the answer.
+tempStart → Possible starting index of the current subarray.
+
+Whenever currentSum becomes 0, the next element can be the start of a new subarray.
+
+Whenever we find a better maxSum, save:
+
+start = tempStart
+end = current index
+🧠 Dry Run
+arr = [-2,1,-3,4,-1,2,1,-5,4]
+
+Initially
+
+currentSum = 0
+maxSum = -∞
+
+start = 0
+end = 0
+tempStart = 0
+i	Element	currentSum	maxSum	start	end
+0	-2	-2	-2	0	0
+Reset				tempStart=1	
+1	1	1	1	1	1
+2	-3	-2	1	1	1
+Reset				tempStart=3	
+3	4	4	4	3	3
+4	-1	3	4	3	3
+5	2	5	5	3	5
+6	1	6	6	3	6
+7	-5	1	6	3	6
+8	4	5	6	3	6
+
+🎉 Final:
+
+Maximum Sum = 6
+
+Subarray = [4,-1,2,1]
+💻 Java Code
+class Main {
+
+    static void printMaximumSubarray(int arr[]) {
+
+        int currentSum = 0;
+        int maxSum = Integer.MIN_VALUE;
+
+        int start = 0;
+        int end = 0;
+        int tempStart = 0;
+
+        for(int i = 0; i < arr.length; i++) {
+
+            if(currentSum == 0) {
+                tempStart = i;
+            }
+
+            currentSum += arr[i];
+
+            if(currentSum > maxSum) {
+
+                maxSum = currentSum;
+                start = tempStart;
+                end = i;
+            }
+
+            if(currentSum < 0) {
+                currentSum = 0;
+            }
+        }
+
+        System.out.println("Maximum Sum = " + maxSum);
+
+        System.out.print("Subarray: ");
+
+        for(int i = start; i <= end; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {-2,1,-3,4,-1,2,1,-5,4};
+
+        printMaximumSubarray(arr);
+    }
+}
+▶️ Output
+Maximum Sum = 6
+
+Subarray:
+4 -1 2 1
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[5]
+
+Output:
+Maximum Sum = 5
+
+Subarray:
+5
+Case 2
+Input:
+[-2,-1,-3]
+
+Output:
+Maximum Sum = -1
+
+Subarray:
+-1
+Case 3
+Input:
+[1,2,3]
+
+Output:
+Maximum Sum = 6
+
+Subarray:
+1 2 3
+📝 Interview Tip
+
+The only difference from Kadane's Algorithm is that you track the indices:
+
+tempStart → Potential beginning of a new subarray.
+start and end → Best subarray found so far.
+
+This lets you print the actual subarray while keeping the same O(n) time complexity.
