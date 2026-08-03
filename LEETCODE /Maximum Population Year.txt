@@ -1,0 +1,262 @@
+1854. Maximum Population Year
+❓ What is the question asking?
+
+You are given logs, where:
+
+logs[i][0] = Birth Year
+logs[i][1] = Death Year (exclusive)
+
+Find the earliest year having the maximum population.
+
+Important
+
+A person is alive in
+
+[birth, death)
+
+meaning
+
+Birth year ✅ Included
+Death year ❌ Not Included
+🪨 Brute Force Approach
+💡 Idea
+
+For every year from 1950 to 2050
+
+Count how many people are alive in that year.
+Keep track of the maximum population.
+💻 Java Code
+class Solution {
+    public int maximumPopulation(int[][] logs) {
+
+        int maxPopulation = 0;
+        int answer = 1950;
+
+        for (int year = 1950; year <= 2050; year++) {
+
+            int count = 0;
+
+            for (int i = 0; i < logs.length; i++) {
+
+                if (logs[i][0] <= year && year < logs[i][1]) {
+                    count++;
+                }
+            }
+
+            if (count > maxPopulation) {
+                maxPopulation = count;
+                answer = year;
+            }
+        }
+
+        return answer;
+    }
+}
+▶️ Output
+Input:
+[[1993,1999],[2000,2010]]
+
+Output:
+1993
+⏱ Time Complexity
+
+O(n × 101) ≈ O(n)
+
+📦 Space Complexity
+
+O(1)
+
+🟡 Better Approach (Count Array)
+💡 Idea
+
+Create an array for years 1950–2050.
+
+For every person:
+
+Increase population for every year from birth to death-1.
+
+Finally, find the year with the maximum count.
+
+💻 Java Code
+class Solution {
+    public int maximumPopulation(int[][] logs) {
+
+        int[] population = new int[101];
+
+        for (int i = 0; i < logs.length; i++) {
+
+            int birth = logs[i][0];
+            int death = logs[i][1];
+
+            for (int year = birth; year < death; year++) {
+                population[year - 1950]++;
+            }
+        }
+
+        int max = 0;
+        int answer = 1950;
+
+        for (int i = 0; i < 101; i++) {
+
+            if (population[i] > max) {
+                max = population[i];
+                answer = i + 1950;
+            }
+        }
+
+        return answer;
+    }
+}
+▶️ Output
+Input:
+[[1993,1999],[2000,2010]]
+
+Output:
+1993
+⏱ Time Complexity
+
+O(n × 100) ≈ O(n)
+
+📦 Space Complexity
+
+O(101) ≈ O(1)
+
+⚡ Optimal Approach (Difference Array + Prefix Sum)
+💡 Idea
+
+Instead of increasing every year individually:
+
+Add +1 at the birth year.
+Add -1 at the death year.
+
+Then calculate the prefix sum.
+
+The prefix sum gives the population for every year.
+
+💻 Java Code
+class Solution {
+    public int maximumPopulation(int[][] logs) {
+
+        int[] diff = new int[101];
+
+        for (int[] log : logs) {
+            diff[log[0] - 1950]++;
+            diff[log[1] - 1950]--;
+        }
+
+        int maxPopulation = 0;
+        int currentPopulation = 0;
+        int answer = 1950;
+
+        for (int i = 0; i < 101; i++) {
+
+            currentPopulation += diff[i];
+
+            if (currentPopulation > maxPopulation) {
+                maxPopulation = currentPopulation;
+                answer = i + 1950;
+            }
+        }
+
+        return answer;
+    }
+}
+▶️ Output
+Input:
+[[1993,1999],[2000,2010]]
+
+Output:
+1993
+⏱ Time Complexity
+
+O(n + 101) ≈ O(n)
+
+📦 Space Complexity
+
+O(101) ≈ O(1)
+
+▶️ Dry Run (Difference Array)
+logs = [[1993,1999],[2000,2010]]
+
+Initially
+
+diff[] = all 0
+Person 1
+Birth = 1993
+
+diff[1993-1950]++
+
+Death = 1999
+
+diff[1999-1950]--
+Person 2
+Birth = 2000
+
+diff[2000-1950]++
+
+Death = 2010
+
+diff[2010-1950]--
+Prefix Sum
+Year 1993
+
+Population = 1
+Maximum = 1
+1994
+
+Population = 1
+...
+
+1998
+
+Population = 1
+1999
+
+Population becomes 0
+2000
+
+Population becomes 1
+
+Maximum population is 1.
+
+Earliest year is
+
+1993
+📝 Key Notes ⭐
+✅ Death Year is Exclusive
+Alive in:
+
+[birth, death)
+
+Birth  → Included ✅
+
+Death  → Not Included ❌
+✅ Count Array
+Increase population for every year.
+Easy to understand.
+Slightly more work.
+✅ Difference Array
+Birth → +1
+
+Death → -1
+
+Then compute the prefix sum.
+
+✅ Prefix Sum
+Current Population
+
+=
+
+Previous Population
+
++
+
+Current Difference
+🎯 Interview Tip
+
+Whenever a problem involves adding or removing values over a range, think of the Difference Array + Prefix Sum pattern. Instead of updating every value in the range, update only the boundaries and compute the final values with a prefix sum. This reduces repeated work and is a common interview optimization.
+
+💖 Memory Trick:
+
+Count Array → Update every year.
+Difference Array → Update only birth (+1) and death (-1), then take a Prefix Sum.
