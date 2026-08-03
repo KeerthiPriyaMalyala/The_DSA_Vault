@@ -1,0 +1,276 @@
+🧠 When should I think of i & j pointers?
+
+First ask yourself this question:
+
+"Can I solve this by scanning the array only once?"
+
+If yes 👉 Two pointers is probably the answer.
+
+🌸 Pattern 1: One pointer reads, one pointer writes
+Think:
+
+"I want to move/copy/replace elements."
+
+Examples:
+
+Remove Duplicates
+Remove Element
+Move Zeroes
+Before
+
+1 2 2 3 4
+
+i = write position
+j = read position
+
+j reads everything
+i writes only needed values
+j ---> 1 2 2 3 4
+i --->
+
+After
+
+1 2 3 4 _
+💡 Clue
+
+If question says
+
+✅ remove
+
+✅ shift
+
+✅ overwrite
+
+✅ keep unique
+
+Immediately think
+
+i = write
+j = read
+🌸 Pattern 2: Compare from both ends
+
+Examples
+
+Palindrome
+Reverse String
+Container With Most Water
+Two Sum II
+i             j
+
+1 2 3 2 1
+
+Move inward.
+
+💡 Clue
+
+Question contains
+
+beginning
+
+and
+
+end
+
+or
+
+opposite sides
+
+Think
+
+i = left
+j = right
+🌸 Pattern 3: Sorted Array + Find Pair
+
+Example
+
+2 4 7 11 15
+
+Target = 15
+i          j
+
+2 4 7 11 15
+
+Need bigger?
+
+i++
+
+Need smaller?
+
+j--
+💡 Clue
+
+Question asks
+
+find two numbers
+
+AND
+
+array is sorted
+
+Immediately think
+
+left right pointer
+🌸 Pattern 4: Partitioning
+
+Example
+
+Sort 0s and 1s
+
+0 1 1 0 1 0
+i = place for next 0
+
+j = scanning
+
+Whenever
+
+arr[j]==0
+
+swap
+
+i
+
+and
+
+j
+
+Then
+
+i++
+
+Also used in
+
+Move Zeroes
+Dutch National Flag
+Partition Array
+🌸 Pattern 5: Sliding Window
+
+Actually also two pointers 😄
+
+i = window start
+
+j = window end
+1 2 3 4 5
+
+i
+      j
+
+Grow
+
+j++
+
+Shrink
+
+i++
+
+Questions
+
+Longest substring
+Maximum sum subarray
+Fruits into baskets
+🌸 Pattern 6: Merge Two Arrays
+A
+
+1 3 5
+
+B
+
+2 4 6
+i -> A
+
+j -> B
+
+Compare
+
+A[i]
+
+B[j]
+
+Take smaller.
+
+🌸 Pattern 7: Fast Slow Pointer
+slow
+
+fast
+
+Questions
+
+Linked List Cycle
+Middle Node
+Happy Number
+❤️ The Decision Tree
+
+Whenever you read a question...
+
+               Question
+                    |
+      --------------------------------
+      |                              |
+Need pair?                    Need modify array?
+      |                              |
+Sorted?                        Yes
+      |                              |
+Use Left Right              i=write
+Pointers                    j=read
+Need compare start/end?
+
+↓
+
+Left Right
+Need remove duplicates?
+
+↓
+
+i write
+
+j read
+Need move zeros?
+
+↓
+
+i write
+
+j scan
+Need window?
+
+↓
+
+i start
+
+j end
+Need partition?
+
+↓
+
+i boundary
+
+j scan
+🎯 Super Trick (This is what I use)
+
+Whenever I see an array question, I ask these 5 questions:
+
+1️⃣ Is the array sorted?
+➡️ Think left & right pointers.
+
+2️⃣ Am I removing, shifting, or overwriting elements?
+➡️ Think i = write, j = read.
+
+3️⃣ Am I comparing the first and last elements?
+➡️ Think left & right.
+
+4️⃣ Am I looking for a continuous subarray/substring?
+➡️ Think sliding window (i & j).
+
+5️⃣ Am I trying to split or partition the array?
+➡️ Think boundary pointer + scan pointer.
+
+🌟 For your Easy Array roadmap, remember this mini cheat sheet:
+Question Pattern	i	j
+Remove Duplicates	Write	Read
+Remove Element	Write	Read
+Move Zeroes	Next non-zero position	Scan
+Sort 0s & 1s	Boundary of 0s	Scan
+Two Sum II	Left	Right
+Palindrome	Left	Right
+Reverse Array	Left	Right
+Sliding Window	Window Start	Window End
+Merge Arrays	Array 1	Array 2
