@@ -1,0 +1,260 @@
+349. Intersection of Two Arrays
+❓ What is the question asking?
+
+You are given two integer arrays.
+
+Return an array containing the unique common elements present in both arrays.
+
+The order of the output does not matter.
+
+Example
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2]
+🪨 Brute Force Approach
+💡 Idea
+Compare every element of nums1 with every element of nums2.
+If both are equal and not already added to the answer, add it.
+💻 Java Code
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        int[] res = new int[Math.min(nums1.length, nums2.length)];
+        int k = 0;
+
+        for (int i = 0; i < nums1.length; i++) {
+
+            boolean alreadyAdded = false;
+
+            for (int x = 0; x < k; x++) {
+                if (res[x] == nums1[i]) {
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+
+            if (alreadyAdded) continue;
+
+            for (int j = 0; j < nums2.length; j++) {
+
+                if (nums1[i] == nums2[j]) {
+                    res[k++] = nums1[i];
+                    break;
+                }
+            }
+        }
+
+        return Arrays.copyOf(res, k);
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2]
+⏱ Time Complexity
+
+O(n × m)
+
+📦 Space Complexity
+
+O(min(n,m))
+
+🟡 Better Approach (Sorting + Two Pointers)
+💡 Idea
+Sort both arrays.
+Use two pointers.
+If elements are equal, store the element.
+Skip duplicate values in both arrays.
+If one element is smaller, move that pointer.
+💻 Java Code
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+
+        int[] res = new int[Math.min(n1, n2)];
+
+        int l = 0;
+        int r = 0;
+        int k = 0;
+
+        while (l < n1 && r < n2) {
+
+            while (l > 0 && l < n1 && nums1[l] == nums1[l - 1]) {
+                l++;
+            }
+
+            while (r > 0 && r < n2 && nums2[r] == nums2[r - 1]) {
+                r++;
+            }
+
+            if (l >= n1 || r >= n2) {
+                break;
+            }
+
+            if (nums1[l] == nums2[r]) {
+                res[k++] = nums1[l];
+                l++;
+                r++;
+            }
+            else if (nums1[l] < nums2[r]) {
+                l++;
+            }
+            else {
+                r++;
+            }
+        }
+
+        return Arrays.copyOf(res, k);
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2]
+⏱ Time Complexity
+
+O(n log n + m log m)
+
+📦 Space Complexity
+
+O(min(n,m))
+
+⚡ Optimal Approach (HashSet)
+💡 Idea
+Store all elements of the first array in a HashSet.
+Traverse the second array.
+If the current element exists in the set, add it to another HashSet (to avoid duplicates).
+Convert the result set into an array.
+💻 Java Code
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        HashSet<Integer> set = new HashSet<>();
+        HashSet<Integer> ans = new HashSet<>();
+
+        for (int num : nums1) {
+            set.add(num);
+        }
+
+        for (int num : nums2) {
+            if (set.contains(num)) {
+                ans.add(num);
+            }
+        }
+
+        int[] res = new int[ans.size()];
+        int i = 0;
+
+        for (int num : ans) {
+            res[i++] = num;
+        }
+
+        return res;
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2]
+⏱ Time Complexity
+
+O(n + m)
+
+📦 Space Complexity
+
+O(n + m)
+
+▶️ Dry Run (Sorting + Two Pointers)
+nums1 = [1,2,2,3,4]
+nums2 = [2,2,4]
+
+After Sorting
+
+nums1 = [1,2,2,3,4]
+nums2 = [2,2,4]
+Step 1
+l = 0
+r = 0
+
+1 < 2
+
+Move l
+Step 2
+l = 1
+r = 0
+
+2 == 2
+
+Store 2
+
+res = [2]
+
+l++
+r++
+Step 3
+l = 2
+r = 1
+
+Skip duplicate in nums1
+
+l = 3
+
+Skip duplicate in nums2
+
+r = 2
+Step 4
+3 < 4
+
+Move l
+Step 5
+l = 4
+r = 2
+
+4 == 4
+
+Store 4
+
+res = [2,4]
+
+Answer
+
+[2,4]
+📝 Key Notes ⭐
+✅ Brute Force
+Compare every pair of elements.
+Before adding an element, check whether it is already present in the result.
+✅ Sorting + Two Pointers
+Sort both arrays.
+Skip duplicates before comparison.
+If values are equal → store the value and move both pointers.
+If left value is smaller → move left pointer.
+If right value is smaller → move right pointer.
+✅ HashSet
+Store elements of the first array in a set.
+Check each element of the second array using contains().
+Use another set to ensure the result contains only unique values.
+🎯 Interview Tip
+
+If asked to optimize:
+
+Without extra space (except output): Use Sorting + Two Pointers.
+Fastest average solution: Use HashSet, which runs in O(n + m) time but uses extra space.
+
+💖 This is a classic problem to practice both the Two Pointers and HashSet patterns.
