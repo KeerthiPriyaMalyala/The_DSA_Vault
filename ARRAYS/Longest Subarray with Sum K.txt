@@ -1,0 +1,211 @@
+<Question Number & Name>
+🔹 Longest Subarray with Sum K
+❓ What is the question asking?
+
+Given an integer array (can contain positive, negative and zero) and an integer K, return the length of the longest subarray whose sum is exactly K.
+
+Example
+Input:
+arr = [1,2,3,1,1,1,1,-1,2]
+K = 3
+
+Output:
+3
+🪨 Brute Force Approach
+💡 Idea
+
+Generate every possible subarray.
+
+Calculate its sum.
+
+If sum equals K,
+
+Update maximum length.
+
+💻 Java Code
+public class Main {
+
+    public static int longestSubarray(int[] arr, int k) {
+
+        int maxLength = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            int sum = 0;
+
+            for (int j = i; j < arr.length; j++) {
+
+                sum += arr[j];
+
+                if (sum == k) {
+                    maxLength = Math.max(maxLength, j - i + 1);
+                }
+            }
+        }
+
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1,2,3,1,1,1,1,-1,2};
+
+        System.out.println(longestSubarray(arr,3));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+🟡 Better Approach (Prefix Sum + HashMap)
+💡 Idea
+
+Store
+
+Prefix Sum → First Index
+
+Suppose
+
+Current Prefix Sum = sum
+
+We need
+
+sum - previousSum = K
+
+So,
+
+previousSum = sum - K
+
+If
+
+sum - K
+
+already exists in the HashMap,
+
+then the subarray between those indices has sum = K.
+
+Store only the first occurrence of every prefix sum because it gives the longest subarray.
+
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static int longestSubarray(int[] arr, int k) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int sum = 0;
+        int maxLength = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            sum += arr[i];
+
+            if (sum == k) {
+                maxLength = i + 1;
+            }
+
+            if (map.containsKey(sum - k)) {
+                maxLength = Math.max(maxLength, i - map.get(sum - k));
+            }
+
+            if (!map.containsKey(sum)) {
+                map.put(sum, i);
+            }
+        }
+
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr = {1,2,3,1,1,1,1,-1,2};
+
+        System.out.println(longestSubarray(arr,3));
+    }
+}
+▶️ Output
+3
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+🎯 Dry Run
+arr = [1,2,3,1,1,-1]
+K = 3
+Index	Element	Prefix Sum	sum-K	Max Length
+0	1	1	-2	0
+1	2	3	0	2
+2	3	6	3	2
+3	1	7	4	2
+4	1	8	5	2
+5	-1	7	4	2
+
+Answer
+
+2
+🎯 Pattern Recognition
+
+Use Prefix Sum + HashMap when:
+
+✅ Array contains negative numbers.
+✅ Find longest subarray.
+✅ Find subarray with sum = K.
+✅ Need O(n) solution.
+❌ Don't Use Sliding Window
+
+Example
+
+[2,-1,2]
+K = 3
+
+Negative numbers make the window sum unpredictable, so Sliding Window fails.
+
+Use
+
+Prefix Sum + HashMap
+📌 Interview Cheat Sheet
+Pattern	Algorithm
+Positive array + Sum K	✅ Sliding Window
+Positive + Negative + Zero + Sum K	✅ Prefix Sum + HashMap
+Count subarrays with Sum K	✅ Prefix Sum + HashMap
+Longest subarray with Sum K	✅ Prefix Sum + HashMap
+Equal number of 0's and 1's	✅ Prefix Sum + HashMap
+🧠 Memory Trick
+Positive Only
+      ↓
+Sliding Window
+
+Negative Present
+      ↓
+Prefix Sum + HashMap
+⭐ Prefix Sum Formula
+Current Prefix Sum = sum
+
+Need:
+
+sum - previousSum = K
+
+Therefore,
+
+previousSum = sum - K
+
+If sum - K exists in the HashMap, then the subarray from (previous index + 1) to current index has sum K.
+
+🎯 Pattern Usage
+
+Whenever you see:
+
+✅ Subarray Sum = K
+✅ Negative numbers are allowed
+✅ Longest subarray
+✅ Need O(n)
+
+Immediately think:
+
+Prefix Sum + HashMap
+
+💖 This is one of the Top 10 most important Prefix Sum interview patterns, and many problems (Subarray Sum Equals K, Count Subarrays, Equal 0's & 1's, Longest Sum K) are built on this same idea.
