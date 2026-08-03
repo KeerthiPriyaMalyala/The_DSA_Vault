@@ -1,0 +1,244 @@
+350. Intersection of Two Arrays II
+❓ What is the question asking?
+
+You are given two integer arrays.
+
+Return all common elements.
+
+👉 If a number appears k times in both arrays, it should appear k times in the answer.
+
+Example
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output = [2,2]
+
+Because 2 appears twice in both arrays.
+
+🪨 Brute Force Approach
+💡 Idea
+Traverse every element of nums1.
+Compare it with every element of nums2.
+Once a match is found,
+Add it to the answer.
+Mark that element in nums2 as visited so it isn't reused.
+💻 Java Code
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+
+        int[] res = new int[Math.min(nums1.length, nums2.length)];
+        boolean[] visited = new boolean[nums2.length];
+
+        int k = 0;
+
+        for (int i = 0; i < nums1.length; i++) {
+
+            for (int j = 0; j < nums2.length; j++) {
+
+                if (!visited[j] && nums1[i] == nums2[j]) {
+                    res[k++] = nums1[i];
+                    visited[j] = true;
+                    break;
+                }
+            }
+        }
+
+        return Arrays.copyOf(res, k);
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2,2]
+⏱ Time Complexity
+
+O(n × m)
+
+📦 Space Complexity
+
+O(m)
+
+🟡 Better Approach (Sorting + Two Pointers)
+💡 Idea
+Sort both arrays.
+Use two pointers.
+If elements are equal,
+Store it.
+Move both pointers.
+If left is smaller → move left.
+Else move right.
+
+❌ Do not skip duplicates because duplicates are required.
+
+💻 Java Code
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int[] res = new int[Math.min(nums1.length, nums2.length)];
+
+        int l = 0;
+        int r = 0;
+        int k = 0;
+
+        while (l < nums1.length && r < nums2.length) {
+
+            if (nums1[l] == nums2[r]) {
+                res[k++] = nums1[l];
+                l++;
+                r++;
+            }
+            else if (nums1[l] < nums2[r]) {
+                l++;
+            }
+            else {
+                r++;
+            }
+        }
+
+        return Arrays.copyOf(res, k);
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2,2]
+⏱ Time Complexity
+
+O(n log n + m log m)
+
+📦 Space Complexity
+
+O(min(n,m))
+
+⚡ Optimal Approach (HashMap)
+💡 Idea
+Store the frequency of every element of nums1 in a HashMap.
+Traverse nums2.
+If the current element exists in the map with frequency greater than 0:
+Add it to the answer.
+Decrease its frequency.
+💻 Java Code
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int num : nums1) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        int[] res = new int[Math.min(nums1.length, nums2.length)];
+        int k = 0;
+
+        for (int num : nums2) {
+
+            if (map.getOrDefault(num, 0) > 0) {
+
+                res[k++] = num;
+                map.put(num, map.get(num) - 1);
+            }
+        }
+
+        return Arrays.copyOf(res, k);
+    }
+}
+▶️ Output
+Input:
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+Output:
+[2,2]
+⏱ Time Complexity
+
+O(n + m)
+
+📦 Space Complexity
+
+O(n)
+
+▶️ Dry Run (Sorting + Two Pointers)
+nums1 = [1,2,2,1]
+nums2 = [2,2]
+
+After Sorting
+
+nums1 = [1,1,2,2]
+nums2 = [2,2]
+Step 1
+l = 0
+r = 0
+
+1 < 2
+
+Move l
+Step 2
+l = 1
+r = 0
+
+1 < 2
+
+Move l
+Step 3
+l = 2
+r = 0
+
+2 == 2
+
+Store 2
+
+res = [2]
+
+l++
+r++
+Step 4
+l = 3
+r = 1
+
+2 == 2
+
+Store 2
+
+res = [2,2]
+
+l++
+r++
+
+Loop ends.
+
+Answer
+
+[2,2]
+📝 Key Notes ⭐
+✅ Difference Between 349 & 350
+349	350
+Unique elements only	Duplicates allowed
+Skip duplicates	Don't skip duplicates
+HashSet	HashMap (Frequency)
+✅ Sorting + Two Pointers
+Sort both arrays.
+Equal → Store and move both pointers.
+Smaller → Move that pointer.
+Never skip duplicates.
+✅ HashMap
+Store frequencies of the first array.
+While traversing the second array:
+If frequency > 0 → add to answer.
+Decrease frequency.
+🎯 Interview Tip
+If asked for the fastest average solution, use HashMap (Frequency Count) → O(n + m).
+If asked to avoid hash-based extra space, use Sorting + Two Pointers → O(n log n + m log m).
+
+💖 Memory Trick:
+
+349 → Set = Unique
+350 → Map = Frequency (Duplicates)
