@@ -1,0 +1,215 @@
+📌 Problem 18: Kadane's Algorithm
+❓ What is the question asking?
+
+Given an integer array (can contain positive and negative numbers), find the maximum possible sum of any contiguous subarray.
+
+Contiguous means the elements must be next to each other.
+
+Example
+Input:
+[-2,1,-3,4,-1,2,1,-5,4]
+
+Output:
+6
+
+Explanation:
+
+The maximum sum subarray is:
+
+[4,-1,2,1]
+
+Sum:
+
+4 + (-1) + 2 + 1 = 6
+🪨 Brute Force Approach
+💡 Idea
+
+Generate every possible subarray.
+
+Calculate its sum.
+
+Keep track of the maximum sum.
+
+💻 Java Code
+class Main {
+
+    static int maxSubarraySum(int arr[]) {
+
+        int maxSum = Integer.MIN_VALUE;
+
+        for(int i = 0; i < arr.length; i++) {
+
+            int sum = 0;
+
+            for(int j = i; j < arr.length; j++) {
+
+                sum += arr[j];
+
+                maxSum = Math.max(maxSum, sum);
+            }
+        }
+
+        return maxSum;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {-2,1,-3,4,-1,2,1,-5,4};
+
+        System.out.println(maxSubarraySum(arr));
+    }
+}
+▶️ Output
+6
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Kadane's Algorithm) ⭐⭐⭐⭐⭐
+💡 Idea
+
+Instead of checking every subarray:
+
+Maintain
+
+currentSum
+maxSum
+
+For every element:
+
+currentSum += arr[i]
+
+If
+
+currentSum > maxSum
+
+update
+
+maxSum = currentSum
+
+If
+
+currentSum < 0
+
+then
+
+currentSum = 0
+🤔 Why reset to 0?
+
+Because a negative running sum will only decrease the sum of any future subarray.
+
+So it's better to start a new subarray.
+
+🧠 Dry Run
+arr = [-2,1,-3,4,-1,2,1,-5,4]
+
+Initially
+
+currentSum = 0
+maxSum = -∞
+Element	currentSum	maxSum	Action
+-2	-2	-2	Reset currentSum = 0
+1	1	1	Keep going
+-3	-2	1	Reset currentSum = 0
+4	4	4	Keep going
+-1	3	4	Keep going
+2	5	5	Keep going
+1	6	6	Keep going
+-5	1	6	Keep going
+4	5	6	Keep going
+
+🎉 Final Answer:
+
+6
+💻 Java Code
+class Main {
+
+    static int maxSubarraySum(int arr[]) {
+
+        int currentSum = 0;
+        int maxSum = Integer.MIN_VALUE;
+
+        for(int num : arr) {
+
+            currentSum += num;
+
+            maxSum = Math.max(maxSum, currentSum);
+
+            if(currentSum < 0) {
+                currentSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {-2,1,-3,4,-1,2,1,-5,4};
+
+        System.out.println(maxSubarraySum(arr));
+    }
+}
+▶️ Output
+6
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1 (All Positive)
+Input:
+[1,2,3,4]
+
+Output:
+10
+
+(Take the whole array.)
+
+Case 2 (All Negative)
+Input:
+[-5,-2,-8]
+
+Output:
+-2
+
+(The least negative number is the answer.)
+
+Case 3
+Input:
+[5]
+
+Output:
+5
+🎯 Why do we initialize maxSum = Integer.MIN_VALUE?
+
+Suppose:
+
+arr = [-5,-2,-8]
+
+If we initialize:
+
+int maxSum = 0;
+
+Then:
+
+Answer = 0 ❌
+
+But 0 is not present in the array.
+
+The correct answer is:
+
+-2
+
+That's why we use:
+
+int maxSum = Integer.MIN_VALUE;
+🎯 Interview Tip
+
+Think of currentSum as a bag.
+
+Add the current element to the bag.
+If the bag becomes negative, throw it away (reset to 0).
+Keep track of the biggest bag you've ever had (maxSum).
+
+This simple idea is Kadane's Algorithm.
