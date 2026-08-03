@@ -1,0 +1,177 @@
+📌 Problem 20: Stock Buy and Sell (Best Time to Buy and Sell Stock)
+❓ What is the question asking?
+
+You are given an array where:
+
+arr[i] = Stock price on day i
+
+You can:
+
+✅ Buy the stock only once
+✅ Sell the stock only once
+✅ Buy must happen before selling
+
+Find the maximum profit.
+
+If no profit is possible, return 0.
+
+Example
+Input:
+prices = [7,1,5,3,6,4]
+
+Output:
+5
+
+Explanation
+
+Buy at 1
+
+Sell at 6
+
+Profit = 6 - 1 = 5
+🪨 Brute Force Approach
+💡 Idea
+
+Try every possible buy day.
+
+For each buy day, try every possible sell day.
+
+Calculate profit and keep the maximum.
+
+💻 Java Code
+class Main {
+
+    static int maxProfit(int prices[]) {
+
+        int maxProfit = 0;
+
+        for(int i = 0; i < prices.length; i++) {
+
+            for(int j = i + 1; j < prices.length; j++) {
+
+                maxProfit = Math.max(maxProfit,
+                                     prices[j] - prices[i]);
+            }
+        }
+
+        return maxProfit;
+    }
+
+    public static void main(String args[]) {
+
+        int prices[] = {7,1,5,3,6,4};
+
+        System.out.println(maxProfit(prices));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach (Greedy) ⭐⭐⭐⭐⭐
+💡 Idea
+
+Maintain two variables:
+
+minPrice → Lowest price seen so far.
+maxProfit → Maximum profit till now.
+
+For every price:
+
+Update the minimum buying price.
+Calculate profit if we sell today.
+Update the maximum profit.
+🧠 Dry Run
+prices = [7,1,5,3,6,4]
+
+Initially
+
+minPrice = 7
+maxProfit = 0
+Day	Price	minPrice	Profit	maxProfit
+0	7	7	0	0
+1	1	1	0	0
+2	5	1	4	4
+3	3	1	2	4
+4	6	1	5	5
+5	4	1	3	5
+
+🎉 Final Answer:
+
+5
+💻 Java Code
+class Main {
+
+    static int maxProfit(int prices[]) {
+
+        int minPrice = prices[0];
+        int maxProfit = 0;
+
+        for(int i = 1; i < prices.length; i++) {
+
+            minPrice = Math.min(minPrice, prices[i]);
+
+            int profit = prices[i] - minPrice;
+
+            maxProfit = Math.max(maxProfit, profit);
+        }
+
+        return maxProfit;
+    }
+
+    public static void main(String args[]) {
+
+        int prices[] = {7,1,5,3,6,4};
+
+        System.out.println(maxProfit(prices));
+    }
+}
+▶️ Output
+5
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(1)
+🎯 Edge Cases
+Case 1
+Input:
+[7,6,4,3,1]
+
+Output:
+0
+
+(No profit is possible.)
+
+Case 2
+Input:
+[1,2,3,4,5]
+
+Output:
+4
+
+(Buy at 1, sell at 5.)
+
+Case 3
+Input:
+[5]
+
+Output:
+0
+
+(Only one day, so selling isn't possible.)
+
+📝 Interview Tip
+
+Think like a trader:
+
+📉 Keep remembering the cheapest price you've seen so far.
+
+📈 Every new day, ask:
+
+"If I sell today, what's my profit?"
+
+Update the best profit if it's larger.
+
+This is a classic Greedy Algorithm because at every step, you make the locally best choice (keeping the minimum price).
