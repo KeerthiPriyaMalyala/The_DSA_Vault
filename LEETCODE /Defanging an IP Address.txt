@@ -1,0 +1,129 @@
+1108. Defanging an IP Address
+❓ What is the question asking?
+
+You are given a valid IPv4 address.
+
+Replace every:
+
+"."
+
+with
+
+"[.]"
+
+and return the new string.
+
+Example
+Input  : "1.1.1.1"
+
+Output : "1[.]1[.]1[.]1"
+🪨 Brute Force Approach
+💡 Idea
+
+Traverse each character of the string.
+
+If the character is ., append [.].
+Otherwise, append the character.
+
+Use a StringBuilder to build the answer.
+
+💻 Java Code
+class Solution {
+    public String defangIPaddr(String address) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char ch : address.toCharArray()) {
+
+            if (ch == '.') {
+                sb.append("[.]");
+            } else {
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
+    }
+}
+▶️ Output
+Input  : "255.100.50.0"
+
+Output : "255[.]100[.]50[.]0"
+⏱ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(n)
+
+⚡ Optimal Approach
+💡 Idea
+
+Java already provides a function to replace all occurrences of a substring.
+
+Simply replace every "." with "[.]".
+
+💻 Java Code
+class Solution {
+    public String defangIPaddr(String address) {
+        return address.replace(".", "[.]");
+    }
+}
+▶️ Output
+Input  : "255.100.50.0"
+
+Output : "255[.]100[.]50[.]0"
+⏱ Time Complexity
+
+O(n)
+
+📦 Space Complexity
+
+O(n)
+
+▶️ Dry Run (Brute Force)
+address = "1.1.1.1"
+
+Initially
+
+sb = ""
+Character = '1'
+Not '.'
+
+sb = "1"
+Character = '.'
+Append "[.]"
+
+sb = "1[.]"
+Character = '1'
+sb = "1[.]1"
+Character = '.'
+sb = "1[.]1[.]"
+Character = '1'
+sb = "1[.]1[.]1"
+Character = '.'
+sb = "1[.]1[.]1[.]"
+Character = '1'
+sb = "1[.]1[.]1[.]1"
+
+Return
+
+"1[.]1[.]1[.]1"
+📝 Key Notes ⭐
+✅ Observation
+We only need to replace every ".".
+No complex algorithm is required.
+✅ StringBuilder
+Used when constructing a new string character by character.
+More efficient than repeatedly using +.
+✅ replace() Method
+address.replace(".", "[.]");
+Replaces all occurrences of ".".
+Returns a new string.
+Does not modify the original string.
+🎯 Interview Tip
+
+If asked to implement without using built-in methods, use StringBuilder.
+
+If built-in methods are allowed, replace() is the shortest and cleanest solution. 💖
