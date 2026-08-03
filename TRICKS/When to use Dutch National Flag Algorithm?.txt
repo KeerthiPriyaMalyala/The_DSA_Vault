@@ -1,0 +1,127 @@
+🎯 When to use Dutch National Flag Algorithm?
+
+Use it when the array contains only 3 different values/categories and you need to sort or partition them in one pass.
+
+Think of this pattern whenever you see:
+
+Only 3 types of elements
+✅ Pattern 1: 0's, 1's and 2's ⭐⭐⭐⭐⭐
+[2,0,1,2,1,0]
+
+Sort them.
+
+➡️ Dutch National Flag
+
+✅ Pattern 2: Three Categories
+
+Example
+
+Negative
+Zero
+Positive
+
+or
+
+Small
+Medium
+Large
+
+Partition them.
+
+✅ Pattern 3: Pivot Partition (Quick Sort)
+
+Suppose pivot is 5
+
+<5
+=5
+>5
+
+Partition using
+
+low
+mid
+high
+
+This is exactly the same idea.
+
+🧠 Pattern Recognition
+
+Whenever you read
+
+Only 3 distinct values
+
+Immediately think
+
+low
+mid
+high
+
+Whenever you read
+
+Partition array into 3 groups
+
+Think
+
+Dutch National Flag
+
+Whenever you read
+
+Sort without extra space
+
+and
+
+Only three unique numbers
+
+Think
+
+Dutch National Flag
+❌ Don't use it when
+
+There are
+
+0,1,2,3,4...
+
+or
+
+Many different numbers
+
+Example
+
+[7,3,9,1,8]
+
+Use
+
+Merge Sort
+Quick Sort
+Heap Sort
+Arrays.sort()
+
+NOT Dutch National Flag.
+
+📌 Interview Cheat Sheet
+Question Pattern	Algorithm
+Only 0,1,2	✅ Dutch National Flag
+Three categories	✅ Dutch National Flag
+< pivot, = pivot, > pivot	✅ Dutch National Flag
+Many distinct numbers	❌ Normal Sorting
+Two categories (0 & 1, Even & Odd, Positive & Negative)	✅ Two Pointers
+🧠 5-Second Memory Trick
+2 Values
+↓
+Two Pointers
+
+3 Values
+↓
+Dutch National Flag
+
+Many Values
+↓
+Sorting Algorithm
+
+⭐ Rule for interviews:
+
+2 groups → Think Two Pointers.
+3 groups → Think Dutch National Flag (low, mid, high).
+Many values → Think sorting algorithms (Merge Sort, Quick Sort, etc.).
+
+This simple rule will help you recognize the pattern within a few seconds during coding rounds. 💖
