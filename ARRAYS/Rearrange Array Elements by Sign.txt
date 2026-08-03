@@ -1,0 +1,180 @@
+📌 Problem 21: Rearrange Array Elements by Sign
+❓ What is the question asking?
+
+Given an array containing equal numbers of positive and negative integers, rearrange it so that:
+
+Positive and negative numbers appear alternately.
+The relative order of positive numbers should remain the same.
+The relative order of negative numbers should also remain the same.
+Example
+Input:
+[3,1,-2,-5,2,-4]
+
+Output:
+[3,-2,1,-5,2,-4]
+🪨 Brute Force Approach
+💡 Idea
+Store all positive numbers in one list.
+Store all negative numbers in another list.
+Merge them alternately into the original array.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    static int[] rearrange(int arr[]) {
+
+        ArrayList<Integer> pos = new ArrayList<>();
+        ArrayList<Integer> neg = new ArrayList<>();
+
+        for(int num : arr) {
+
+            if(num > 0)
+                pos.add(num);
+            else
+                neg.add(num);
+        }
+
+        int ans[] = new int[arr.length];
+
+        int i = 0;
+        int p = 0;
+        int n = 0;
+
+        while(p < pos.size() && n < neg.size()) {
+
+            ans[i++] = pos.get(p++);
+            ans[i++] = neg.get(n++);
+        }
+
+        return ans;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {3,1,-2,-5,2,-4};
+
+        int ans[] = rearrange(arr);
+
+        for(int num : ans)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+3 -2 1 -5 2 -4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+⚡ Optimal Approach
+
+Note: For this version of the problem (preserving relative order), using an extra answer array is already considered the optimal approach.
+
+💡 Idea
+
+Create an answer array.
+
+Maintain:
+
+posIndex = 0 (even positions)
+negIndex = 1 (odd positions)
+
+Traverse the array:
+
+If positive → place at posIndex, then posIndex += 2.
+If negative → place at negIndex, then negIndex += 2.
+🧠 Dry Run
+arr = [3,1,-2,-5,2,-4]
+
+Initially
+
+ans = [_,_,_,_,_,_]
+
+posIndex = 0
+negIndex = 1
+Element	Action	Answer
+3	Place at 0	[3,,,,,_]
+1	Place at 2	[3,,1,,,]
+-2	Place at 1	[3,-2,1,,,_]
+-5	Place at 3	[3,-2,1,-5,,]
+2	Place at 4	[3,-2,1,-5,2,_]
+-4	Place at 5	[3,-2,1,-5,2,-4]
+
+🎉 Final Answer:
+
+[3,-2,1,-5,2,-4]
+💻 Java Code
+class Main {
+
+    static int[] rearrange(int arr[]) {
+
+        int ans[] = new int[arr.length];
+
+        int posIndex = 0;
+        int negIndex = 1;
+
+        for(int num : arr) {
+
+            if(num > 0) {
+
+                ans[posIndex] = num;
+                posIndex += 2;
+            }
+            else {
+
+                ans[negIndex] = num;
+                negIndex += 2;
+            }
+        }
+
+        return ans;
+    }
+
+    public static void main(String args[]) {
+
+        int arr[] = {3,1,-2,-5,2,-4};
+
+        int ans[] = rearrange(arr);
+
+        for(int num : ans)
+            System.out.print(num + " ");
+    }
+}
+▶️ Output
+3 -2 1 -5 2 -4
+⏱️ Time Complexity
+O(n)
+📦 Space Complexity
+O(n)
+🎯 Edge Cases
+Case 1
+Input:
+[1,-1]
+
+Output:
+[1,-1]
+Case 2
+Input:
+[5,-2]
+
+Output:
+[5,-2]
+Case 3
+Input:
+[1,2,-1,-2]
+
+Output:
+[1,-1,2,-2]
+📝 Interview Tip
+
+⚠️ There are two versions of this problem:
+
+Version 1 (Most Common)
+Equal number of positives and negatives.
+Preserve relative order.
+✅ Use an extra array.
+Version 2
+Unequal positives and negatives.
+Extra handling is needed after one type finishes.
+
+Always read the problem statement carefully.
