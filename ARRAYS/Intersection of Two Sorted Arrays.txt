@@ -1,0 +1,211 @@
+Union of Two Sorted Arrays
+❓ What is the question asking?
+
+Given two sorted arrays, return the union of both arrays.
+
+Union means all unique elements present in both arrays.
+The output should also be sorted.
+Example
+arr1 = [1,2,2,3,5]
+arr2 = [2,3,4,5,6]
+
+Output:
+[1,2,3,4,5,6]
+⚡ Optimal Approach
+💡 Idea
+Use two pointers (left, right).
+Skip duplicates in both arrays first.
+Compare the current elements.
+Add the smaller element.
+If equal, add only one copy and move both pointers.
+If one array finishes, add the remaining elements from the other array.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static List<Integer> union(int[] arr1, int[] arr2) {
+
+        int left = 0;
+        int right = 0;
+
+        List<Integer> res = new ArrayList<>();
+
+        while (left < arr1.length || right < arr2.length) {
+
+            // Skip duplicates in arr1
+            while (left > 0 && left < arr1.length &&
+                    arr1[left] == arr1[left - 1]) {
+                left++;
+            }
+
+            // Skip duplicates in arr2
+            while (right > 0 && right < arr2.length &&
+                    arr2[right] == arr2[right - 1]) {
+                right++;
+            }
+
+            // arr1 finished
+            if (left >= arr1.length) {
+                res.add(arr2[right]);
+                right++;
+                continue;
+            }
+
+            // arr2 finished
+            if (right >= arr2.length) {
+                res.add(arr1[left]);
+                left++;
+                continue;
+            }
+
+            // Comparison
+            if (arr1[left] < arr2[right]) {
+                res.add(arr1[left]);
+                left++;
+            }
+            else if (arr1[left] > arr2[right]) {
+                res.add(arr2[right]);
+                right++;
+            }
+            else {
+                res.add(arr1[left]);
+                left++;
+                right++;
+            }
+        }
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1,2,2,3,5};
+        int[] arr2 = {2,3,4,5,6};
+
+        System.out.println(union(arr1, arr2));
+    }
+}
+▶️ Output
+[1, 2, 3, 4, 5, 6]
+⏱️ Time Complexity
+O(n + m)
+📦 Space Complexity
+O(n + m)
+🧠 Pointer Movement
+Condition	Action
+Duplicate in arr1	left++
+Duplicate in arr2	right++
+arr1[left] < arr2[right]	Add arr1[left], left++
+arr1[left] > arr2[right]	Add arr2[right], right++
+arr1[left] == arr2[right]	Add once, left++, right++
+left >= arr1.length	Add remaining elements of arr2
+right >= arr2.length	Add remaining elements of arr1
+
+
+
+
+
+Intersection of Two Sorted Arrays
+❓ What is the question asking?
+
+Given two sorted arrays, return all unique common elements present in both arrays.
+
+Example
+arr1 = [1,2,2,3,4,5]
+arr2 = [2,2,3,5,6]
+
+Output:
+[2,3,5]
+⚡ Optimal Approach
+💡 Idea
+Use two pointers (left, right).
+Before comparing, skip duplicate elements in both arrays.
+Compare the current elements:
+Smaller → move that pointer.
+Equal → add to answer and move both.
+Stop when one array finishes.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static List<Integer> intersection(int[] arr1, int[] arr2) {
+
+        int left = 0;
+        int right = 0;
+
+        List<Integer> res = new ArrayList<>();
+
+        while (left < arr1.length && right < arr2.length) {
+
+            // Skip duplicates in arr1
+            while (left > 0 && left < arr1.length &&
+                    arr1[left] == arr1[left - 1]) {
+                left++;
+            }
+
+            // Skip duplicates in arr2
+            while (right > 0 && right < arr2.length &&
+                    arr2[right] == arr2[right - 1]) {
+                right++;
+            }
+
+            // One array exhausted
+            if (left >= arr1.length || right >= arr2.length) {
+                break;
+            }
+
+            // Comparison
+            if (arr1[left] < arr2[right]) {
+                left++;
+            }
+            else if (arr1[left] > arr2[right]) {
+                right++;
+            }
+            else {
+                res.add(arr1[left]);
+                left++;
+                right++;
+            }
+        }
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1,2,2,3,4,5};
+        int[] arr2 = {2,2,3,5,6};
+
+        System.out.println(intersection(arr1, arr2));
+    }
+}
+▶️ Output
+[2, 3, 5]
+⏱️ Time Complexity
+O(n + m)
+📦 Space Complexity
+O(min(n, m))
+🧠 Why skip duplicates first?
+
+Suppose
+
+arr1 = [1,2,2,2,3]
+arr2 = [2,2,3]
+
+Without skipping duplicates:
+
+2
+2
+2
+
+gets added multiple times.
+
+With
+
+while(left > 0 && arr1[left] == arr1[left-1])
+    left++;
+
+while(right > 0 && arr2[right] == arr2[right-1])
+    right++;
