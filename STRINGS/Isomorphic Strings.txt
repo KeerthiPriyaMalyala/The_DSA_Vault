@@ -1,0 +1,362 @@
+🟡 Question: Isomorphic Strings
+
+LeetCode 205 – Isomorphic Strings
+
+❓ What is the question asking?
+
+Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+
+Conditions:
+
+Every character maps to only one character.
+Two different characters cannot map to the same character.
+A character can map to itself.
+
+Return true if the strings are isomorphic, otherwise false.
+
+Example 1
+Input:
+s = "egg"
+t = "add"
+
+Output:
+true
+
+Mapping
+
+e → a
+g → d
+
+Valid ✅
+
+Example 2
+Input:
+s = "foo"
+t = "bar"
+
+Output:
+false
+
+Mapping
+
+f → b
+
+o → a
+
+o → r ❌
+
+o cannot map to two different characters.
+
+Example 3
+Input:
+s = "badc"
+t = "baba"
+
+Output:
+false
+
+Mapping
+
+b → b
+
+a → a
+
+d → b ❌
+
+Both b and d map to b.
+
+Not allowed.
+
+🪨 Brute Force Approach
+💡 Idea
+
+For every character,
+
+Check all previous characters.
+Verify that the mapping is consistent.
+
+This requires comparing many previous characters repeatedly.
+
+💻 Java Code
+class Main {
+
+    public static boolean isIsomorphic(String s, String t) {
+
+        for (int i = 0; i < s.length(); i++) {
+
+            for (int j = 0; j < i; j++) {
+
+                if (s.charAt(i) == s.charAt(j) &&
+                    t.charAt(i) != t.charAt(j))
+                    return false;
+
+                if (s.charAt(i) != s.charAt(j) &&
+                    t.charAt(i) == t.charAt(j))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "egg";
+        String t = "add";
+
+        System.out.println(isIsomorphic(s, t));
+    }
+}
+▶️ Dry Run
+s = egg
+
+t = add
+
+Compare every previous character.
+
+No conflicts found.
+
+Output
+
+true
+⏱️ Time Complexity
+O(N²)
+📦 Space Complexity
+O(1)
+⚡ Optimal Approach
+💡 Idea
+
+Use two HashMaps.
+
+Map characters from s → t
+Map characters from t → s
+
+Why two maps?
+
+Because mapping should work both ways.
+
+Example
+
+ab
+
+cc
+
+One map says
+
+a → c
+
+b → c
+
+Looks valid.
+
+But actually
+
+Two characters map to one character.
+
+So we also store
+
+c → a
+
+When b → c comes,
+
+Conflict occurs.
+
+Return false.
+
+💻 Java Code
+import java.util.HashMap;
+
+class Main {
+
+    public static boolean isIsomorphic(String s, String t) {
+
+        HashMap<Character, Character> map1 = new HashMap<>();
+        HashMap<Character, Character> map2 = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+
+            char c1 = s.charAt(i);
+            char c2 = t.charAt(i);
+
+            if (map1.containsKey(c1)) {
+
+                if (map1.get(c1) != c2)
+                    return false;
+
+            } else {
+
+                map1.put(c1, c2);
+            }
+
+            if (map2.containsKey(c2)) {
+
+                if (map2.get(c2) != c1)
+                    return false;
+
+            } else {
+
+                map2.put(c2, c1);
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "egg";
+        String t = "add";
+
+        System.out.println(isIsomorphic(s, t));
+    }
+}
+▶️ Dry Run
+
+Input
+
+s = egg
+
+t = add
+
+Iteration 1
+
+e → a
+
+Store
+
+Maps
+
+e → a
+
+a → e
+
+Iteration 2
+
+g → d
+
+Store
+
+Maps
+
+e → a
+
+g → d
+
+a → e
+
+d → g
+
+Iteration 3
+
+g → d
+
+Already exists
+
+Correct mapping ✅
+
+Return
+
+true
+Another Dry Run
+s = badc
+
+t = baba
+
+Mappings
+
+b → b
+
+a → a
+
+d → b ❌
+
+Map2 already contains
+
+b → b
+
+Conflict found.
+
+Return
+
+false
+⏱️ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+🧠 Why Two HashMaps?
+
+One map checks
+
+s → t
+
+Second map checks
+
+t → s
+
+This guarantees one-to-one mapping.
+
+Without the second map,
+
+ab
+
+cc
+
+would incorrectly return true.
+
+🎯 Interview Trick / Memory Trick
+Take two HashMaps
+
+↓
+
+s → t
+
+↓
+
+t → s
+
+↓
+
+Check both mappings
+
+↓
+
+Conflict?
+
+↓
+
+False
+
+↓
+
+Otherwise True
+⭐ Revision in 20 Seconds
+Two HashMaps
+
+↓
+
+Check old mapping
+
+↓
+
+If mismatch
+
+Return false
+
+↓
+
+Otherwise store
+
+↓
+
+Return true
+🎯 Output Examples
+s	t	Output
+"egg"	"add"	true
+"foo"	"bar"	false
+"paper"	"title"	true
+"badc"	"baba"	false
+🌟 Interview Tip
+
+Whenever you hear "one-to-one mapping", think two HashMaps (or two arrays for ASCII characters). One map alone is not enough because it can't detect when two different characters map to the same character.
+
+This is the standard O(N) interview solution. 💖🚀
