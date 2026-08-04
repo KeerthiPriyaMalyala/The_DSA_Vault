@@ -1,0 +1,294 @@
+🟡 Question: Rotate String
+
+LeetCode 796 – Rotate String
+
+❓ What is the question asking?
+
+Given two strings s and goal, check whether goal can be obtained by rotating s.
+
+One rotation means:
+
+Remove the first character.
+Add it to the end.
+
+Return true if possible, otherwise false.
+
+Example 1
+Input:
+s = "abcde"
+goal = "cdeab"
+
+Output:
+true
+
+Rotation
+
+abcde
+
+↓
+
+bcdea
+
+↓
+
+cdeab ✅
+Example 2
+Input:
+s = "abcde"
+goal = "abced"
+
+Output:
+false
+
+No rotation produces "abced".
+
+🪨 Brute Force Approach
+💡 Idea
+
+Rotate the string one character at a time.
+
+After every rotation,
+
+Compare with goal.
+If equal → return true.
+
+If all rotations are checked and no match is found, return false.
+
+💻 Java Code
+class Main {
+
+    public static boolean rotateString(String s, String goal) {
+
+        if (s.length() != goal.length())
+            return false;
+
+        String str = s;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            str = str.substring(1) + str.charAt(0);
+
+            if (str.equals(goal))
+                return true;
+        }
+
+        return s.equals(goal);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "abcde";
+        String goal = "cdeab";
+
+        System.out.println(rotateString(s, goal));
+    }
+}
+▶️ Dry Run
+
+Input
+
+s = abcde
+
+goal = cdeab
+
+Rotations
+
+bcdea
+
+cdeab ✅
+
+Return
+
+true
+⏱️ Time Complexity
+O(N²)
+N rotations
+Each comparison takes O(N)
+📦 Space Complexity
+O(N)
+⚡ Optimal Approach
+💡 Idea
+
+If goal is a rotation of s, then it must appear inside s + s.
+
+Example
+
+s = abcde
+
+Concatenate
+
+abcdeabcde
+
+Now check
+
+cdeab
+
+It exists inside
+
+abcdeabcde
+
+So answer is true.
+
+💻 Java Code
+class Main {
+
+    public static boolean rotateString(String s, String goal) {
+
+        if (s.length() != goal.length())
+            return false;
+
+        String temp = s + s;
+
+        return temp.contains(goal);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "abcde";
+        String goal = "cdeab";
+
+        System.out.println(rotateString(s, goal));
+    }
+}
+▶️ Dry Run
+
+Input
+
+s = abcde
+
+goal = cdeab
+
+Create
+
+temp = abcdeabcde
+
+Check
+
+temp.contains("cdeab")
+
+Result
+
+true
+
+Another Example
+
+Input
+
+s = abcde
+
+goal = abced
+
+Create
+
+abcdeabcde
+
+Search
+
+abced
+
+Not found.
+
+Return
+
+false
+⏱️ Time Complexity
+O(N)
+
+(Assuming contains() uses an efficient search implementation.)
+
+📦 Space Complexity
+O(N)
+🧠 Why Does s + s Work?
+
+Suppose
+
+s = abcde
+
+All possible rotations are
+
+abcde
+
+bcdea
+
+cdeab
+
+deabc
+
+eabcd
+
+Now create
+
+abcdeabcde
+
+Notice every possible rotation appears as a substring.
+
+abcdeabcde
+
+↑ abcde
+
+ ↑ bcdea
+
+  ↑ cdeab
+
+   ↑ deabc
+
+    ↑ eabcd
+
+So checking
+
+(s + s).contains(goal)
+
+is enough.
+
+🎯 Interview Trick / Memory Trick
+Length different?
+
+↓
+
+Return false
+
+↓
+
+temp = s + s
+
+↓
+
+temp.contains(goal)
+
+↓
+
+Return answer
+⭐ Revision in 10 Seconds
+Length must be same
+
+↓
+
+Double the string
+
+↓
+
+Check contains()
+
+↓
+
+Done
+🎯 Output Examples
+s	goal	Output
+"abcde"	"cdeab"	true
+"abcde"	"abced"	false
+"aaaa"	"aaaa"	true
+"ab"	"ba"	true
+🌟 Interview Tip
+
+The key observation is:
+
+Every rotation of a string is a substring of the string concatenated with itself.
+
+That's why the one-line solution is:
+
+if (s.length() != goal.length())
+    return false;
+
+return (s + s).contains(goal);
+
+This is the standard interview solution and the one most interviewers expect. 💖🚀
