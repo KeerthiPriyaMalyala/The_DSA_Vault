@@ -1,0 +1,188 @@
+📘 3731. Find Missing Elements
+❓ What is the question asking?
+
+You are given a unique integer array.
+
+Originally, the array contained every integer from a certain range, but some numbers are missing.
+
+The smallest and largest numbers are always present.
+
+Return all the missing numbers in sorted order.
+
+🪨 Brute Force Approach
+💡 Idea
+Find the minimum and maximum element.
+For every number between min and max, search the entire array.
+If the number is not found, add it to the answer.
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static List<Integer> findMissing(int[] nums) {
+
+        List<Integer> ans = new ArrayList<>();
+
+        int min = nums[0];
+        int max = nums[0];
+
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+
+        for (int i = min; i <= max; i++) {
+
+            boolean found = false;
+
+            for (int num : nums) {
+
+                if (num == i) {
+                    found = true;
+                    break;
+                }
+
+            }
+
+            if (!found)
+                ans.add(i);
+
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {3, 7, 5};
+
+        System.out.println(findMissing(nums));
+
+    }
+}
+▶️ Output
+[4, 6]
+⏱️ Time Complexity
+O((max - min) × n)
+📦 Space Complexity
+O(1)
+
+(Answer list not counted.)
+
+⚡ Optimal Approach (HashSet)
+💡 Idea
+Find the minimum and maximum element.
+Store every element in a HashSet.
+Traverse from min to max.
+If a number is not present in the HashSet, it is missing.
+
+Since HashSet lookup is O(1), this is much faster.
+
+💻 Java Code
+import java.util.*;
+
+public class Main {
+
+    public static List<Integer> findMissing(int[] nums) {
+
+        List<Integer> ans = new ArrayList<>();
+
+        int min = nums[0];
+        int max = nums[0];
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int num : nums) {
+
+            set.add(num);
+
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+
+        }
+
+        for (int i = min; i <= max; i++) {
+
+            if (!set.contains(i))
+                ans.add(i);
+
+        }
+
+        return ans;
+
+    }
+
+    public static void main(String[] args) {
+
+        int nums[] = {3, 7, 5};
+
+        System.out.println(findMissing(nums));
+
+    }
+}
+▶️ Output
+[4, 6]
+⏱️ Time Complexity
+O(n + (max - min))
+O(n) → Insert all elements into HashSet.
+O(max - min) → Check every number in the range.
+📦 Space Complexity
+O(n)
+
+(HashSet)
+
+🧠 Dry Run
+nums = [3,7,5]
+
+min = 3
+max = 7
+
+HashSet = {3,5,7}
+
+Check:
+
+3 ✅
+
+4 ❌ → add
+
+5 ✅
+
+6 ❌ → add
+
+7 ✅
+
+Answer = [4,6]
+🎯 Trick to Remember
+Missing numbers in a range?
+
+        ↓
+
+Find min & max
+
+        ↓
+
+Store all numbers in HashSet
+
+        ↓
+
+Traverse min → max
+
+        ↓
+
+If number is absent in HashSet
+
+        ↓
+
+It is missing.
+📌 Pattern
+Range Problems
+      ↓
+Need fast searching
+      ↓
+HashSet
+      ↓
+Traverse complete range
+      ↓
+Collect missing elements
+
+This is the standard HashSet pattern for range + missing element problems and is a very common interview approach. 💙
