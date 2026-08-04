@@ -1,0 +1,265 @@
+📘 125. Valid Palindrome
+🟢 What is the question asking?
+
+Given a string s,
+
+Ignore all special characters.
+Ignore spaces.
+Ignore capital/small letter difference.
+Check whether the remaining characters form a palindrome.
+
+Return:
+
+true → if palindrome
+false → otherwise
+Example
+Input:
+"A man, a plan, a canal: Panama"
+
+After removing special chars:
+"amanaplanacanalpanama"
+
+Reverse:
+"amanaplanacanalpanama"
+
+Output:
+true
+🟡 Brute Force Approach
+💡 Idea
+Traverse the string.
+Keep only letters and digits.
+Convert everything to lowercase.
+Store in a new string.
+Reverse the new string.
+Compare both strings.
+Java Code
+class Main {
+
+    public static boolean isPalindrome(String s) {
+
+        StringBuilder clean = new StringBuilder();
+
+        for(char ch : s.toCharArray())
+        {
+            if(Character.isLetterOrDigit(ch))
+            {
+                clean.append(Character.toLowerCase(ch));
+            }
+        }
+
+        String original = clean.toString();
+        String reversed = clean.reverse().toString();
+
+        return original.equals(reversed);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "A man, a plan, a canal: Panama";
+
+        System.out.println(isPalindrome(s));
+    }
+}
+Output
+true
+Time Complexity
+O(n)
+Space Complexity
+O(n)
+
+(New cleaned string)
+
+🟢 Optimal Approach (Two Pointers)
+💡 Idea
+
+Instead of creating another string,
+
+Use
+
+left = 0
+right = n-1
+
+Move both pointers toward the center.
+
+Rules
+If left is NOT letter/digit
+left++
+If right is NOT letter/digit
+right--
+Otherwise
+
+Convert both to lowercase.
+
+If
+
+left != right
+
+Return
+
+false
+
+Else
+
+left++
+right--
+
+Continue until
+
+left >= right
+Dry Run
+"A man, a plan, a canal: Panama"
+
+L                           R
+A                           a
+
+Compare
+
+a == a
+
+Move
+
+      L                 R
+      ' '             'm'
+
+Space
+
+Skip
+
+        L
+
+m == m
+
+Move
+
+Eventually
+
+a == a
+n == n
+a == a
+
+Pointers meet
+
+Return true
+Visualization
+L ------------------------->
+
+A man, a plan, a canal: Panama
+
+<------------------------- R
+
+Skip non-alphanumeric:
+
+L
+
+A
+
+compare
+
+a
+
+R
+
+Move inward:
+
+L --> next valid
+R <-- next valid
+Java Code
+class Main {
+
+    public static boolean isPalindrome(String s) {
+
+        int left = 0;
+        int right = s.length() - 1;
+
+        while(left < right)
+        {
+
+            while(left < right && !Character.isLetterOrDigit(s.charAt(left)))
+            {
+                left++;
+            }
+
+            while(left < right && !Character.isLetterOrDigit(s.charAt(right)))
+            {
+                right--;
+            }
+
+            char l = Character.toLowerCase(s.charAt(left));
+            char r = Character.toLowerCase(s.charAt(right));
+
+            if(l != r)
+            {
+                return false;
+            }
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "A man, a plan, a canal: Panama";
+
+        System.out.println(isPalindrome(s));
+    }
+}
+Output
+true
+Time Complexity
+O(n)
+
+Each character is visited at most once.
+
+Space Complexity
+O(1)
+
+No extra string is created.
+
+🎯 Interview Trick
+
+Whenever the question says:
+
+Ignore spaces
+Ignore punctuation
+Ignore special characters
+Ignore case
+
+👉 Think immediately:
+
+Two Pointers
+
+because you can skip unwanted characters while comparing from both ends.
+
+🧠 Similar Problems (Same Pattern)
+✅ Valid Palindrome
+✅ Valid Palindrome II (delete at most one character)
+✅ Reverse String
+✅ Merge Strings Alternately
+✅ Reverse Only Letters
+✅ Backspace String Compare
+✅ Is Subsequence (slightly different pointer movement)
+🌟 Remember This Template
+int left = 0;
+int right = s.length() - 1;
+
+while(left < right)
+{
+    while(left < right && condition_to_skip_left)
+        left++;
+
+    while(left < right && condition_to_skip_right)
+        right--;
+
+    if(compare fails)
+        return false;
+
+    left++;
+    right--;
+}
+
+return true;
+
+💖 DSA Takeaway: Whenever you need to compare characters from both ends (palindrome, reverse checks, matching pairs), ask yourself: "Can I solve this with two pointers instead of creating a new string?" Most of the time, that's the optimal approach.
