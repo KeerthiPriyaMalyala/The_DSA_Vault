@@ -1,0 +1,295 @@
+📘 14. Longest Common Prefix
+🟢 What is the question asking?
+
+Given an array of strings,
+
+Find the longest prefix that is common to all the strings.
+
+If no common prefix exists, return "".
+
+Example 1
+Input:
+["flower","flow","flight"]
+
+Output:
+"fl"
+Example 2
+Input:
+["dog","racecar","car"]
+
+Output:
+""
+🟡 Brute Force Approach
+💡 Idea
+
+Take the first string as reference.
+
+Compare each character of it with the same position in every other string.
+
+The moment a mismatch occurs, return the prefix collected so far.
+
+Dry Run
+["flower","flow","flight"]
+
+Reference = flower
+
+Index 0
+
+f == f == f ✅
+
+Prefix = "f"
+
+----------------
+
+Index 1
+
+l == l == l ✅
+
+Prefix = "fl"
+
+----------------
+
+Index 2
+
+o == o != i ❌
+
+Stop
+
+Answer = "fl"
+Java Code
+class Main {
+
+    public static String longestCommonPrefix(String[] strs) {
+
+        if (strs == null || strs.length == 0)
+            return "";
+
+        String first = strs[0];
+
+        for (int i = 0; i < first.length(); i++) {
+
+            char ch = first.charAt(i);
+
+            for (int j = 1; j < strs.length; j++) {
+
+                if (i >= strs[j].length() || strs[j].charAt(i) != ch) {
+                    return first.substring(0, i);
+                }
+            }
+        }
+
+        return first;
+    }
+
+    public static void main(String[] args) {
+
+        String[] strs = {"flower","flow","flight"};
+
+        System.out.println(longestCommonPrefix(strs));
+    }
+}
+Output
+fl
+Time Complexity
+O(n × m)
+n = number of strings
+m = length of shortest string
+Space Complexity
+O(1)
+🟢 Optimal Approach (Sorting)
+💡 Idea
+
+Sort the array.
+
+After sorting,
+
+Only compare
+
+First string
+Last string
+
+Because these two will be the most different.
+
+If these two have a common prefix,
+
+every string in between will also have that prefix.
+
+Why?
+
+Example
+
+Before sorting
+
+flower
+flow
+flight
+
+After sorting
+
+flight
+flow
+flower
+
+Notice
+
+First = flight
+Last = flower
+
+If these share
+
+fl
+
+Then every string in between must also start with
+
+fl
+
+So there's no need to compare every string.
+
+Dry Run
+Input
+
+["flower","flow","flight"]
+
+↓
+
+Sort
+
+flight
+flow
+flower
+
+↓
+
+First = flight
+
+Last = flower
+
+Compare
+
+f == f ✅
+
+l == l ✅
+
+i != o ❌
+
+Answer
+
+"fl"
+Java Code
+import java.util.Arrays;
+
+class Main {
+
+    public static String longestCommonPrefix(String[] strs) {
+
+        if (strs == null || strs.length == 0)
+            return "";
+
+        Arrays.sort(strs);
+
+        String first = strs[0];
+        String last = strs[strs.length - 1];
+
+        int i = 0;
+
+        while (i < first.length() &&
+               i < last.length() &&
+               first.charAt(i) == last.charAt(i)) {
+
+            i++;
+        }
+
+        return first.substring(0, i);
+    }
+
+    public static void main(String[] args) {
+
+        String[] strs = {"flower","flow","flight"};
+
+        System.out.println(longestCommonPrefix(strs));
+    }
+}
+Output
+fl
+Time Complexity
+Sorting = O(n log n)
+
+Comparing = O(m)
+
+Overall = O(n log n + m)
+Space Complexity
+O(1)
+
+(ignoring sorting's internal implementation)
+
+🎯 Interview Trick
+
+Whenever you hear
+
+Common Prefix
+Common Suffix
+Lexicographical Order
+
+Think about:
+
+Sorting
+
+Because after sorting,
+
+Only the first and last strings need to be compared.
+
+🧠 Visualization
+Before Sorting
+flower
+flow
+flight
+
+↓
+
+After Sorting
+flight   ← First
+flow
+flower   ← Last
+
+Now compare only:
+
+flight
+flower
+f == f ✅
+
+l == l ✅
+
+i != o ❌
+
+Answer:
+
+fl
+🌟 Remember These Templates
+Brute Force
+Take first string
+
+For every character
+
+    Compare with all strings
+
+    If mismatch
+
+        Return prefix
+
+Return first string
+Sorting Trick
+Sort array
+
+First = strs[0]
+
+Last = strs[n-1]
+
+Compare both
+
+Return common prefix
+💖 DSA Takeaway
+
+Whenever a problem involves finding something common across all strings, think:
+
+✅ Compare using the first string (simple brute approach).
+✅ If lexicographical sorting is allowed, compare only the first and last strings after sorting—their common prefix is the answer for the whole array. This is a neat interview trick that's easy to remember and explain. 🌸
