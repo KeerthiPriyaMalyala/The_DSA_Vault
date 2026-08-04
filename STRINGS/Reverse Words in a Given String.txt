@@ -1,0 +1,213 @@
+🟡 Question: Reverse Words in a Given String
+
+LeetCode 151 – Reverse Words in a String
+
+❓ What is the question asking?
+
+Given a string s, reverse the order of the words.
+
+Do not reverse the characters inside each word.
+Remove leading and trailing spaces.
+If multiple spaces exist between words, keep only one space in the output.
+Example
+Input:
+"  hello   world  "
+
+Output:
+"world hello"
+🪨 Brute Force Approach
+💡 Idea
+Traverse the string character by character.
+Build each word manually.
+Store all words in an ArrayList.
+Traverse the list from the end and build the answer.
+💻 Java Code
+import java.util.*;
+
+class Main {
+
+    public static String reverseWords(String s) {
+
+        ArrayList<String> words = new ArrayList<>();
+        String word = "";
+
+        for (int i = 0; i < s.length(); i++) {
+
+            char ch = s.charAt(i);
+
+            if (ch != ' ') {
+                word += ch;
+            } else {
+
+                if (!word.equals("")) {
+                    words.add(word);
+                    word = "";
+                }
+            }
+        }
+
+        if (!word.equals())
+            words.add(word);
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = words.size() - 1; i >= 0; i--) {
+
+            ans.append(words.get(i));
+
+            if (i != 0)
+                ans.append(" ");
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "  hello   world  ";
+
+        System.out.println(reverseWords(s));
+    }
+}
+
+Note: There is a small typo above. The line:
+
+if (!word.equals())
+
+should be:
+
+if (!word.equals(""))
+▶️ Dry Run
+
+Input
+
+"the sky is blue"
+
+Collected words
+
+["the","sky","is","blue"]
+
+Reverse traversal
+
+blue
+blue is
+blue is sky
+blue is sky the
+
+Output
+
+blue is sky the
+⏱️ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+⚡ Optimal Approach
+💡 Idea
+
+Java already provides useful methods.
+
+Remove extra spaces using trim().
+Split words using split("\\s+").
+Traverse from the last word.
+Store answer in StringBuilder.
+
+Much shorter and cleaner.
+
+💻 Java Code
+class Main {
+
+    public static String reverseWords(String s) {
+
+        String[] words = s.trim().split("\\s+");
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+
+            ans.append(words[i]);
+
+            if (i != 0)
+                ans.append(" ");
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "  hello   world  ";
+
+        System.out.println(reverseWords(s));
+    }
+}
+▶️ Dry Run
+
+Input
+
+"  hello   world  "
+
+After trim()
+
+"hello   world"
+
+After split("\\s+")
+
+["hello", "world"]
+
+Reverse loop
+
+world
+world hello
+
+Final Output
+
+world hello
+⏱️ Time Complexity
+O(N)
+📦 Space Complexity
+O(N)
+🧠 Interview Trick / Memory Trick
+⭐ Remember these 4 steps
+trim()
+
+↓
+
+split("\\s+")
+
+↓
+
+Reverse Loop
+
+↓
+
+StringBuilder
+Why split("\\s+")?
+\\s → Matches any whitespace (space, tab, etc.)
++ → Matches one or more whitespace characters
+
+So,
+
+"hello     world"
+
+becomes
+
+["hello", "world"]
+
+without empty strings.
+
+🎯 Key Points for Interviews
+✔️ Reverse words, not characters.
+✔️ Remove extra spaces.
+✔️ Use trim() to remove leading/trailing spaces.
+✔️ Use split("\\s+") to handle multiple spaces.
+✔️ Use StringBuilder for efficient string construction.
+⭐ Revision in 20 Seconds
+Reverse Words
+
+1. trim()
+2. split("\\s+")
+3. Loop from end
+4. Append using StringBuilder
+
+TC : O(N)
+SC : O(N)
