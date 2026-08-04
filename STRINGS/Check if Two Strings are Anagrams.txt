@@ -1,0 +1,288 @@
+🟡 Question: Check if Two Strings are Anagrams
+
+LeetCode 242 – Valid Anagram
+
+❓ What is the question asking?
+
+Two strings are anagrams if they contain the same characters with the same frequency, but the order can be different.
+
+Return true if both strings are anagrams, otherwise false.
+
+Example 1
+Input:
+s = "anagram"
+t = "nagaram"
+
+Output:
+true
+Example 2
+Input:
+s = "rat"
+t = "car"
+
+Output:
+false
+🪨 Brute Force Approach (Sorting)
+💡 Idea
+
+If two strings are anagrams,
+
+after sorting both strings,
+
+they become exactly the same.
+
+Example
+
+listen
+
+↓
+
+eilnst
+
+silent
+
+↓
+
+eilnst
+
+Since both sorted strings are equal,
+
+they are anagrams.
+
+💻 Java Code
+import java.util.Arrays;
+
+class Main {
+
+    public static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length())
+            return false;
+
+        char[] a = s.toCharArray();
+        char[] b = t.toCharArray();
+
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        return Arrays.equals(a, b);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "anagram";
+        String t = "nagaram";
+
+        System.out.println(isAnagram(s, t));
+    }
+}
+▶️ Dry Run
+
+Input
+
+anagram
+
+nagaram
+
+After sorting
+
+aaagmnr
+
+aaagmnr
+
+Compare
+
+Equal ✅
+
+Output
+
+true
+⏱️ Time Complexity
+O(N log N)
+📦 Space Complexity
+O(N)
+⚡ Optimal Approach (Frequency Count)
+💡 Idea
+
+Instead of sorting,
+
+count how many times every character appears.
+
+Increase count for characters in s
+Decrease count for characters in t
+
+If all counts become 0, then both strings have the same characters.
+
+💻 Java Code
+class Main {
+
+    public static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length())
+            return false;
+
+        int[] freq = new int[26];
+
+        for (int i = 0; i < s.length(); i++) {
+
+            freq[s.charAt(i) - 'a']++;
+            freq[t.charAt(i) - 'a']--;
+        }
+
+        for (int count : freq) {
+
+            if (count != 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "anagram";
+        String t = "nagaram";
+
+        System.out.println(isAnagram(s, t));
+    }
+}
+▶️ Dry Run
+
+Input
+
+s = anagram
+
+t = nagaram
+
+Frequency changes
+
+a → +1 -1 = 0
+
+n → +1 -1 = 0
+
+g → +1 -1 = 0
+
+r → +1 -1 = 0
+
+m → +1 -1 = 0
+
+Final Frequency Array
+
+All values = 0
+
+Return
+
+true
+Another Example
+
+Input
+
+s = rat
+
+t = car
+
+Frequency Array
+
+r → 1
+
+a → 0
+
+t → 1
+
+c → -1
+
+Some counts are not zero.
+
+Return
+
+false
+⏱️ Time Complexity
+O(N)
+📦 Space Complexity
+O(1)
+
+(Only an array of size 26 is used.)
+
+🧠 Why Does Frequency Count Work?
+
+Suppose
+
+listen
+
+silent
+
+Every character appears the same number of times.
+
+After
+
+incrementing for listen
+decrementing for silent
+
+all counts become 0.
+
+If even one count is non-zero, the strings are not anagrams.
+
+🎯 Interview Trick / Memory Trick
+Length different?
+
+↓
+
+Return false
+
+↓
+
+Create freq[26]
+
+↓
+
+For every character
+
+freq[s]++
+
+freq[t]--
+
+↓
+
+Any count != 0 ?
+
+↓
+
+False
+
+↓
+
+Otherwise True
+⭐ Revision in 15 Seconds
+Check length
+
+↓
+
+freq[26]
+
+↓
+
++ for first string
+
+- for second string
+
+↓
+
+All zeros
+
+↓
+
+Anagram
+🎯 Output Examples
+s	t	Output
+"anagram"	"nagaram"	true
+"rat"	"car"	false
+"listen"	"silent"	true
+"hello"	"world"	false
+🌟 Interview Tip
+
+There are two popular solutions:
+
+✅ Sorting → Easy to understand, O(N log N)
+✅ Frequency Array (26 letters) → Best solution, O(N) and O(1) space for lowercase English letters.
+
+In interviews, mention the sorting approach first, then write the frequency count solution as the optimal one. That's exactly what interviewers like to see. 💖🚀
