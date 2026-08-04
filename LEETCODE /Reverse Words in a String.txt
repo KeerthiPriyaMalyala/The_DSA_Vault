@@ -1,0 +1,341 @@
+📘 151. Reverse Words in a String
+🟢 What is the question asking?
+
+Given a string s,
+
+Reverse the order of words, not the characters.
+
+Also,
+
+Ignore extra spaces.
+Remove leading/trailing spaces.
+Keep only one space between words.
+Example 1
+Input:
+"the sky is blue"
+
+Output:
+"blue is sky the"
+Example 2
+Input:
+"  hello   world  "
+
+Output:
+"world hello"
+Example 3
+Input:
+"a good   example"
+
+Output:
+"example good a"
+🟡 Brute Force Approach (Split + Traverse Backwards)
+💡 Idea
+Remove leading/trailing spaces.
+Split the string using one or more spaces.
+Traverse the array from the end.
+Join the words with a single space.
+Dry Run
+Input
+
+"  hello   world  "
+
+↓
+
+trim()
+
+"hello   world"
+
+↓
+
+split("\\s+")
+
+["hello","world"]
+
+↓
+
+Traverse Backwards
+
+world hello
+Java Code
+class Main {
+
+    public static String reverseWords(String s) {
+
+        s = s.trim();
+
+        String[] words = s.split("\\s+");
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+
+            ans.append(words[i]);
+
+            if (i != 0)
+                ans.append(" ");
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "  hello   world  ";
+
+        System.out.println(reverseWords(s));
+    }
+}
+Output
+world hello
+Time Complexity
+O(n)
+Space Complexity
+O(n)
+
+(split array + answer string)
+
+🟢 Optimal Approach (Traverse from End)
+💡 Idea
+
+Instead of splitting,
+
+Start from the end of the string.
+
+Skip spaces.
+Find one complete word.
+Add it to the answer.
+Continue until the beginning.
+
+This avoids creating a split array.
+
+Dry Run
+Input
+
+"the sky is blue"
+
+                 i
+
+Find
+
+blue
+
+↓
+
+Answer
+
+blue
+
+----------------
+
+Find
+
+is
+
+↓
+
+blue is
+
+----------------
+
+Find
+
+sky
+
+↓
+
+blue is sky
+
+----------------
+
+Find
+
+the
+
+↓
+
+blue is sky the
+Visualization
+the sky is blue
+             ↑
+
+Pick
+
+blue
+
+↓
+
+the sky is blue
+        ↑
+
+Pick
+
+is
+
+↓
+
+the sky is blue
+    ↑
+
+Pick
+
+sky
+
+↓
+
+the sky is blue
+↑
+
+Pick
+
+the
+Java Code
+class Main {
+
+    public static String reverseWords(String s) {
+
+        StringBuilder ans = new StringBuilder();
+
+        int i = s.length() - 1;
+
+        while (i >= 0) {
+
+            while (i >= 0 && s.charAt(i) == ' ')
+                i--;
+
+            if (i < 0)
+                break;
+
+            int j = i;
+
+            while (j >= 0 && s.charAt(j) != ' ')
+                j--;
+
+            ans.append(s.substring(j + 1, i + 1));
+
+            ans.append(" ");
+
+            i = j;
+        }
+
+        return ans.toString().trim();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "the sky is blue";
+
+        System.out.println(reverseWords(s));
+    }
+}
+Output
+blue is sky the
+Time Complexity
+O(n)
+
+Each character is visited at most once.
+
+Space Complexity
+O(n)
+
+(Answer string only)
+
+🎯 Interview Tricks
+✅ Trick 1
+
+If the question says
+
+Reverse Words
+
+Don't reverse individual characters.
+
+Reverse the order of complete words.
+
+✅ Trick 2
+
+If the input contains
+
+Extra spaces
+
+Think immediately:
+
+trim()
+
+split("\\s+")
+
+or manually skip spaces using pointers.
+
+✅ Trick 3
+
+Whenever you need to process words from the end,
+
+Think:
+
+Start from the last character
+
+↓
+
+Find complete word
+
+↓
+
+Append
+
+↓
+
+Repeat
+🧠 Visualization
+Original
+
+the sky is blue
+
+↓
+
+Words
+
+the | sky | is | blue
+
+↓
+
+Reverse Order
+
+blue | is | sky | the
+
+↓
+
+Answer
+
+blue is sky the
+🌟 Remember These Templates
+Brute Force
+trim()
+
+split("\\s+")
+
+Traverse backwards
+
+Append words
+Optimal
+Start from end
+
+Skip spaces
+
+Find one word
+
+Append
+
+Repeat
+🔥 Similar Problems
+✅ Reverse Words in a String
+✅ Reverse String
+✅ Reverse Words in a String III
+✅ Reverse Vowels of a String
+✅ Length of Last Word
+✅ Valid Palindrome
+💖 DSA Takeaway
+
+Whenever a problem asks you to reverse the order of words (instead of characters), think:
+
+✅ Simple approach: trim() + split("\\s+") + traverse backwards.
+✅ Interview approach: Traverse from the end, extract one word at a time, and build the answer while skipping extra spaces.
+
+The key observation is that words stay unchanged—only their positions are reversed. 🌸
