@@ -1,0 +1,256 @@
+📘 344. Reverse String
+🟢 What is the question asking?
+
+Given a character array char[] s,
+
+Reverse the array in-place.
+
+You must not create another array.
+
+Example 1
+Input:
+['h','e','l','l','o']
+
+Output:
+['o','l','l','e','h']
+Example 2
+Input:
+['H','a','n','n','a','h']
+
+Output:
+['h','a','n','n','a','H']
+🟡 Brute Force Approach
+💡 Idea
+
+Create a new array.
+
+Copy characters from the end of the original array to the beginning of the new array.
+
+Finally, copy the new array back.
+
+Dry Run
+Input
+
+h e l l o
+
+↓
+
+New Array
+
+o l l e h
+Java Code
+class Main {
+
+    public static void reverseString(char[] s) {
+
+        char[] temp = new char[s.length];
+
+        int j = 0;
+
+        for (int i = s.length - 1; i >= 0; i--) {
+            temp[j++] = s[i];
+        }
+
+        for (int i = 0; i < s.length; i++) {
+            s[i] = temp[i];
+        }
+    }
+
+    public static void main(String[] args) {
+
+        char[] s = {'h','e','l','l','o'};
+
+        reverseString(s);
+
+        System.out.println(s);
+    }
+}
+Output
+olleh
+Time Complexity
+O(n)
+Space Complexity
+O(n)
+🟢 Optimal Approach (Two Pointers)
+💡 Idea
+
+Keep
+
+left = 0
+right = n-1
+
+Swap both characters.
+
+Move
+
+left++
+right--
+
+Continue until both pointers meet.
+
+Dry Run
+Input
+
+h e l l o
+
+L       R
+
+Swap
+
+o e l l h
+
+  L   R
+
+Swap
+
+o l l e h
+
+    L R
+
+Done
+Visualization
+
+Initial
+
+L               R
+
+h e l l o
+
+↓
+
+After First Swap
+
+  L         R
+
+o e l l h
+
+↓
+
+After Second Swap
+
+    LR
+
+o l l e h
+
+Pointers meet ✅
+
+Java Code
+class Main {
+
+    public static void reverseString(char[] s) {
+
+        int left = 0;
+        int right = s.length - 1;
+
+        while (left < right) {
+
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+
+            left++;
+            right--;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        char[] s = {'h','e','l','l','o'};
+
+        reverseString(s);
+
+        System.out.println(s);
+    }
+}
+Output
+olleh
+Time Complexity
+O(n)
+
+Each character is swapped at most once.
+
+Space Complexity
+O(1)
+
+No extra array is used.
+
+🎯 Interview Tricks
+✅ Trick 1
+
+Whenever you hear
+
+Reverse
+
+Think immediately:
+
+Two Pointers
+✅ Trick 2
+
+If the question says
+
+In-place
+
+Don't create another array.
+
+Swap elements directly.
+
+✅ Trick 3
+
+Two pointers always start from opposite ends:
+
+left = 0
+right = n - 1
+
+Move inward after every swap.
+
+🧠 Visualization
+Initial
+
+h  e  l  l  o
+↑           ↑
+L           R
+
+Swap
+
+o  e  l  l  h
+   ↑     ↑
+   L     R
+
+Swap
+
+o  l  l  e  h
+      ↑ ↑
+      L R
+
+Done ✅
+🌟 Remember This Template
+int left = 0;
+int right = arr.length - 1;
+
+while (left < right) {
+
+    char temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+
+    left++;
+    right--;
+}
+🔥 Similar Problems (Same Two Pointer Pattern)
+✅ Reverse String
+✅ Valid Palindrome
+✅ Reverse Vowels of a String
+✅ Reverse Only Letters
+✅ Squares of a Sorted Array
+✅ Move Zeroes (different pointer movement)
+✅ Container With Most Water
+💖 DSA Takeaway
+
+Whenever the problem asks you to reverse an array or string in-place, the first thought should be:
+
+✅ Start one pointer from the beginning.
+✅ Start another pointer from the end.
+✅ Swap the elements.
+✅ Move both pointers toward the center.
+
+This Two Pointer technique is simple, efficient, and appears in many interview questions. 🌸
