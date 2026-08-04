@@ -1,0 +1,363 @@
+📘 242. Valid Anagram
+🟢 What is the question asking?
+
+Given two strings s and t,
+
+Check whether they contain exactly the same characters with the same frequency.
+
+If yes → return true
+
+Else → return false
+
+Example 1
+Input:
+s = "anagram"
+t = "nagaram"
+
+Output:
+true
+
+Both contain
+
+a → 3
+n → 1
+g → 1
+r → 1
+m → 1
+Example 2
+Input:
+s = "rat"
+t = "car"
+
+Output:
+false
+🟡 Brute Force Approach (Sorting)
+💡 Idea
+
+If two strings are anagrams,
+
+after sorting,
+
+both strings become exactly the same.
+
+Example
+
+listen
+
+↓
+
+eilnst
+
+silent
+
+↓
+
+eilnst
+
+Same ⇒ Anagram ✅
+
+Dry Run
+s = "eat"
+
+↓
+
+aet
+
+t = "tea"
+
+↓
+
+aet
+
+Compare
+
+aet == aet
+
+Answer
+
+true
+Java Code
+import java.util.Arrays;
+
+class Main {
+
+    public static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length())
+            return false;
+
+        char[] a = s.toCharArray();
+        char[] b = t.toCharArray();
+
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        return Arrays.equals(a, b);
+    }
+
+    public static void main(String[] args) {
+
+        String s = "anagram";
+        String t = "nagaram";
+
+        System.out.println(isAnagram(s, t));
+    }
+}
+Output
+true
+Time Complexity
+O(n log n)
+Space Complexity
+O(n)
+🟢 Better Approach (HashMap)
+💡 Idea
+
+Store frequency of every character.
+
+Increase count for first string.
+
+Decrease count for second string.
+
+If every count becomes 0, both strings are anagrams.
+
+Dry Run
+s = "abb"
+
+Map
+
+a → 1
+b → 2
+
+----------------
+
+t = "bab"
+
+a → 0
+b → 0
+
+All zero
+
+Answer = true
+Java Code
+import java.util.HashMap;
+
+class Main {
+
+    public static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length())
+            return false;
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        for (char ch : t.toCharArray()) {
+
+            if (!map.containsKey(ch))
+                return false;
+
+            map.put(ch, map.get(ch) - 1);
+
+            if (map.get(ch) == 0)
+                map.remove(ch);
+        }
+
+        return map.isEmpty();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "anagram";
+        String t = "nagaram";
+
+        System.out.println(isAnagram(s, t));
+    }
+}
+Output
+true
+Time Complexity
+O(n)
+Space Complexity
+O(n)
+🟢 Optimal Approach (Frequency Array)
+💡 Idea
+
+Since the problem contains only lowercase English letters, create an array of size 26.
+
+Increase frequency for characters in s.
+
+Decrease frequency for characters in t.
+
+If every index becomes 0, they are anagrams.
+
+Dry Run
+s = "abb"
+
+Frequency
+
+a = 1
+b = 2
+
+--------------
+
+t = "bab"
+
+a = 0
+b = 0
+
+Every count is zero
+
+Answer = true
+Java Code
+class Main {
+
+    public static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length())
+            return false;
+
+        int[] freq = new int[26];
+
+        for (int i = 0; i < s.length(); i++) {
+
+            freq[s.charAt(i) - 'a']++;
+            freq[t.charAt(i) - 'a']--;
+        }
+
+        for (int count : freq) {
+
+            if (count != 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        String s = "anagram";
+        String t = "nagaram";
+
+        System.out.println(isAnagram(s, t));
+    }
+}
+Output
+true
+Time Complexity
+O(n)
+Space Complexity
+O(1)
+
+Because the array size is always 26.
+
+🎯 Interview Tricks
+✅ Trick 1
+
+If the question says
+
+Only lowercase English letters
+
+Think immediately:
+
+Frequency Array (size 26)
+✅ Trick 2
+
+If characters can be
+
+Uppercase
+Digits
+Symbols
+Unicode
+
+Think:
+
+HashMap
+✅ Trick 3
+
+If they simply ask
+
+Are these strings anagrams?
+
+Sorting is the easiest approach to explain.
+
+🧠 Visualization
+Frequency Array
+Index
+
+0 1 2 3 ... 25
+a b c d     z
+
+Initially
+
+0 0 0 0 ... 0
+
+After
+
+s = abb
+a = 1
+
+b = 2
+
+Array
+
+1 2 0 0 ... 0
+
+Now process
+
+t = bab
+
+Subtract
+
+a = 0
+
+b = 0
+
+Final
+
+0 0 0 0 ... 0
+
+Every value is 0 ✅
+
+🌟 Remember These Templates
+Sorting
+Convert to char[]
+
+Sort both
+
+Compare
+HashMap
+Increase counts
+
+Decrease counts
+
+If all become zero
+
+Return true
+Frequency Array
+int[] freq = new int[26];
+
+for every index
+
+    freq[s.charAt(i)-'a']++;
+
+    freq[t.charAt(i)-'a']--;
+
+Check every value
+
+If any != 0
+
+Return false
+
+Else
+
+Return true
+💖 DSA Takeaway
+
+Whenever the question asks whether two strings have the same characters with the same frequency, think:
+
+✅ Sorting → Simple and easy to explain.
+✅ HashMap → Works for any character set.
+✅ Frequency Array (26) → Best choice when the input is limited to lowercase English letters because it gives O(n) time and O(1) extra space. 🌸
