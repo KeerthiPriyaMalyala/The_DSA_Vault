@@ -1,0 +1,178 @@
+🟡 Question: Longest Common Prefix (Sorting Approach)
+
+LeetCode 14 – Longest Common Prefix
+
+❓ What is the question asking?
+
+Given an array of strings, find the longest common prefix among all the strings.
+
+If there is no common prefix, return "".
+
+Example
+Input:
+["flower","flow","flight"]
+
+Output:
+"fl"
+⚡ Optimal Approach (Sorting)
+💡 Idea
+
+Sort the array of strings.
+
+After sorting,
+
+The first string is lexicographically smallest.
+The last string is lexicographically largest.
+
+If these two strings have a common prefix, then every string between them will also have the same prefix.
+
+So, compare only the first and last strings character by character.
+
+💻 Java Code
+import java.util.Arrays;
+
+class Main {
+
+    public static String longestCommonPrefix(String[] strs) {
+
+        // Step 1: Sort the array
+        Arrays.sort(strs);
+
+        // Step 2: Take first and last strings
+        String first = strs[0];
+        String last = strs[strs.length - 1];
+
+        int i = 0;
+
+        // Step 3: Compare characters
+        while (i < first.length() &&
+               i < last.length() &&
+               first.charAt(i) == last.charAt(i)) {
+
+            i++;
+        }
+
+        // Step 4: Return common prefix
+        return first.substring(0, i);
+    }
+
+    public static void main(String[] args) {
+
+        String[] strs = {"flower", "flow", "flight"};
+
+        System.out.println(longestCommonPrefix(strs));
+    }
+}
+▶️ Dry Run
+Input
+["flower","flow","flight"]
+Step 1: Sort
+flight
+flow
+flower
+Step 2: Compare First & Last
+First = "flight"
+
+Last = "flower"
+
+Character comparison
+
+f == f ✅
+
+l == l ✅
+
+i != o ❌
+
+Stop here.
+
+Answer
+
+fl
+▶️ Output
+fl
+⏱️ Time Complexity
+Sorting : O(N log N)
+
+Comparison : O(M)
+
+Total : O(N log N + M)
+
+Where
+
+N = Number of strings
+M = Length of the shortest string
+📦 Space Complexity
+O(1)
+
+(Ignoring the space used internally by Java's sorting algorithm.)
+
+🧠 Why Does This Work?
+
+Suppose after sorting:
+
+app
+apple
+application
+apply
+
+The first and last strings are the most different.
+
+If they still have a common prefix:
+
+app
+
+then every string between them must also start with "app".
+
+So, comparing only the first and last strings is enough.
+
+🎯 Interview Trick / Memory Trick
+Sort
+
+↓
+
+Take First String
+
+↓
+
+Take Last String
+
+↓
+
+Compare Character by Character
+
+↓
+
+Mismatch?
+
+↓
+
+Return substring(0, i)
+⭐ Revision in 15 Seconds
+Arrays.sort(strs)
+
+↓
+
+first = strs[0]
+
+last = strs[n-1]
+
+↓
+
+Compare characters
+
+↓
+
+Mismatch
+
+↓
+
+Return first.substring(0, i)
+🎯 Output Examples
+Input	Output
+["flower","flow","flight"]	"fl"
+["dog","racecar","car"]	""
+["apple","app","application"]	"app"
+["cat"]	"cat"
+🌟 One-Line Interview Summary
+
+Sort the array, compare only the first and last strings, and the common characters from the beginning form the longest common prefix. 💖🚀
