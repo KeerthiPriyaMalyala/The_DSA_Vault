@@ -1,0 +1,262 @@
+🟡 Problem 1: Remove Outermost Parentheses
+
+Difficulty: Medium
+
+1️⃣ What is the question asking?
+
+You are given a valid parentheses string.
+
+A valid parentheses string can contain many primitive valid strings.
+
+Your task is:
+
+👉 Remove the outermost '(' and ')' from every primitive string.
+
+Finally, return the remaining string.
+
+Example 1
+Input:
+"(()())(())"
+
+Output:
+"()()()"
+Explanation
+
+The string has two primitive parts.
+
+(()())
+
+(())
+
+
+Remove outer parentheses.
+
+(()())
+↓
+
+()()
+
+(()) 
+↓
+
+()
+
+Answer
+
+()()()
+Example 2
+Input
+
+"(()())(())(()(()))"
+
+Output
+
+()()()()(())
+Example 3
+Input
+
+"()()"
+
+Output
+
+""
+
+Because
+
+()
+
+Remove outer pair
+
+Nothing remains.
+2️⃣ Brute Force Approach
+💡 Idea
+
+First divide the string into primitive strings.
+
+For each primitive
+
+remove first '('
+remove last ')'
+
+Join everything.
+
+Algorithm
+Find one primitive.
+
+Store it.
+
+Remove first and last character.
+
+Append answer.
+
+Repeat.
+Time Complexity
+O(N)
+Space Complexity
+O(N)
+
+👉 Possible, but not the cleanest implementation.
+
+3️⃣ Better Approach
+
+There is no separate better approach.
+
+4️⃣ Optimal Approach ✅
+💡 Main Idea
+
+Instead of finding primitive strings separately,
+
+Maintain a depth counter.
+
+Depth tells us
+
+Current nesting level.
+
+Whenever
+
+(
+
+comes
+
+increase depth.
+
+Whenever
+
+)
+
+comes
+
+decrease depth.
+
+Important Trick ⭐
+
+We only keep characters that are NOT the outermost ones.
+
+Rule 1
+
+If current character is
+
+(
+
+Append it ONLY IF
+
+depth > 0
+
+Then increase depth.
+
+Rule 2
+
+If current character is
+
+)
+
+Decrease depth first.
+
+Append it ONLY IF
+
+depth > 0
+🧠 Why does this work?
+
+Outermost opening bracket always appears when
+
+depth = 0
+
+So don't add it.
+
+Outermost closing bracket always makes depth become
+
+0
+
+So don't add it.
+
+Every other bracket belongs inside.
+
+✨ Dry Run
+
+Input
+
+(()())(())
+Character	Depth Before	Action	Depth After	Answer
+(	0	Skip	1	""
+(	1	Add	2	(
+)	2	Add	1	()
+(	1	Add	2	()(
+)	2	Add	1	()()
+)	1	Skip	0	()()
+(	0	Skip	1	()()
+(	1	Add	2	()()(
+)	2	Add	1	()()()
+)	1	Skip	0	()()()
+
+Final Answer
+
+()()()
+☕ Java Code (Optimal)
+class Main {
+
+    public static String removeOuterParentheses(String s) {
+
+        StringBuilder ans = new StringBuilder();
+        int depth = 0;
+
+        for (char ch : s.toCharArray()) {
+
+            if (ch == '(') {
+
+                if (depth > 0)
+                    ans.append(ch);
+
+                depth++;
+
+            } else {
+
+                depth--;
+
+                if (depth > 0)
+                    ans.append(ch);
+            }
+        }
+
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+
+        String s = "(()())(())";
+
+        System.out.println(removeOuterParentheses(s));
+    }
+}
+✅ Output
+()()()
+🎯 Time Complexity
+O(N)
+
+We traverse the string only once.
+
+🎯 Space Complexity
+O(N)
+
+For storing the answer.
+
+🌟 Interview Trick to Remember
+
+Imagine depth as floors in a building 🏢:
+
+🚪 Entering the building ((): if you're already inside (depth > 0), keep the bracket; then go up one floor.
+🚪 Leaving the building ()): first come down one floor; if you're still inside (depth > 0), keep the bracket.
+
+So the first ( (entering from outside) and the last ) (leaving to outside) of every primitive are skipped automatically.
+
+📝 Notes Shortcut
+✔ Maintain depth.
+
+'('
+→ if(depth > 0) append
+→ depth++
+
+')'
+→ depth--
+→ if(depth > 0) append
+
+Answer = StringBuilder
