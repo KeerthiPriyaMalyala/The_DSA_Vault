@@ -1,0 +1,198 @@
+LeetCode 3310 – Remove Methods From Project
+❓What is the question asking?
+
+We are given:
+
+n methods (0 to n-1)
+A suspicious method k
+invocations[i] = [a, b] means method a calls b
+
+We need to remove all suspicious methods.
+
+A method is suspicious if:
+
+It is k, or
+It can be reached from k.
+
+But...
+
+❌ If any normal method calls a suspicious method, then removing them would break the project.
+
+In that case,
+➡️ return all methods.
+
+Otherwise,
+➡️ return only the non-suspicious methods.
+
+💡 Key Observation
+
+Starting from k,
+all reachable methods become suspicious.
+
+After finding them,
+
+Check every edge.
+
+If
+
+Normal Method -----> Suspicious Method
+
+exists,
+
+then we cannot remove the suspicious methods.
+
+Return everyone.
+
+Otherwise,
+
+return only the normal methods.
+
+🧠 Algorithm
+Step 1
+
+Create graph.
+
+a -> b
+
+means
+
+graph[a].add(b)
+Step 2
+
+Run DFS from k.
+
+Mark every reachable node as suspicious.
+
+DFS(k)
+Step 3
+
+Traverse all edges.
+
+For every edge
+
+u -> v
+
+check
+
+if (!suspicious[u] && suspicious[v])
+
+means
+
+Normal ---> Suspicious
+
+Project cannot remove them.
+
+Return
+
+0...n-1
+Step 4
+
+Otherwise,
+
+collect every node whose
+
+suspicious[i] == false
+
+Return them.
+
+🌳 Example
+n = 5
+
+k = 1
+
+Edges
+
+1 -> 2
+2 -> 3
+0 -> 4
+
+Graph
+
+0 → 4
+
+1 → 2 → 3
+
+DFS from 1
+
+1
+↓
+2
+↓
+3
+
+Suspicious
+
+1 2 3
+
+Remaining
+
+0 4
+
+Answer
+
+[0,4]
+Another Example
+0 → 1
+1 → 2
+3 → 1
+
+k = 1
+
+DFS
+
+1
+↓
+2
+
+Suspicious
+
+1 2
+
+Now check edges
+
+3 → 1
+
+Here
+
+3 = Normal
+
+1 = Suspicious
+
+Normal method is calling suspicious.
+
+So removal is impossible.
+
+Return
+
+[0,1,2,3]
+🔑 Trick to Remember
+DFS from k
+        ↓
+Mark Suspicious
+        ↓
+Normal → Suspicious ?
+        ↓
+      YES
+Return Everyone
+
+      NO
+Return Only Normal Methods
+⏱ Complexity
+
+Time
+
+O(V + E)
+Build graph → O(E)
+DFS → O(V + E)
+Check edges → O(E)
+Build answer → O(V)
+
+Space
+
+O(V + E)
+Graph
+Visited (suspicious) array
+DFS recursion stack
+🎯 Interview One-Liner
+
+Find all methods reachable from k using DFS. If any non-suspicious method invokes a suspicious one, removal is impossible, so return all methods; otherwise return only the non-suspicious methods. 💙
